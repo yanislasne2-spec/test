@@ -105,7 +105,7 @@ main{position:relative;z-index:2}
   text-align:center;position:relative;padding:100px 16px 120px;overflow:hidden;
 }
 .radar{
-  position:absolute;left:50%;top:44%;width:min(620px,110vw);aspect-ratio:1;transform:translate(-50%,-50%);
+  position:absolute;left:50%;top:40%;width:min(620px,110vw);aspect-ratio:1;transform:translate(-50%,-50%);
   border-radius:50%;pointer-events:none;opacity:.9;
   background:
     radial-gradient(circle, transparent 0 24.6%, rgba(93,255,143,.12) 24.8% 25%, transparent 25.2% 49.6%, rgba(93,255,143,.1) 49.8% 50%, transparent 50.2% 74.6%, rgba(93,255,143,.08) 74.8% 75%, transparent 75.2%),
@@ -122,6 +122,20 @@ main{position:relative;z-index:2}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes blip{0%,100%{opacity:0}10%{opacity:1}60%{opacity:0}}
 
+.portrait{
+  position:absolute;left:50%;top:6vh;height:min(66vh,760px);aspect-ratio:447/559;transform:translateX(-50%);
+  z-index:0;pointer-events:none;
+  mask-image:linear-gradient(#000 55%,transparent 92%);-webkit-mask-image:linear-gradient(#000 55%,transparent 92%);
+}
+.portrait img{width:100%;height:100%;object-fit:contain;display:block;
+  filter:saturate(.8) contrast(1.08) brightness(1.05) drop-shadow(0 0 40px rgba(93,255,143,.12));
+  opacity:0;transform:scale(1.06);transition:opacity 1.6s ease, transform 2.4s cubic-bezier(.2,.8,.2,1)}
+.ready .portrait img{opacity:1;transform:scale(1)}
+.portrait::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
+  mask-image:url(jolagreen.png);-webkit-mask-image:url(jolagreen.png);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center}
+.hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;margin-top:30vh}
+@media (max-width:700px){.portrait{top:11vh;height:54vh}.hero-content{margin-top:28vh}}
 .logo{width:44px;height:22px;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(93,255,143,.55))}
 .season{font-size:10px;letter-spacing:.35em;color:var(--mid);margin-bottom:30px}
 .xp{font-family:var(--mono);font-size:clamp(12px,1.5vw,16px);letter-spacing:1.1em;color:var(--text);margin-right:-1.1em;opacity:.8}
@@ -141,7 +155,7 @@ main{position:relative;z-index:2}
   100%{opacity:.7;clip-path:inset(5% 0 85% 0);transform:translate(0,0)}
 }
 .subtitle{font-family:var(--mono);font-style:italic;font-size:clamp(11px,1.4vw,15px);color:var(--mid);letter-spacing:1.2em;margin-right:-1.2em;line-height:2.4}
-.hero .scroll{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.4em;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero .scroll{position:absolute;bottom:96px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.4em;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:10px}
 .hero .scroll::after{content:"";width:1px;height:40px;background:linear-gradient(var(--mid),transparent);animation:drop 2s ease-in-out infinite}
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -316,15 +330,14 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
       <span class="blip" style="left:58%;top:74%;animation-delay:2.1s"></span>
     </div>
 
-    <svg class="logo reveal" viewBox="0 0 44 22" fill="none" stroke="#8ee6a8" stroke-width="2">
-      <path d="M11 2 L20 11 L11 20 L2 11 Z"/><path d="M33 2 L42 11 L33 20 L24 11 Z"/>
-    </svg>
-    <div class="season reveal d1">TRILOGIE · 3 COLLECTIONS</div>
+    <div class="portrait"><img src="jolagreen.png" alt="Jolagreen"></div>
+
+    <div class="hero-content">
     <div class="xp reveal d2">+99XP</div>
     <h1 class="name reveal d3" data-hover>JOLAGREEN<span class="glitch" aria-hidden="true">JOLAGREEN</span></h1>
     <div class="subtitle reveal d4">RECHERCHE<br>&amp;<br>DESTRUCTION</div>
+    </div>
 
-    <a href="#collections" class="scroll reveal d5">SCROLL</a>
 
     <div class="hud l">
       <div>LAT <b>48.8566° N</b></div>
