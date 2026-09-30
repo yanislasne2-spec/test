@@ -360,21 +360,21 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
       <div class="season">LES ALBUMS · CHOISIS TON NIVEAU</div>
     </div>
 
-    <a href="#" class="col" data-scene="war" data-hover id="c-rd">
+    <a href="collection.html#rd" class="col" data-scene="war" data-hover id="c-rd">
       <div class="num">01 / ALBUM</div>
       <div class="title">R&amp;D</div>
       <div class="sub">COLLECTION</div>
       <div class="theme">GUERRE · APOCALYPSE</div>
     </a>
 
-    <a href="#" class="col" data-scene="game" data-hover id="c-99">
+    <a href="collection.html#99xp" class="col" data-scene="game" data-hover id="c-99">
       <div class="num">02 / ALBUM</div>
       <div class="title">99XP</div>
       <div class="sub">COLLECTION</div>
       <div class="theme">JEUX VIDÉO</div>
     </a>
 
-    <a href="#" class="col locked" data-scene="anime" data-hover id="c-goty">
+    <a href="collection.html#goty" class="col locked" data-scene="anime" data-hover id="c-goty">
       <div class="num">03 / ALBUM · VERROUILLÉ</div>
       <div class="title">GOTY</div>
       <div class="sub">EDITION</div>
@@ -437,9 +437,9 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
 <!-- MENU -->
 <div class="overlay" id="overlay">
   <div class="foot">MENU PRINCIPAL</div>
-  <a href="#c-rd" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
-  <a href="#c-99" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
-  <a href="#c-goty" data-close data-hover>GOTY <small>03 · ANIMÉ · J-23</small></a>
+  <a href="collection.html#rd" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
+  <a href="collection.html#99xp" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
+  <a href="collection.html#goty" data-close data-hover>GOTY <small>03 · ANIMÉ · J-23</small></a>
 </div>
 <button class="pill" id="pill" data-hover aria-label="Menu">
   <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#8ee6a8" stroke-width="1.5"><path d="M12 2 L22 12 L12 22 L2 12 Z"/></svg></span>
@@ -488,7 +488,6 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
   cols.forEach(function(c){
     c.addEventListener('mouseenter', function(){ c.classList.add('active'); show(c.dataset.scene); });
     c.addEventListener('mouseleave', function(){ c.classList.remove('active'); hide(); });
-    c.addEventListener('click', function(e){ e.preventDefault(); });
   });
 
   // Touch: activate the row closest to screen center
