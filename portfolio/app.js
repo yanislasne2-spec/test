@@ -1,5 +1,6 @@
 (() => {
 'use strict';
+document.body.classList.add('is-loading');
 const S = window.SITE;
 const P = window.PHOTOS || {};
 const $ = (s, r = document) => r.querySelector(s);
@@ -137,8 +138,14 @@ const closeModal = () => { modal.classList.remove('open'); modal.setAttribute('a
 $('#hud-trophy').addEventListener('click', openModal);
 $('#hud-level').addEventListener('click', openModal);
 $$('[data-close]', modal).forEach(b => b.addEventListener('click', closeModal));
-$('#tr-reset').addEventListener('click', () => {
-  if (!confirm('Remettre ta progression à zéro ?')) return;
+$('#tr-reset').addEventListener('click', e => {
+  const b = e.currentTarget;
+  if (!b.dataset.armed) {
+    b.dataset.armed = '1'; b.textContent = 'Sûr ? Clique encore pour tout effacer';
+    clearTimeout(b._t); b._t = setTimeout(() => { delete b.dataset.armed; b.textContent = 'Remettre à zéro'; }, 4000);
+    return;
+  }
+  delete b.dataset.armed; b.textContent = 'Remettre à zéro';
   state.xp = 0; state.seen.clear(); state.ach.clear(); save(); renderHud(); renderTrophies(); refreshSeen();
   document.body.classList.remove('argentique');
 });
@@ -546,6 +553,12 @@ function observe() {
 const ioEnd = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { unlock('explorer'); ioEnd.disconnect(); } }), { threshold: .5 });
 ioEnd.observe($('.foot'));
 $$('.sec-head, .about-grid, .contact-sub, .contact-actions').forEach(el => el.classList.add('reveal'));
+
+// filet de sécurité : tout reste visible même si l'observer ne se déclenche pas (aperçus, miniatures)
+setTimeout(() => $$('.reveal:not(.in), .shot:not(.in), .contact-title:not(.in)').forEach(el => {
+  const r = el.getBoundingClientRect();
+  if (r.top < innerHeight && r.bottom > 0) el.classList.add('in');
+}), 2500);
 
 addEventListener('scroll', () => $('.nav').classList.toggle('scrolled', scrollY > 40), { passive: true });
 
