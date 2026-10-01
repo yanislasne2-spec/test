@@ -58,17 +58,17 @@ soundBtn.addEventListener('click', () => { sound.on = !sound.on; store.set('soun
 renderSound();
 
 /* ================= GAMIFICATION ================= */
-const LEVELS = [[0, 'Rookie'], [60, 'Sixième homme'], [160, 'Titulaire'], [320, 'All-Star'], [520, 'MVP'], [800, 'Hall of Fame']];
+const LEVELS = [[0, 'Débutant'], [60, 'Amateur'], [160, 'Œil affûté'], [320, 'Reporter'], [520, 'Pro'], [800, 'Légende']];
 const ACH = [
   { id: 'first-shot', ico: '📸', title: 'Premier déclic', desc: 'Ouvre ta première photo.', xp: 20 },
   { id: 'burst', ico: '⚡', title: 'Rafale', desc: 'Déclenche 10 fois dans le viseur en moins de 4 s.', xp: 25 },
   { id: 'full-roll', ico: '🎞️', title: 'Pellicule complète', desc: "Vois toutes les photos d'une galerie.", xp: 60 },
   { id: 'curious', ico: '🔒', title: 'Trop pressé', desc: 'Essaie d\'ouvrir une pellicule pas encore développée.', xp: 10 },
-  { id: 'swish', ico: '🏀', title: 'Swish', desc: 'Marque ton premier panier au Shootaround.', xp: 20 },
-  { id: 'on-fire', ico: '🔥', title: 'On fire', desc: '3 paniers d\'affilée.', xp: 40 },
-  { id: 'buzzer', ico: '⏱️', title: 'Buzzer beater', desc: 'Marque dans la dernière seconde du shot clock.', xp: 50 },
-  { id: 'clutch', ico: '👑', title: 'Clutch', desc: 'Fais 16 points ou plus en une partie.', xp: 60 },
-  { id: 'hidden-ball', ico: '👁️', title: 'Œil de lynx', desc: 'Trouve le ballon caché sur le site.', xp: 40 },
+  { id: 'decisive', ico: '✨', title: 'Instant décisif', desc: 'Déclenche pile quand le sujet s\'illumine.', xp: 30 },
+  { id: 'centered', ico: '🎯', title: 'Pile au centre', desc: 'Un sujet parfaitement centré dans le cadre.', xp: 30 },
+  { id: 'streak', ico: '🔥', title: 'Œil sûr', desc: '4 photos réussies d\'affilée.', xp: 40 },
+  { id: 'pro-roll', ico: '👑', title: 'Planche parfaite', desc: 'Fais 300 points ou plus en une partie.', xp: 60 },
+  { id: 'hidden-ball', ico: '👁️', title: 'Œil de lynx', desc: 'Trouve le bouchon d\'objectif caché sur le site.', xp: 40 },
   { id: 'konami', ico: '🕹️', title: 'Old school', desc: 'Entre le code secret → mode argentique.', xp: 40 },
   { id: 'explorer', ico: '🧭', title: 'Explorateur', desc: 'Descends jusqu\'au bout du site.', xp: 15 },
   { id: 'contact', ico: '✉️', title: 'Prise de contact', desc: 'Clique pour me contacter.', xp: 25 }
@@ -157,7 +157,7 @@ function confetti() {
   if (reduce) return;
   const dpr = Math.min(devicePixelRatio || 1, 2);
   cf.width = innerWidth * dpr; cf.height = innerHeight * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const cols = ['#ff5a1f', '#f1ebe1', '#ffb36b', '#b8ff4a', '#ff3b3b'];
+  const cols = ['#ff4d5a', '#f3eeee', '#ff8a92', '#ffd2d5', '#a8132a'];
   for (let i = 0; i < 160; i++) parts.push({
     x: innerWidth / 2, y: innerHeight / 2, vx: (Math.random() - .5) * 18, vy: Math.random() * -16 - 4,
     s: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], life: 1
@@ -264,18 +264,64 @@ hero.addEventListener('click', e => {
   burst = burst.filter(t => now - t < 4000); burst.push(now);
   if (burst.length >= 10) unlock('burst');
 });
-/* fond hero : diaporama des premières photos si disponibles */
+/* photo centrale du hero (diaporama) */
 (() => {
-  const pics = galleries.flatMap(g => g.photos).slice(0, 5);
-  if (!pics.length) return;
-  const bg = $('#hero-bg');
-  bg.innerHTML = pics.map((p, i) => `<div class="slide ${i ? '' : 'on'}" style="background-image:url('${encodeURI(p.src)}')"></div>`).join('');
-  if (pics.length > 1) { let k = 0; setInterval(() => { const s = $$('.slide', bg); s[k].classList.remove('on'); k = (k + 1) % s.length; s[k].classList.add('on'); }, 5500); }
+  const pics = galleries.flatMap(g => g.photos).slice(0, 6);
+  const box = $('#hero-photo');
+  if (!pics.length || !box) return;
+  box.innerHTML = pics.map((p, i) => `<div class="slide ${i ? '' : 'on'}" style="background-image:url('${encodeURI(p.src)}')"></div>`).join('');
+  if (pics.length > 1 && !reduce) { let k = 0; setInterval(() => { const s = $$('.slide', box); s[k].classList.remove('on'); k = (k + 1) % s.length; s[k].classList.add('on'); }, 5000); }
+})();
+
+/* fond de points ondulant (réagit à la souris) */
+(() => {
+  const c = $('#dots'); if (!c) return;
+  const x = c.getContext('2d');
+  let W = 0, H = 0, on = true, t = 0, mx = -999, my = -999;
+  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); W = c.clientWidth; H = c.clientHeight; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0); };
+  size(); addEventListener('resize', size);
+  hero.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+  hero.addEventListener('pointerleave', () => { mx = my = -999; });
+  new IntersectionObserver(([en]) => { on = en.isIntersecting; if (on) requestAnimationFrame(draw); }).observe(c);
+  function draw() {
+    if (!on) return;
+    t += reduce ? 0 : .012;
+    x.clearRect(0, 0, W, H);
+    const gap = W < 640 ? 16 : 20;
+    for (let j = 0; j * gap < H + gap; j++) for (let i = 0; i * gap < W + gap; i++) {
+      const px = i * gap, py = j * gap;
+      const edge = Math.min(1, Math.abs(px - W / 2) / (W * .5));
+      const wave = Math.sin(i * .16 + t * 2) * Math.cos(j * .13 - t) ;
+      const dx = px - mx, dy = py - my, dm = Math.hypot(dx, dy), push = dm < 140 ? (1 - dm / 140) * 14 : 0;
+      const ox = dm ? dx / dm * push : 0, oy = (dm ? dy / dm * push : 0) + wave * 6 * edge;
+      const a = (.05 + .35 * edge * (wave * .5 + .5)) + (push ? push / 30 : 0);
+      x.fillStyle = `rgba(255,77,90,${Math.min(a, .8).toFixed(3)})`;
+      x.fillRect(px + ox, py + oy, 1.6, 1.6);
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* lignes « terminal » façon démarrage d'appareil */
+(() => {
+  const el = $('#term'); if (!el) return;
+  const lines = ['◆ initialisation du capteur…', '> charger "pellicule_sport" [ok]', '> mise au point "af-c" [verrouillée]', '> mode "noir & blanc + couleur" [activé]'];
+  if (reduce) { el.innerHTML = lines.map(esc).join('\n'); return; }
+  let li = 0, ci = 0, out = '';
+  const type = () => {
+    if (li >= lines.length) return;
+    out += lines[li][ci++] || '';
+    if (ci > lines[li].length) { li++; ci = 0; out += '\n'; }
+    el.innerHTML = esc(out).replace(/\[(.*?)\]/g, '<b>[$1]</b>');
+    setTimeout(type, ci === 0 ? 220 : 18);
+  };
+  setTimeout(type, 1900);
 })();
 
 /* ================= MARQUEE ================= */
 (() => {
-  const words = ['Sport', 'basket', 'Portrait', 'visages', 'Concerts', 'la scène', 'Paysages', 'horizons'];
+  const words = ['Sport', 'Portrait', 'Concerts', 'Paysages', 'Noir & blanc', 'Lumière'];
   const html = words.map(w => `<span>${w} ·</span>`).join('');
   const tr = $('#marquee'); tr.innerHTML = html + html + html;
   let x = 0, lastY = scrollY, vel = 0;

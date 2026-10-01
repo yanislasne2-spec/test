@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0c0b0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="is-loading">
@@ -41,7 +41,7 @@
   <a href="#top" class="logo" data-cursor="link">YL<span class="logo-dot"></span></a>
   <nav class="nav-links">
     <a href="#galeries" data-cursor="link">Galeries</a>
-    <a href="#jeu" data-cursor="link">Shootaround</a>
+    <a href="#jeu" data-cursor="link">Mini-jeu</a>
     <a href="#apropos" data-cursor="link">À propos</a>
     <a href="#contact" data-cursor="link">Contact</a>
   </nav>
@@ -61,19 +61,9 @@
 <!-- ========== HERO : viseur ========== -->
 <section id="hero" class="hero">
   <div class="hero-bg" id="hero-bg"></div>
-  <svg class="court" viewBox="0 0 940 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g fill="none" stroke="currentColor" stroke-width="2">
-      <path pathLength="1" d="M10 10 H930 V490 H10 Z"/>
-      <path pathLength="1" d="M470 10 V490"/>
-      <circle pathLength="1" cx="470" cy="250" r="60"/>
-      <path pathLength="1" d="M10 170 H200 V330 H10"/>
-      <circle pathLength="1" cx="200" cy="250" r="60"/>
-      <path pathLength="1" d="M10 40 H90 A230 230 0 0 1 90 460 H10"/>
-      <path pathLength="1" d="M930 170 H740 V330 H930"/>
-      <circle pathLength="1" cx="740" cy="250" r="60"/>
-      <path pathLength="1" d="M930 40 H850 A230 230 0 0 0 850 460 H930"/>
-    </g>
-  </svg>
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
+  <div class="term" id="term" aria-hidden="true"></div>
 
   <div class="vf" aria-hidden="true">
     <i class="vf-c tl"></i><i class="vf-c tr"></i><i class="vf-c bl"></i><i class="vf-c br"></i>
@@ -93,12 +83,12 @@
   </div>
 
   <div class="hero-inner">
-    <p class="hero-kicker"><span>Portfolio</span><span>2026</span></p>
+    <span class="tracked top">Photographe</span>
     <h1 class="hero-name" aria-label="Yanis Lasne">
       <span class="line" data-split>YANIS</span>
       <span class="line line-2" data-split>LASNE</span>
     </h1>
-    <p class="hero-sub"><em>Photographe</em> — sport, portrait, concert &amp; paysage</p>
+    <span class="tracked bottom">Sport · Portrait · Concerts · Paysages</span>
   </div>
   <p class="hero-hint">Clique n'importe où pour déclencher <kbd>●</kbd></p>
   <a href="#galeries" class="scroll-cue" data-cursor="link" aria-label="Défiler"><span></span></a>
@@ -122,24 +112,25 @@
 <section id="jeu" class="section game-sec">
   <header class="sec-head">
     <span class="sec-num">( 02 )</span>
-    <h2 class="sec-title">Shoot<em>around</em></h2>
-    <p class="sec-desc">Entre deux galeries, prends un tir. Tire le ballon vers l'arrière, vise, relâche. 24 secondes au shot clock.</p>
+    <h2 class="sec-title">Instant <em>décisif</em></h2>
+    <p class="sec-desc">Mini-jeu. Vise avec le cadre et déclenche quand le sujet est dedans. Quand il s'illumine, c'est l'instant décisif&nbsp;: points ×3. 12 poses, 30 secondes.</p>
   </header>
   <div class="game" id="game">
     <canvas id="game-canvas"></canvas>
     <div class="game-hud">
-      <div><small>Score</small><b id="g-score">00</b></div>
-      <div class="clock"><small>Shot clock</small><b id="g-clock">24</b></div>
-      <div><small>Record</small><b id="g-best">00</b></div>
-      <div class="streak" id="g-streak"></div>
+      <div><small>Score</small><b id="g-score">000</b></div>
+      <div class="clock"><small>Temps</small><b id="g-clock">30</b></div>
+      <div><small>Poses</small><b id="g-shots">12</b></div>
+      <div><small>Record</small><b id="g-best">000</b></div>
     </div>
     <div class="game-overlay" id="g-overlay">
       <p class="go-title" id="g-title">Prêt&nbsp;?</p>
-      <p class="go-text" id="g-text">Attrape le ballon, tire vers l'arrière et relâche.<br>Le chrono part au premier tir.</p>
-      <button class="btn" id="g-start" data-cursor="link">Jouer</button>
+      <p class="go-text" id="g-text">Déplace le cadre avec la souris ou le doigt, clique ou tape pour déclencher.<br>Le chrono part au premier déclenchement.</p>
+      <button class="btn" id="g-start" data-cursor="link">Charger la pellicule</button>
     </div>
     <div class="game-pop" id="g-pop"></div>
   </div>
+  <div class="strip" id="g-strip" aria-label="Tes photos de la partie"></div>
 </section>
 
 <!-- ========== À PROPOS ========== -->
@@ -175,7 +166,7 @@
 
 <footer class="foot">
   <span>© <span id="year"></span> Yanis Lasne</span>
-  <span>Fait avec de la lumière <button class="hidden-ball" id="hidden-ball" aria-label="Un ballon ?"></button> et du grain</span>
+  <span>Fait avec de la lumière <button class="hidden-ball" id="hidden-ball" aria-label="Un bouchon d'objectif ?"></button> et du grain</span>
   <span class="foot-konami">↑↑↓↓←→←→BA</span>
 </footer>
 

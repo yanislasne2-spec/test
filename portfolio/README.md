@@ -32,7 +32,8 @@ python3 -m http.server 8000
 
 ## Gamification
 
-- XP + niveaux (Rookie → Hall of Fame) : on en gagne en ouvrant des photos et en débloquant des trophées
+- XP + niveaux (Débutant → Légende) : on en gagne en ouvrant des photos et en débloquant des trophées
 - 12 trophées (🏆 en haut à droite), progression sauvegardée dans le navigateur
-- Mini-jeu **Shootaround** : basket façon lance-pierre, avec un shot clock de 24 s et un record
-- Secrets : un ballon caché dans le footer, et le code Konami (↑↑↓↓←→←→BA) qui active le mode argentique
+- Mini-jeu **Instant décisif** : vise les sujets avec le cadre et déclenche ; quand un sujet s'illumine, c'est ×3.
+  12 poses, 30 secondes, record et planche contact de ta partie
+- Secrets : un bouchon d'objectif caché dans le footer, et le code Konami (↑↑↓↓←→←→BA) qui active le mode argentique

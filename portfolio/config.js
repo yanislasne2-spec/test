@@ -6,14 +6,14 @@
 window.SITE = {
   name: 'Yanis Lasne',
   role: 'Photographe',
-  location: '',            // ex. 'Paris, France'
-  email: '',               // ex. 'contact@tondomaine.fr' (laisse vide pour cacher le bouton)
-  instagram: '',           // ex. 'yanislasne' (sans le @)
+  location: '',            // ex. 'Nantes, France'
+  email: 'ylasne.pro@gmail.com',
+  instagram: 'yanis_lsn',  // sans le @
   aboutPhoto: '',          // ex. 'photos/moi.jpg' (sinon un monogramme s'affiche)
 
   about: [
-    "Je photographie ce qui bouge : le parquet qui grince, la sueur sous les projecteurs, la seconde suspendue avant le buzzer.",
-    "Le basket est mon terrain de jeu, mais le viseur ne s'arrête pas là : portraits, concerts et paysages arrivent bientôt dans de nouvelles pellicules."
+    "Je photographie ce qui vit : un regard, une foule, une lumière qui tombe au bon endroit.",
+    "Sport, portraits, concerts, paysages : je cherche l'instant où tout se joue, puis je le travaille en noir et blanc avec une touche de couleur."
   ],
 
   /* Chaque galerie = une « pellicule ».
@@ -23,22 +23,22 @@ window.SITE = {
   galleries: [
     {
       id: 'sport', roll: '01', title: 'Sport', kicker: 'Basket',
-      accent: '#ff5a1f', open: true, placeholders: 9,
-      intro: "Crissement de semelles, contre-attaque, dunk. Le jeu à 1/1000e de seconde."
+      accent: '#ff4d5a', open: true, placeholders: 9,
+      intro: "Projecteurs, sueur et parquet. Le noir et blanc pour l'intensité, la couleur du maillot pour l'identité."
     },
     {
       id: 'portrait', roll: '02', title: 'Portrait', kicker: 'Visages',
-      accent: '#f2b49b', open: false,
+      accent: '#ff9aa2', open: false,
       intro: "Des regards, des silhouettes, des histoires en une image."
     },
     {
       id: 'concert', roll: '03', title: 'Concerts', kicker: 'Scène',
-      accent: '#b06bff', open: false,
+      accent: '#e0304a', open: false,
       intro: "Les lumières, la foule, l'énergie de la scène."
     },
     {
       id: 'paysage', roll: '04', title: 'Paysages', kicker: 'Horizons',
-      accent: '#5fd3a8', open: false,
+      accent: '#f3c4c4', open: false,
       intro: "Prendre l'air. Lignes d'horizon et lumière naturelle."
     }
   ]
