@@ -355,7 +355,10 @@ function render() {
   });
   btn.classList.toggle('on', playing);
 }
-const openPanel = open => { panel.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+const openPanel = open => {
+  if (open !== panel.classList.contains('open') && window.YL && window.YL.sound) window.YL.sound[open ? 'open' : 'close']();
+  panel.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open));
+};
 btn.addEventListener('click', e => {
   e.stopPropagation();
   const open = !panel.classList.contains('open');
