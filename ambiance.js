@@ -291,7 +291,8 @@ function scheduleAdvance() { clearTimeout(advanceT); advanceT = setTimeout(() =>
 function play() {
   if (!init()) return;
   clearTimeout(suspendT);
-  ctx.resume();
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  ctx.resume().catch(() => {});
   silentLoop().play().catch(() => {});
   if (!current) current = startTrack(idx);
   rampMaster(vol, 0.8);
@@ -387,10 +388,10 @@ if (store.get('music-on', false)) {
   btn.classList.add('hint');
   const resume = e => {
     if (e.target.closest && e.target.closest('#hud-music, #music-panel')) return;
-    removeEventListener('pointerdown', resume, true); removeEventListener('keydown', resume, true);
+    ['click', 'touchend', 'keydown'].forEach(ev => removeEventListener(ev, resume, true));
     if (!playing) play();
   };
-  addEventListener('pointerdown', resume, true); addEventListener('keydown', resume, true);
+  ['click', 'touchend', 'keydown'].forEach(ev => addEventListener(ev, resume, true));
 }
 render();
 window.YLMusic = { play, pause, select, tracks: TRACKS };
