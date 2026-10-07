@@ -49,8 +49,15 @@ python3 -m http.server 8000
 # puis ouvre http://localhost:8000
 ```
 
+## Musique d'ambiance
+
+Bouton ♪ (barres animées) en haut à droite : 5 ambiances nature (Vagues, Pluie, Forêt, Nuit d'été, Feu de camp)
+avec accords doux, générées en direct dans le navigateur par `ambiance.js` (Web Audio, aucun fichier audio).
+La piste change toutes les 4 minutes ; volume et piste sont mémorisés. Les navigateurs interdisent la lecture
+automatique : la musique démarre au clic, et reprend au premier clic sur la page si elle était active.
+
 ## Gamification
 
 - XP + niveaux (Débutant → Légende) : on en gagne en ouvrant des photos et en débloquant des trophées
-- 11 trophées (🏆 en haut à droite), progression sauvegardée dans le navigateur
+- 12 trophées (🏆 en haut à droite), progression sauvegardée dans le navigateur
 - Secrets : un bouchon d'objectif caché dans le footer, et le code Konami (↑↑↓↓←→←→BA) qui active le mode argentique

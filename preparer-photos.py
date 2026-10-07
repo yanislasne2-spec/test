@@ -87,7 +87,7 @@ version = time.strftime("%Y%m%d%H%M")
 for page in ["index.html", "galerie.html"]:
     p = ROOT / page
     s = p.read_text(encoding="utf-8")
-    s2 = re.sub(r'((?:style\.css|config\.js|photos\.js|app\.js))\?v=[\w.-]+', rf"\1?v={version}", s)
+    s2 = re.sub(r'((?:style\.css|config\.js|photos\.js|app\.js|ambiance\.js))\?v=[\w.-]+', rf"\1?v={version}", s)
     if s2 != s:
         p.write_text(s2, encoding="utf-8")
 
