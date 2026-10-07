@@ -53,10 +53,21 @@ const sound = {
       sfxNoise = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
       const w = sfxNoise.getChannelData(0); for (let i = 0; i < w.length; i++) w[i] = Math.random() * 2 - 1;
     }
-    if (actx.state === 'suspended') actx.resume();
+    if (actx.state !== 'running') actx.resume().catch(() => {});
     return actx;
   },
-  ready() { return this.on && this.ctx() && actx.state === 'running'; },
+  unlock() { // à appeler pendant un vrai geste (clic, toucher relâché, touche)
+    if (!this.on || !this.ctx() || (this.unlocked && actx.state === 'running')) return;
+    this.unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {} // iPhone : ignore le bouton silencieux
+    const b = actx.createBuffer(1, 1, 22050), s = actx.createBufferSource(); s.buffer = b; s.connect(actx.destination); s.start(0);
+  },
+  ready() { return this.on && !!this.ctx(); },
+  run(fn) { // joue dès que l'audio est prêt (Safari démarre de façon asynchrone)
+    if (!this.ready()) return;
+    if (actx.state === 'running') fn.call(this, actx.currentTime);
+    else actx.resume().then(() => fn.call(this, actx.currentTime)).catch(() => {});
+  },
   tone(f, t, peak, dur, { type = 'sine', to = 0, attack = 0.004, pan = 0 } = {}) {
     const o = actx.createOscillator(), g = actx.createGain(); o.type = type;
     o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
@@ -75,27 +86,27 @@ const sound = {
     node.connect(sfxOut); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.02);
   },
   /* --- vocabulaire --- */
-  tap() { if (!this.ready()) return; const t = actx.currentTime; this.tone(1750, t, 0.05, 0.035, { to: 1150 }); this.air(t, 5000, 3000, 0.015, 0.02); },
-  hover() { if (!this.ready()) return; this.tone(2600, actx.currentTime, 0.012, 0.025); },
-  tick() { if (!this.ready()) return; this.tone(3200, actx.currentTime, 0.018, 0.018, { type: 'triangle' }); },
-  tock() { if (!this.ready()) return; this.tone(520, actx.currentTime, 0.03, 0.12, { to: 440, attack: 0.006 }); },
-  open() { if (!this.ready()) return; const t = actx.currentTime; this.air(t, 500, 2600, 0.05, 0.28); this.tone(587, t + 0.02, 0.028, 0.3, { to: 880, attack: 0.03 }); },
-  close() { if (!this.ready()) return; const t = actx.currentTime; this.air(t, 2400, 500, 0.04, 0.22); this.tone(784, t, 0.022, 0.22, { to: 523, attack: 0.02 }); },
-  swipe(dir = 1) { if (!this.ready()) return; this.air(actx.currentTime, dir > 0 ? 900 : 2200, dir > 0 ? 2200 : 900, 0.04, 0.18, dir * 0.4); },
-  toggle(on) { if (!this.ready()) return; const t = actx.currentTime; this.tone(on ? 880 : 1175, t, 0.04, 0.08); this.tone(on ? 1175 : 880, t + 0.07, 0.04, 0.12); },
-  denied() { if (!this.ready()) return; const t = actx.currentTime; this.tone(330, t, 0.045, 0.1, { type: 'triangle' }); this.tone(294, t + 0.09, 0.04, 0.14, { type: 'triangle' }); },
-  success() { if (!this.ready()) return; const t = actx.currentTime; [1047, 1319, 1568].forEach((f, i) => this.tone(f, t + i * 0.07, 0.035, 0.7, { attack: 0.006 })); },
-  levelUp() { if (!this.ready()) return; const t = actx.currentTime; [523, 659, 784, 1047, 1319].forEach((f, i) => this.tone(f, t + i * 0.08, 0.035, 0.9, { attack: 0.008 })); },
+  tap() { this.run(t => { this.tone(1750, t, 0.05, 0.035, { to: 1150 }); this.air(t, 5000, 3000, 0.015, 0.02); }); },
+  hover() { if (this.ready() && actx.state === 'running') this.tone(2600, actx.currentTime, 0.012, 0.025); },
+  tick() { if (this.ready() && actx.state === 'running') this.tone(3200, actx.currentTime, 0.018, 0.018, { type: 'triangle' }); },
+  tock() { if (this.ready() && actx.state === 'running') this.tone(520, actx.currentTime, 0.03, 0.12, { to: 440, attack: 0.006 }); },
+  open() { this.run(t => { this.air(t, 500, 2600, 0.05, 0.28); this.tone(587, t + 0.02, 0.028, 0.3, { to: 880, attack: 0.03 }); }); },
+  close() { this.run(t => { this.air(t, 2400, 500, 0.04, 0.22); this.tone(784, t, 0.022, 0.22, { to: 523, attack: 0.02 }); }); },
+  swipe(dir = 1) { this.run(t => this.air(t, dir > 0 ? 900 : 2200, dir > 0 ? 2200 : 900, 0.04, 0.18, dir * 0.4)); },
+  toggle(on) { this.run(t => { this.tone(on ? 880 : 1175, t, 0.04, 0.08); this.tone(on ? 1175 : 880, t + 0.07, 0.04, 0.12); }); },
+  denied() { this.run(t => { this.tone(330, t, 0.045, 0.1, { type: 'triangle' }); this.tone(294, t + 0.09, 0.04, 0.14, { type: 'triangle' }); }); },
+  success() { this.run(t => [1047, 1319, 1568].forEach((f, i) => this.tone(f, t + i * 0.07, 0.035, 0.7, { attack: 0.006 }))); },
+  levelUp() { this.run(t => [523, 659, 784, 1047, 1319].forEach((f, i) => this.tone(f, t + i * 0.08, 0.035, 0.9, { attack: 0.008 }))); },
   // compatibilité
   blip() { this.success(); }, shutter() { this.tap(); }
 };
 const soundBtn = $('#hud-sound');
 const renderSound = () => { soundBtn.textContent = sound.on ? '🔊' : '🔇'; soundBtn.setAttribute('aria-label', sound.on ? 'Couper les sons' : 'Activer les sons'); };
-soundBtn.addEventListener('click', () => { sound.on = !sound.on; store.set('sound', sound.on); renderSound(); if (sound.on) { sound.ctx(); setTimeout(() => sound.toggle(true), 30); } });
+soundBtn.addEventListener('click', () => { sound.on = !sound.on; store.set('sound', sound.on); renderSound(); if (sound.on) { sound.unlock(); sound.toggle(true); } });
 renderSound();
 // le contexte audio ne peut démarrer qu'après un geste : on le prépare au premier contact
-addEventListener('pointerdown', () => { if (sound.on) sound.ctx(); }, { capture: true, once: true });
-addEventListener('keydown', () => { if (sound.on) sound.ctx(); }, { capture: true, once: true });
+// Safari n'accepte que click / touchend / keydown comme geste valable (pas pointerdown)
+['click', 'touchend', 'keydown'].forEach(ev => addEventListener(ev, () => sound.unlock(), { capture: true, passive: true }));
 // tap sur tout ce qui est cliquable, léger souffle au survol (souris uniquement)
 document.addEventListener('click', e => {
   const el = e.target.closest('a, button, [role="button"], .shot, input[type="range"]');
