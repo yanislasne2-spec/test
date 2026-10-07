@@ -18,7 +18,7 @@ window.SITE = {
     'photos/sport/sport-03.jpg',
     'photos/paysage/paysage-01.jpg',
     'photos/sport/sport-04.jpg',
-    'photos/paysage/paysage-03.jpg',
+    'photos/paysage/paysage-06.jpg',
     'photos/sport/sport-02.jpg'
   ],
 
@@ -50,7 +50,7 @@ window.SITE = {
     {
       id: 'paysage', roll: '04', title: 'Paysages', kicker: 'Horizons',
       accent: '#f3c4c4', open: false,
-      intro: "Ruelles blanchies à la chaux, volets bleus et mer à perte de vue."
+      intro: "Ruelles blanchies à la chaux, mer turquoise et couchers de soleil."
     }
   ]
 };

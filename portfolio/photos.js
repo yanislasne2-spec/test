@@ -128,6 +128,46 @@ window.PHOTOS = /*DATA*/{
       "exif": "",
       "ratio": 0.667,
       "focus": "50% 45%"
+    },
+    {
+      "src": "photos/paysage/paysage-06.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "50% 55%"
+    },
+    {
+      "src": "photos/paysage/paysage-07.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "40% 55%"
+    },
+    {
+      "src": "photos/paysage/paysage-08.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "35% 60%"
+    },
+    {
+      "src": "photos/paysage/paysage-09.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "50% 55%"
+    },
+    {
+      "src": "photos/paysage/paysage-10.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "45% 50%"
     }
   ]
 }/*END*/;
