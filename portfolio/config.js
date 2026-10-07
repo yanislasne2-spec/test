@@ -11,6 +11,16 @@ window.SITE = {
   instagram: 'yanis_lsn',  // sans le @
   aboutPhoto: '',          // ex. 'photos/moi.jpg' (sinon un monogramme s'affiche)
 
+  // Photos du diaporama plein écran de l'accueil (dans l'ordre). Vide = les premières photos.
+  hero: [
+    'photos/sport/sport-01.jpg',
+    'photos/sport/sport-03.jpg',
+    'photos/sport/sport-04.jpg',
+    'photos/sport/sport-02.jpg',
+    'photos/sport/sport-07.jpg',
+    'photos/sport/sport-06.jpg'
+  ],
+
   about: [
     "Je photographie ce qui vit : un regard, une foule, une lumière qui tombe au bon endroit.",
     "Sport, portraits, concerts, paysages : je cherche l'instant où tout se joue, et la lumière qui le raconte."

@@ -13,22 +13,24 @@
 </head>
 <body class="is-loading" data-page="home">
 
-<!-- ========== LOADER : ouverture du diaphragme ========== -->
-<div id="loader" aria-hidden="true">
-  <svg viewBox="-100 -100 200 200" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <mask id="iris-mask">
-        <rect x="-300" y="-300" width="600" height="600" fill="#fff"/>
-        <g id="iris-hole"><polygon id="iris-poly" fill="#000"/></g>
-      </mask>
-    </defs>
-    <rect x="-300" y="-300" width="600" height="600" fill="#0c0b0a" mask="url(#iris-mask)"/>
-    <g id="iris-blades" stroke="rgba(241,235,225,.22)" stroke-width=".5" fill="none"></g>
-  </svg>
-  <div class="loader-read"><span id="loader-f">f/22</span><span class="loader-name">Yanis Lasne</span></div>
+<!-- ========== ÉCRAN DE CHARGEMENT ========== -->
+<div id="loader" role="status" aria-label="Chargement du portfolio">
+  <div class="ld-panel ld-top"></div>
+  <div class="ld-panel ld-bottom"></div>
+  <div class="ld-inner">
+    <div class="ld-meta"><span>Portfolio</span><span id="ld-year">2026</span></div>
+    <span class="tracked ld-role">Photographe</span>
+    <p class="ld-name" aria-hidden="true"><span class="ld-out">YANIS LASNE</span><span class="ld-fill" id="ld-fill">YANIS LASNE</span></p>
+    <div class="ld-foot">
+      <span class="ld-status" id="ld-status">Développement de la pellicule…</span>
+      <span class="ld-count"><b id="ld-count">000</b>%</span>
+    </div>
+    <div class="ld-bar"><i id="ld-bar"></i></div>
+  </div>
 </div>
 
 <div class="grain" aria-hidden="true"></div>
+<div class="scroll-prog" aria-hidden="true"><i id="scroll-prog"></i></div>
 <div id="flash" aria-hidden="true"></div>
 
 <div id="cursor" aria-hidden="true">
@@ -41,7 +43,7 @@
   <a href="#top" class="logo" data-cursor="link">YL<span class="logo-dot"></span></a>
   <nav class="nav-links">
     <a href="#galeries" data-cursor="link">Galeries</a>
-    <a href="#jeu" data-cursor="link">Mini-jeu</a>
+    <a href="#selection" data-cursor="link">Sélection</a>
     <a href="#apropos" data-cursor="link">À propos</a>
     <a href="#contact" data-cursor="link">Contact</a>
   </nav>
@@ -60,29 +62,19 @@
 
 <!-- ========== HERO : viseur ========== -->
 <section id="hero" class="hero">
-  <div class="hero-bg" id="hero-bg"></div>
-  <canvas id="dots" aria-hidden="true"></canvas>
-  <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
-  <div class="term" id="term" aria-hidden="true"></div>
+  <div class="hero-slides" id="hero-slides" aria-hidden="true"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
 
   <div class="vf" aria-hidden="true">
     <i class="vf-c tl"></i><i class="vf-c tr"></i><i class="vf-c bl"></i><i class="vf-c br"></i>
     <div class="vf-top">
       <span><b class="rec"></b> REC</span>
-      <span class="vf-mode">AF-C · RAFALE H</span>
       <span class="batt"><i></i><i></i><i></i></span>
     </div>
     <div class="vf-focus" id="vf-focus"></div>
-    <div class="vf-bottom">
-      <span id="vf-shutter">1/1000</span>
-      <span id="vf-ap">F2.8</span>
-      <span id="vf-iso">ISO 3200</span>
-      <span class="vf-exp">−2..1..0..1..+2</span>
-      <span>[<b id="vf-shots">036</b>]</span>
-    </div>
   </div>
 
-  <div class="hero-inner">
+  <div class="hero-inner" id="hero-inner">
     <span class="tracked top">Photographe</span>
     <h1 class="hero-name" aria-label="Yanis Lasne">
       <span class="line" data-split>YANIS</span>
@@ -90,11 +82,30 @@
     </h1>
     <span class="tracked bottom">Sport · Portrait · Concerts · Paysages</span>
   </div>
-  <p class="hero-hint">Clique n'importe où pour déclencher <kbd>●</kbd></p>
-  <a href="#galeries" class="scroll-cue" data-cursor="link" aria-label="Défiler"><span></span></a>
+
+  <div class="hero-side">
+    <div class="hero-read"><span id="vf-shutter">1/1000</span><span id="vf-ap">F2.8</span><span id="vf-iso">ISO 3200</span><span>[<b id="vf-shots">036</b>]</span></div>
+    <div class="hero-count"><b id="hero-idx">01</b><span>/</span><span id="hero-total">06</span></div>
+    <div class="hero-bars" id="hero-bars"></div>
+  </div>
+  <p class="hero-hint">Clique pour déclencher <kbd>●</kbd></p>
+  <a href="#selection" class="scroll-cue" data-cursor="link" aria-label="Défiler"><span></span></a>
 </section>
 
 <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+<!-- ========== SÉLECTION (défilement horizontal) ========== -->
+<section id="selection" class="hs">
+  <div class="hs-sticky">
+    <header class="hs-head">
+      <span class="sec-num">( sélection )</span>
+      <h2 class="hs-title">Sur le <em>terrain</em></h2>
+      <p class="hs-count"><b id="hs-idx">01</b> / <span id="hs-total">10</span></p>
+    </header>
+    <div class="hs-track" id="hs-track"></div>
+    <div class="hs-progress"><i id="hs-bar"></i></div>
+  </div>
+</section>
 
 <!-- ========== PELLICULES ========== -->
 <section id="galeries" class="section">
@@ -107,35 +118,11 @@
 </section>
 
 
-<!-- ========== MINI-JEU ========== -->
-<section id="jeu" class="section game-sec">
-  <header class="sec-head">
-    <span class="sec-num">( 02 )</span>
-    <h2 class="sec-title">Instant <em>décisif</em></h2>
-    <p class="sec-desc">Mini-jeu. Vise avec le cadre et déclenche quand le sujet est dedans. Quand il s'illumine, c'est l'instant décisif&nbsp;: points ×3. 12 poses, 30 secondes.</p>
-  </header>
-  <div class="game" id="game">
-    <canvas id="game-canvas"></canvas>
-    <div class="game-hud">
-      <div><small>Score</small><b id="g-score">000</b></div>
-      <div class="clock"><small>Temps</small><b id="g-clock">30</b></div>
-      <div><small>Poses</small><b id="g-shots">12</b></div>
-      <div><small>Record</small><b id="g-best">000</b></div>
-    </div>
-    <div class="game-overlay" id="g-overlay">
-      <p class="go-title" id="g-title">Prêt&nbsp;?</p>
-      <p class="go-text" id="g-text">Déplace le cadre avec la souris ou le doigt, clique ou tape pour déclencher.<br>Le chrono part au premier déclenchement.</p>
-      <button class="btn" id="g-start" data-cursor="link">Charger la pellicule</button>
-    </div>
-    <div class="game-pop" id="g-pop"></div>
-  </div>
-  <div class="strip" id="g-strip" aria-label="Tes photos de la partie"></div>
-</section>
 
 <!-- ========== À PROPOS ========== -->
 <section id="apropos" class="section about">
   <header class="sec-head">
-    <span class="sec-num">( 03 )</span>
+    <span class="sec-num">( 02 )</span>
     <h2 class="sec-title">À propos</h2>
   </header>
   <div class="about-grid">
@@ -156,7 +143,7 @@
 
 <!-- ========== CONTACT ========== -->
 <section id="contact" class="section contact">
-  <p class="sec-num">( 04 )</p>
+  <p class="sec-num">( 03 )</p>
   <h2 class="contact-title" data-split-words>On shoote <em>ensemble&nbsp;?</em></h2>
   <p class="contact-sub">Matchs, tournois, concerts, portraits : écris-moi, je réponds vite.</p>
   <div class="contact-actions" id="contact-actions"></div>
@@ -209,6 +196,5 @@
 <script src="config.js"></script>
 <script src="photos.js"></script>
 <script src="app.js"></script>
-<script src="game.js"></script>
 </body>
 </html>
