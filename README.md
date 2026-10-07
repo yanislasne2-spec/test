@@ -49,12 +49,13 @@ python3 -m http.server 8000
 # puis ouvre http://localhost:8000
 ```
 
-## Musique d'ambiance
+## Playlist (type beats)
 
-Bouton ♪ (barres animées) en haut à droite : 5 ambiances nature (Vagues, Pluie, Forêt, Nuit d'été, Feu de camp)
-avec accords doux, générées en direct dans le navigateur par `ambiance.js` (Web Audio, aucun fichier audio).
-La piste change toutes les 4 minutes ; volume et piste sont mémorisés. Les navigateurs interdisent la lecture
-automatique : la musique démarre au clic, et reprend au premier clic sur la page si elle était active.
+Bouton à barres animées en haut à droite : 5 instrus trap originales dans l'esprit de Future et Young Thug
+(Flûte de minuit, Bounce, Piano sombre, Guitare d'Atlanta, Cloches), composées et jouées en direct par
+`ambiance.js` (Web Audio : 808 avec glides, rafales de charleston, clap, flûte/cloches/piano/guitare ; aucun fichier audio).
+Ouvrir la playlist lance le son ; morceau suivant toutes les 3 minutes ; volume et morceau mémorisés.
+Les navigateurs interdisent la lecture automatique : la musique reprend au premier clic si elle était active.
 
 ## Gamification
 
