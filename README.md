@@ -1,11 +1,12 @@
 # Portfolio photo de Yanis Lasne
 
-Site statique, sans build : `index.html`, `style.css`, `app.js`, `game.js`.
+Site statique, sans build : `index.html`, `galerie.html`, `style.css`, `app.js`.
+En ligne sur **https://yanislasne.fr** (GitHub Pages, domaine déclaré dans le fichier `CNAME`).
 
 ## Ajouter des photos depuis GitHub (le plus simple, sans limite de nombre)
 
 1. Ouvre le dossier de la galerie sur GitHub, par exemple
-   https://github.com/yanislasne2-spec/test/tree/main/portfolio/photos/paysage
+   https://github.com/yanislasne2-spec/test/tree/main/photos/paysage
    (ou `sport`, `portrait`, `concert`).
 2. **Add file → Upload files**, glisse tes photos (JPG, PNG, HEIC d'iPhone… jusqu'à 100 par envoi, 25 Mo max chacune).
 3. En bas, laisse « Commit directly to the main branch » et clique **Commit changes**.
@@ -44,7 +45,6 @@ Dans `index.html` et `galerie.html`, change le numéro `?v=...` après `style.cs
 ## Tester en local
 
 ```bash
-cd portfolio
 python3 -m http.server 8000
 # puis ouvre http://localhost:8000
 ```
