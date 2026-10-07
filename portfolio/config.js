@@ -14,11 +14,12 @@ window.SITE = {
   // Photos du diaporama plein écran de l'accueil (dans l'ordre). Vide = les premières photos.
   hero: [
     'photos/sport/sport-01.jpg',
+    'photos/paysage/paysage-02.jpg',
     'photos/sport/sport-03.jpg',
+    'photos/paysage/paysage-01.jpg',
     'photos/sport/sport-04.jpg',
-    'photos/sport/sport-02.jpg',
-    'photos/sport/sport-07.jpg',
-    'photos/sport/sport-06.jpg'
+    'photos/paysage/paysage-03.jpg',
+    'photos/sport/sport-02.jpg'
   ],
 
   about: [
@@ -49,7 +50,7 @@ window.SITE = {
     {
       id: 'paysage', roll: '04', title: 'Paysages', kicker: 'Horizons',
       accent: '#f3c4c4', open: false,
-      intro: "Prendre l'air. Lignes d'horizon et lumière naturelle."
+      intro: "Ruelles blanchies à la chaux, volets bleus et mer à perte de vue."
     }
   ]
 };

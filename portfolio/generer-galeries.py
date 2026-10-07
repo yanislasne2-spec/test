@@ -11,6 +11,11 @@ import json
 import re
 from pathlib import Path
 
+try:  # optionnel : sert à connaître le format (horizontal / vertical) de chaque photo
+    from PIL import Image
+except ImportError:
+    Image = None
+
 ROOT = Path(__file__).resolve().parent
 PHOTOS_DIR = ROOT / "photos"
 OUT = ROOT / "photos.js"
@@ -27,6 +32,10 @@ for g in GALLERIES + sorted(p.name for p in PHOTOS_DIR.iterdir() if p.is_dir() a
     folder = PHOTOS_DIR / g
     files = sorted(f for f in folder.iterdir() if f.suffix.lower() in EXT) if folder.exists() else []
     data[g] = [known.get(f"photos/{g}/{f.name}", {"src": f"photos/{g}/{f.name}", "alt": "", "caption": "", "exif": ""}) for f in files]
+    if Image:
+        for e, f in zip(data[g], files):
+            with Image.open(f) as im:
+                e["ratio"] = round(im.width / im.height, 3)
     print(f"{g:>10} : {len(data[g])} photo(s)")
 
 body = json.dumps(data, ensure_ascii=False, indent=2)
