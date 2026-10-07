@@ -623,6 +623,20 @@ scrollFx.push(() => {
   const lim = innerHeight * .72;
   words.forEach(w => w.classList.toggle('lit', w.getBoundingClientRect().top < lim));
 });
+(() => {
+  const fig = $('#contact-photo'), img = $('#contact-img');
+  if (!fig) return;
+  if (!S.contactPhoto) { fig.remove(); $('.contact-wrap').classList.add('no-photo'); return; }
+  img.src = S.contactPhoto;
+  fig.classList.add('reveal');
+  if (!reduce) scrollFx.push(() => {
+    const r = fig.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+    img.style.transform = `translate3d(0,${p * -8}%,0) scale(1.14)`;
+  });
+  fig.addEventListener('click', () => { flash(); fig.classList.remove('snap'); void fig.offsetWidth; fig.classList.add('snap'); });
+})();
 if (S.aboutPhoto) { const a = $('#about-photo'); a.style.backgroundImage = `url('${encodeURI(S.aboutPhoto)}')`; a.innerHTML = ''; }
 $('#st-photos').dataset.count = totalPhotos;
 $('#st-rolls').dataset.count = galleries.length;
