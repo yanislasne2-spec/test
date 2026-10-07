@@ -31,6 +31,16 @@ for g in GALLERIES + sorted(p.name for p in PHOTOS_DIR.iterdir() if p.is_dir() a
     known = {e["src"]: e for e in current.get(g, [])}
     folder = PHOTOS_DIR / g
     files = sorted(f for f in folder.iterdir() if f.suffix.lower() in EXT) if folder.exists() else []
+    if Image:  # on écarte les fichiers qui ne sont pas de vraies images
+        ok = []
+        for f in files:
+            try:
+                with Image.open(f) as im:
+                    im.verify()
+                ok.append(f)
+            except Exception:
+                print(f"  ignorée : {f.name} (image illisible)")
+        files = ok
     data[g] = [known.get(f"photos/{g}/{f.name}", {"src": f"photos/{g}/{f.name}", "alt": "", "caption": "", "exif": ""}) for f in files]
     if Image:
         for e, f in zip(data[g], files):
