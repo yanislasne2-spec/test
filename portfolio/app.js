@@ -73,7 +73,7 @@ const ACH = [
   { id: 'full-roll', ico: '🎞️', title: 'Pellicule complète', desc: "Vois toutes les photos d'une galerie.", xp: 60 },
   { id: 'curious', ico: '🔒', title: 'Trop pressé', desc: 'Essaie d\'ouvrir une pellicule pas encore développée.', xp: 10 },
   { id: 'slideshow', ico: '🎬', title: 'Diaporama', desc: 'Regarde toutes les photos de l\'accueil défiler.', xp: 30 },
-  { id: 'selection', ico: '🎯', title: 'Sur le terrain', desc: 'Fais défiler toute la sélection.', xp: 30 },
+  { id: 'selection', ico: '🎯', title: 'Toute la sélection', desc: 'Fais défiler toute la sélection.', xp: 30 },
   { id: 'gallery', ico: '🖼️', title: 'Dans la galerie', desc: 'Ouvre la page d\'une pellicule.', xp: 20 },
   { id: 'hidden-ball', ico: '👁️', title: 'Œil de lynx', desc: 'Trouve le bouchon d\'objectif caché sur le site.', xp: 40 },
   { id: 'konami', ico: '🕹️', title: 'Old school', desc: 'Entre le code secret → mode argentique.', xp: 40 },
@@ -326,10 +326,13 @@ hero.addEventListener('click', e => {
 (() => {
   const sec = $('#selection'), track = $('#hs-track');
   if (!sec || !track) return;
-  const items = galleries.flatMap(g => g.photos.map((p, i) => ({ g, p, i })));
+  // alterne les thèmes pour mélanger sport et paysages
+  const lists = galleries.map(g => g.photos.map((p, i) => ({ g, p, i }))).filter(l => l.length);
+  const items = [];
+  for (let k = 0; lists.some(l => l.length); k++) { const l = lists[k % lists.length]; if (l.length) items.push(l.shift()); }
   if (!items.length) { sec.remove(); return; }
   track.innerHTML = items.map(({ g, p, i }, k) => `
-    <figure class="hs-item shot" data-g="${g.id}" data-i="${i}" data-cursor="photo" tabindex="0" role="button" aria-label="Ouvrir la photo ${k + 1}">
+    <figure class="hs-item shot" style="--r:${+p.ratio || 2 / 3}" data-g="${g.id}" data-i="${i}" data-cursor="photo" tabindex="0" role="button" aria-label="Ouvrir la photo ${k + 1}">
       <div class="frame"><img src="${esc(p.src)}" alt="${esc(p.alt || g.title + ' ' + (k + 1))}" loading="lazy" decoding="async"></div>
       <figcaption><span class="fr">${pad(k + 1)}</span><span>${esc(g.title)}</span></figcaption>
     </figure>`).join('');
@@ -442,6 +445,11 @@ function currentId() {
   const g = galleries.find(x => x.id === h && x.unlocked) || galleries.find(x => x.unlocked);
   return g && g.id;
 }
+// nombre de colonnes (desktop) qui laisse le moins de cases vides, une photo horizontale comptant pour deux
+function bestCols(items) {
+  const units = items.reduce((a, it) => a + ((it.ratio || 0) > 1.1 ? 2 : 1), 0);
+  return [5, 4, 3].reduce((best, c) => ((c - units % c) % c) < ((best - units % best) % best) ? c : best, 5);
+}
 function renderGalleries() {
   const box = $('#gallery-sections'); if (!box) return;
   const id = currentId();
@@ -460,9 +468,9 @@ function renderGalleries() {
         <div class="gal-progress">Collection<b data-prog="${g.id}">0/${g.items.length}</b><span class="hud-bar"><i data-progbar="${g.id}"></i></span></div>
       </header>
       ${empty ? `<p class="gal-empty-note">↳ Cadres d'exemple — dépose tes photos dans <code>photos/${g.id}/</code> puis lance <code>python3 generer-galeries.py</code>.</p>` : ''}
-      <div class="grid">
+      <div class="grid" style="--cols:${bestCols(g.items)}">
         ${g.items.map((it, i) => `
-          <figure class="shot" data-g="${g.id}" data-i="${i}" data-cursor="photo" style="--d:${(i % 3) * .12}s" tabindex="0" role="button" aria-label="Ouvrir la photo ${it.n}">
+          <figure class="shot${(it.ratio || 0) > 1.1 ? ' wide' : ''}" data-g="${g.id}" data-i="${i}" data-cursor="photo" style="--d:${(i % 3) * .12}s" tabindex="0" role="button" aria-label="Ouvrir la photo ${it.n}">
             <div class="frame">${it.placeholder
               ? `<div class="ph-art" style="--g:${g.accent};aspect-ratio:${it.ratio}"><div class="ph-label"><span>Photo à venir</span><b>${pad(it.n)}</b></div></div>`
               : `<img src="${esc(it.src)}" alt="${esc(it.alt || it.caption || g.title + ' ' + it.n)}" loading="lazy" decoding="async">`}</div>
