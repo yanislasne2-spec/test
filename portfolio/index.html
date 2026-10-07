@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yanis Lasne — Photographe</title>
+<meta name="description" content="Portfolio photo de Yanis Lasne : sport (basket), portrait, concerts et paysages.">
+<meta name="theme-color" content="#0c0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading" data-page="home">
+
+<!-- ========== LOADER : ouverture du diaphragme ========== -->
+<div id="loader" aria-hidden="true">
+  <svg viewBox="-100 -100 200 200" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <mask id="iris-mask">
+        <rect x="-300" y="-300" width="600" height="600" fill="#fff"/>
+        <g id="iris-hole"><polygon id="iris-poly" fill="#000"/></g>
+      </mask>
+    </defs>
+    <rect x="-300" y="-300" width="600" height="600" fill="#0c0b0a" mask="url(#iris-mask)"/>
+    <g id="iris-blades" stroke="rgba(241,235,225,.22)" stroke-width=".5" fill="none"></g>
+  </svg>
+  <div class="loader-read"><span id="loader-f">f/22</span><span class="loader-name">Yanis Lasne</span></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+
+<div id="cursor" aria-hidden="true">
+  <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+  <i class="c-dot"></i><span class="c-label"></span>
+</div>
+
+<!-- ========== NAV + HUD GAMIFICATION ========== -->
+<header class="nav">
+  <a href="#top" class="logo" data-cursor="link">YL<span class="logo-dot"></span></a>
+  <nav class="nav-links">
+    <a href="#galeries" data-cursor="link">Galeries</a>
+    <a href="#jeu" data-cursor="link">Mini-jeu</a>
+    <a href="#apropos" data-cursor="link">À propos</a>
+    <a href="#contact" data-cursor="link">Contact</a>
+  </nav>
+  <div class="hud">
+    <button class="hud-level" id="hud-level" data-cursor="link" aria-label="Voir les trophées">
+      <span class="hud-lvl-name" id="hud-lvl-name">Rookie</span>
+      <span class="hud-bar"><i id="hud-bar"></i></span>
+      <span class="hud-xp" id="hud-xp">0 XP</span>
+    </button>
+    <button class="hud-btn" id="hud-trophy" data-cursor="link" aria-label="Trophées">🏆<b id="hud-trophy-count">0</b></button>
+    <button class="hud-btn" id="hud-sound" data-cursor="link" aria-label="Activer le son">🔇</button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ========== HERO : viseur ========== -->
+<section id="hero" class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
+  <div class="term" id="term" aria-hidden="true"></div>
+
+  <div class="vf" aria-hidden="true">
+    <i class="vf-c tl"></i><i class="vf-c tr"></i><i class="vf-c bl"></i><i class="vf-c br"></i>
+    <div class="vf-top">
+      <span><b class="rec"></b> REC</span>
+      <span class="vf-mode">AF-C · RAFALE H</span>
+      <span class="batt"><i></i><i></i><i></i></span>
+    </div>
+    <div class="vf-focus" id="vf-focus"></div>
+    <div class="vf-bottom">
+      <span id="vf-shutter">1/1000</span>
+      <span id="vf-ap">F2.8</span>
+      <span id="vf-iso">ISO 3200</span>
+      <span class="vf-exp">−2..1..0..1..+2</span>
+      <span>[<b id="vf-shots">036</b>]</span>
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <span class="tracked top">Photographe</span>
+    <h1 class="hero-name" aria-label="Yanis Lasne">
+      <span class="line" data-split>YANIS</span>
+      <span class="line line-2" data-split>LASNE</span>
+    </h1>
+    <span class="tracked bottom">Sport · Portrait · Concerts · Paysages</span>
+  </div>
+  <p class="hero-hint">Clique n'importe où pour déclencher <kbd>●</kbd></p>
+  <a href="#galeries" class="scroll-cue" data-cursor="link" aria-label="Défiler"><span></span></a>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+<!-- ========== PELLICULES ========== -->
+<section id="galeries" class="section">
+  <header class="sec-head">
+    <span class="sec-num">( 01 )</span>
+    <h2 class="sec-title">Pellicules</h2>
+    <p class="sec-desc">Chaque série est une pellicule. Certaines sont encore <em>en développement</em> : reviens bientôt.</p>
+  </header>
+  <div class="rolls" id="rolls"></div>
+</section>
+
+
+<!-- ========== MINI-JEU ========== -->
+<section id="jeu" class="section game-sec">
+  <header class="sec-head">
+    <span class="sec-num">( 02 )</span>
+    <h2 class="sec-title">Instant <em>décisif</em></h2>
+    <p class="sec-desc">Mini-jeu. Vise avec le cadre et déclenche quand le sujet est dedans. Quand il s'illumine, c'est l'instant décisif&nbsp;: points ×3. 12 poses, 30 secondes.</p>
+  </header>
+  <div class="game" id="game">
+    <canvas id="game-canvas"></canvas>
+    <div class="game-hud">
+      <div><small>Score</small><b id="g-score">000</b></div>
+      <div class="clock"><small>Temps</small><b id="g-clock">30</b></div>
+      <div><small>Poses</small><b id="g-shots">12</b></div>
+      <div><small>Record</small><b id="g-best">000</b></div>
+    </div>
+    <div class="game-overlay" id="g-overlay">
+      <p class="go-title" id="g-title">Prêt&nbsp;?</p>
+      <p class="go-text" id="g-text">Déplace le cadre avec la souris ou le doigt, clique ou tape pour déclencher.<br>Le chrono part au premier déclenchement.</p>
+      <button class="btn" id="g-start" data-cursor="link">Charger la pellicule</button>
+    </div>
+    <div class="game-pop" id="g-pop"></div>
+  </div>
+  <div class="strip" id="g-strip" aria-label="Tes photos de la partie"></div>
+</section>
+
+<!-- ========== À PROPOS ========== -->
+<section id="apropos" class="section about">
+  <header class="sec-head">
+    <span class="sec-num">( 03 )</span>
+    <h2 class="sec-title">À propos</h2>
+  </header>
+  <div class="about-grid">
+    <div class="polaroid" id="polaroid" data-cursor="link">
+      <div class="polaroid-img" id="about-photo"><span>YL</span></div>
+      <p class="polaroid-cap">derrière le viseur</p>
+    </div>
+    <div class="about-body">
+      <div class="about-text" id="about-text"></div>
+      <div class="stats">
+        <div><b data-count id="st-photos">0</b><small>photos en ligne</small></div>
+        <div><b data-count id="st-rolls">0</b><small>pellicules</small></div>
+        <div><b id="st-trophies">0/0</b><small>trophées débloqués par toi</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section id="contact" class="section contact">
+  <p class="sec-num">( 04 )</p>
+  <h2 class="contact-title" data-split-words>On shoote <em>ensemble&nbsp;?</em></h2>
+  <p class="contact-sub">Matchs, tournois, concerts, portraits : écris-moi, je réponds vite.</p>
+  <div class="contact-actions" id="contact-actions"></div>
+</section>
+</main>
+
+<footer class="foot">
+  <span>© <span id="year"></span> Yanis Lasne</span>
+  <span>Fait avec de la lumière <button class="hidden-ball" id="hidden-ball" aria-label="Un bouchon d'objectif ?"></button> et du grain</span>
+  <span class="foot-konami">↑↑↓↓←→←→BA</span>
+</footer>
+
+<!-- ========== LIGHTBOX ========== -->
+<div id="lb" class="lb" aria-hidden="true" role="dialog" aria-label="Photo">
+  <div class="lb-bg"></div>
+  <div class="lb-stage" id="lb-stage"></div>
+  <div class="lb-top">
+    <span id="lb-count">01 / 09</span>
+    <button class="lb-close" id="lb-close" data-cursor="link" aria-label="Fermer">Fermer ✕</button>
+  </div>
+  <button class="lb-nav prev" id="lb-prev" data-cursor="link" aria-label="Précédente">←</button>
+  <button class="lb-nav next" id="lb-next" data-cursor="link" aria-label="Suivante">→</button>
+  <div class="lb-bottom">
+    <span id="lb-caption"></span>
+    <span id="lb-exif"></span>
+  </div>
+</div>
+
+<!-- ========== TROPHÉES ========== -->
+<div id="trophies" class="modal" aria-hidden="true" role="dialog" aria-label="Trophées">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-x" data-close data-cursor="link" aria-label="Fermer">✕</button>
+    <p class="sec-num">Vestiaire</p>
+    <h3 class="modal-title">Tes trophées</h3>
+    <div class="modal-level">
+      <b id="tr-level">Rookie</b>
+      <span class="hud-bar big"><i id="tr-bar"></i></span>
+      <small id="tr-next"></small>
+    </div>
+    <ul class="ach-list" id="ach-list"></ul>
+    <button class="link-btn" id="tr-reset" data-cursor="link">Remettre à zéro</button>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="levelup" aria-hidden="true"><small>Level up</small><b id="levelup-name"></b></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="config.js"></script>
+<script src="photos.js"></script>
+<script src="app.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

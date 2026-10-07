@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie — Yanis Lasne</title>
+<meta name="description" content="Portfolio photo de Yanis Lasne : sport (basket), portrait, concerts et paysages.">
+<meta name="theme-color" content="#0c0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading" data-page="gallery">
+
+<div class="grain" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+
+<div id="cursor" aria-hidden="true">
+  <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+  <i class="c-dot"></i><span class="c-label"></span>
+</div>
+
+
+<header class="nav">
+  <a href="index.html" class="logo" data-cursor="link">YL<span class="logo-dot"></span></a>
+  <nav class="nav-links">
+    <a href="index.html" data-cursor="link">Accueil</a>
+    <a href="index.html#galeries" data-cursor="link">Pellicules</a>
+    <a href="index.html#contact" data-cursor="link">Contact</a>
+  </nav>
+  <div class="hud">
+    <button class="hud-level" id="hud-level" data-cursor="link" aria-label="Voir les trophées">
+      <span class="hud-lvl-name" id="hud-lvl-name">Rookie</span>
+      <span class="hud-bar"><i id="hud-bar"></i></span>
+      <span class="hud-xp" id="hud-xp">0 XP</span>
+    </button>
+    <button class="hud-btn" id="hud-trophy" data-cursor="link" aria-label="Trophées">🏆<b id="hud-trophy-count">0</b></button>
+    <button class="hud-btn" id="hud-sound" data-cursor="link" aria-label="Activer le son">🔇</button>
+  </div>
+</header>
+
+<main id="top">
+<div id="gallery-sections"></div>
+
+<section class="section others">
+  <header class="sec-head">
+    <span class="sec-num">( pellicules )</span>
+    <h2 class="sec-title">Toutes les <em>pellicules</em></h2>
+  </header>
+  <div class="rolls" id="rolls"></div>
+</section>
+</main>
+
+<footer class="foot">
+  <span>© <span id="year"></span> Yanis Lasne</span>
+  <span>Fait avec de la lumière <button class="hidden-ball" id="hidden-ball" aria-label="Un bouchon d'objectif ?"></button> et du grain</span>
+  <span class="foot-konami">↑↑↓↓←→←→BA</span>
+</footer>
+
+<!-- ========== LIGHTBOX ========== -->
+<div id="lb" class="lb" aria-hidden="true" role="dialog" aria-label="Photo">
+  <div class="lb-bg"></div>
+  <div class="lb-stage" id="lb-stage"></div>
+  <div class="lb-top">
+    <span id="lb-count">01 / 09</span>
+    <button class="lb-close" id="lb-close" data-cursor="link" aria-label="Fermer">Fermer ✕</button>
+  </div>
+  <button class="lb-nav prev" id="lb-prev" data-cursor="link" aria-label="Précédente">←</button>
+  <button class="lb-nav next" id="lb-next" data-cursor="link" aria-label="Suivante">→</button>
+  <div class="lb-bottom">
+    <span id="lb-caption"></span>
+    <span id="lb-exif"></span>
+  </div>
+</div>
+
+<!-- ========== TROPHÉES ========== -->
+<div id="trophies" class="modal" aria-hidden="true" role="dialog" aria-label="Trophées">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-x" data-close data-cursor="link" aria-label="Fermer">✕</button>
+    <p class="sec-num">Vestiaire</p>
+    <h3 class="modal-title">Tes trophées</h3>
+    <div class="modal-level">
+      <b id="tr-level">Rookie</b>
+      <span class="hud-bar big"><i id="tr-bar"></i></span>
+      <small id="tr-next"></small>
+    </div>
+    <ul class="ach-list" id="ach-list"></ul>
+    <button class="link-btn" id="tr-reset" data-cursor="link">Remettre à zéro</button>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="levelup" aria-hidden="true"><small>Level up</small><b id="levelup-name"></b></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script src="config.js"></script>
+<script src="photos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
