@@ -77,7 +77,7 @@ const ACH = [
   { id: 'gallery', ico: '🖼️', title: 'Dans la galerie', desc: 'Ouvre la page d\'une pellicule.', xp: 20 },
   { id: 'hidden-ball', ico: '👁️', title: 'Œil de lynx', desc: 'Trouve le bouchon d\'objectif caché sur le site.', xp: 40 },
   { id: 'konami', ico: '🕹️', title: 'Old school', desc: 'Entre le code secret → mode argentique.', xp: 40 },
-  { id: 'ambiance', ico: '🎧', title: 'Ambiance', desc: 'Lance la musique d’ambiance.', xp: 15 },
+  { id: 'ambiance', ico: '🎧', title: 'Ambiance', desc: 'Lance la playlist.', xp: 15 },
   { id: 'explorer', ico: '🧭', title: 'Explorateur', desc: 'Descends jusqu\'au bout du site.', xp: 15 },
   { id: 'contact', ico: '✉️', title: 'Prise de contact', desc: 'Clique pour me contacter.', xp: 25 }
 ];
