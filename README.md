@@ -49,6 +49,13 @@ python3 -m http.server 8000
 # puis ouvre http://localhost:8000
 ```
 
+## Sound design
+
+Petits sons d'interface synthétisés (style épuré, façon Apple) dans `app.js` : tap au clic, souffle très léger
+au survol, ouverture / fermeture (lightbox, trophées, playlist), glissement entre photos, cran de « molette »
+à chaque photo de la sélection, cran doux quand une section arrive à l'écran, carillons pour les trophées.
+Activés par défaut, coupés avec le bouton 🔊 en haut à droite (indépendant de la playlist).
+
 ## Playlist (type beats)
 
 Bouton à barres animées en haut à droite : 5 instrus trap originales dans l'esprit de Future et Young Thug
