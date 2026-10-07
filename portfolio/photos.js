@@ -87,7 +87,48 @@ window.PHOTOS = /*DATA*/{
     }
   ],
   "portrait": [],
-  "concert": [],
+  "concert": [
+    {
+      "src": "photos/concert/concert-01.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "60% 50%"
+    },
+    {
+      "src": "photos/concert/concert-02.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "50% 45%"
+    },
+    {
+      "src": "photos/concert/concert-03.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "50% 45%"
+    },
+    {
+      "src": "photos/concert/concert-04.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "45% 50%"
+    },
+    {
+      "src": "photos/concert/concert-05.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "35% 45%"
+    }
+  ],
   "paysage": [
     {
       "src": "photos/paysage/paysage-01.jpg",

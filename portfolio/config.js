@@ -19,6 +19,7 @@ window.SITE = {
     'photos/sport/sport-03.jpg',
     'photos/paysage/paysage-01.jpg',
     'photos/sport/sport-04.jpg',
+    'photos/concert/concert-02.jpg',
     'photos/paysage/paysage-06.jpg',
     'photos/sport/sport-02.jpg'
   ],
@@ -46,7 +47,7 @@ window.SITE = {
     {
       id: 'concert', roll: '03', title: 'Concerts', kicker: 'Scène',
       accent: '#e0304a', open: false,
-      intro: "Les lumières, la foule, l'énergie de la scène."
+      intro: "Projecteurs, fumée et lumières de scène. L'énergie du live, au plus près des artistes."
     },
     {
       id: 'paysage', roll: '04', title: 'Paysages', kicker: 'Horizons',
