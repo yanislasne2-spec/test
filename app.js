@@ -386,10 +386,13 @@ hero.addEventListener('click', e => {
 (() => {
   const sec = $('#selection'), track = $('#hs-track');
   if (!sec || !track) return;
-  // alterne les thèmes pour mélanger sport et paysages
-  const lists = galleries.map(g => g.photos.map((p, i) => ({ g, p, i }))).filter(l => l.length);
-  const items = [];
-  for (let k = 0; lists.some(l => l.length); k++) { const l = lists[k % lists.length]; if (l.length) items.push(l.shift()); }
+  // sélection choisie dans config.js (S.selection) ; sinon, toutes les photos en alternant les thèmes
+  const find = src => { for (const g of galleries) { const i = g.photos.findIndex(p => p.src === src); if (i >= 0) return { g, p: g.photos[i], i }; } return null; };
+  let items = (S.selection || []).map(find).filter(Boolean);
+  if (!items.length) {
+    const lists = galleries.map(g => g.photos.map((p, i) => ({ g, p, i }))).filter(l => l.length);
+    for (let k = 0; lists.some(l => l.length); k++) { const l = lists[k % lists.length]; if (l.length) items.push(l.shift()); }
+  }
   if (!items.length) { sec.remove(); return; }
   track.innerHTML = items.map(({ g, p, i }, k) => `
     <figure class="hs-item shot" style="--r:${+p.ratio || 2 / 3}" data-g="${g.id}" data-i="${i}" data-cursor="photo" tabindex="0" role="button" aria-label="Ouvrir la photo ${k + 1}">
