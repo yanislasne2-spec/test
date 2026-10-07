@@ -189,7 +189,7 @@ const runScroll = () => {
   scrollQueued = false;
   const bar = $('#scroll-prog'), max = document.documentElement.scrollHeight - innerHeight;
   if (bar) bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-  scrollFx.forEach(f => f());
+  scrollFx.forEach(f => { try { f(); } catch (e) { console.error(e); } });
 };
 const queueScroll = () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(runScroll); } };
 addEventListener('scroll', queueScroll, { passive: true });
@@ -216,11 +216,12 @@ function runLoader() {
   srcs.forEach(src => { const im = new Image(); im.onload = im.onerror = () => done++; im.src = src; });
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => done++, () => done++);
   const STATUS = ['Développement de la pellicule…', 'Révélateur, fixateur…', 'Séchage des tirages…', 'Mise au point…', 'Prêt.'];
-  const minT = reduce ? 0 : again ? 450 : 2300, maxT = 8000, t0 = performance.now();
+  const minT = reduce ? 0 : again ? 450 : 2300, maxT = 4500, t0 = performance.now();
   const countEl = $('#ld-count'), barEl = $('#ld-bar'), fillEl = $('#ld-fill'), stEl = $('#ld-status');
   let shown = 0, finished = false;
   const finish = () => {
     if (finished) return; finished = true;
+    clearTimeout(window.__ylFailsafe);
     loader.classList.add('open');
     flash(); ready();
     setTimeout(() => loader.remove(), 1400);
@@ -367,13 +368,13 @@ hero.addEventListener('click', e => {
 
 /* titres : l'accueil s'efface en parallaxe au scroll */
 (() => {
-  const slides = $('#hero-slides'), inner = $('#hero-inner'), name = $('.hero-name'), side = $('.hero-side');
+  const slides = $('#hero-slides'), inner = $('#hero-inner'), name = $('.hero-name'), side = $('.hero-side'), dim = $('#hero-dim');
   if (!slides || reduce) return;
   scrollFx.push(() => {
     const vh = innerHeight, p = Math.min(scrollY / vh, 1.2);
     if (p > 1.15) return;
     slides.style.transform = `translate3d(0,${p * vh * .3}px,0) scale(${1 + p * .15})`;
-    slides.style.filter = `brightness(${1 - p * .55})`;
+    if (dim) dim.style.opacity = Math.min(.6, p * .55);
     inner.style.transform = `translate3d(0,${-p * vh * .22}px,0)`;
     inner.style.opacity = Math.max(0, 1 - p * 1.4);
     name.style.letterSpacing = (-.02 + p * .12) + 'em';
