@@ -24,6 +24,11 @@ Conseil : exporte en JPG, environ 2000 px sur le grand côté, qualité 80 : le 
 
 Tout se règle dans `config.js` : email, Instagram, photo « à propos », textes, couleurs et intros des galeries.
 
+## Mettre en ligne une nouvelle version
+
+Dans `index.html` et `galerie.html`, change le numéro `?v=...` après `style.css`, `config.js`, `photos.js` et `app.js`
+(ex. `?v=20261007c` → `?v=20261008a`) : les visiteurs reçoivent alors la nouvelle version au lieu de celle en cache.
+
 ## Tester en local
 
 ```bash

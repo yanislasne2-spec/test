@@ -627,7 +627,7 @@ scrollFx.push(() => {
   const fig = $('#contact-photo'), img = $('#contact-img');
   if (!fig) return;
   if (!S.contactPhoto) { fig.remove(); $('.contact-wrap').classList.add('no-photo'); return; }
-  img.src = S.contactPhoto;
+  if (img.getAttribute('src') !== S.contactPhoto) img.src = S.contactPhoto;
   fig.classList.add('reveal');
   if (!reduce) scrollFx.push(() => {
     const r = fig.getBoundingClientRect();
