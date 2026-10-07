@@ -10,6 +10,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>
+  // Sécurité : si un script échoue, l'écran de chargement s'efface quand même.
+  (function () {
+    function unblock() {
+      var l = document.getElementById('loader');
+      if (l) l.parentNode.removeChild(l);
+      if (document.body) { document.body.classList.remove('is-loading'); document.body.classList.add('ready'); }
+    }
+    window.__ylFailsafe = setTimeout(unblock, 6000);
+    window.addEventListener('error', function () { setTimeout(unblock, 300); });
+  })();
+</script>
 </head>
 <body class="is-loading" data-page="home">
 
@@ -64,6 +76,7 @@
 <section id="hero" class="hero">
   <div class="hero-slides" id="hero-slides" aria-hidden="true"></div>
   <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-dim" id="hero-dim" aria-hidden="true"></div>
 
   <div class="vf" aria-hidden="true">
     <i class="vf-c tl"></i><i class="vf-c tr"></i><i class="vf-c bl"></i><i class="vf-c br"></i>
