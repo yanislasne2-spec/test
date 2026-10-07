@@ -24,6 +24,20 @@ window.SITE = {
     'photos/concert/concert-02.jpg'
   ],
 
+  // « La sélection » de l'accueil : les photos fortes, dans l'ordre. Vide = toutes les photos.
+  selection: [
+    'photos/sport/sport-01.jpg',
+    'photos/sport/sport-03.jpg',
+    'photos/portrait/portrait-02.jpg',
+    'photos/sport/sport-02.jpg',
+    'photos/concert/concert-01.jpg',
+    'photos/sport/sport-07.jpg',
+    'photos/portrait/portrait-07.jpg',
+    'photos/sport/sport-06.jpg',
+    'photos/paysage/paysage-06.jpg',
+    'photos/sport/sport-04.jpg'
+  ],
+
   about: [
     "Je photographie ce qui vit : un regard, une foule, une lumière qui tombe au bon endroit.",
     "Sport, portraits, concerts, paysages : je cherche l'instant où tout se joue, et la lumière qui le raconte."
