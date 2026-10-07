@@ -3,546 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UNIQLO × JOLAGREEN</title>
+<title>Yanis Lasne — Photographe</title>
+<meta name="description" content="Portfolio photo de Yanis Lasne : sport (basket), portrait, concerts et paysages.">
+<meta name="theme-color" content="#0c0b0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Space+Mono:wght@400;700&family=Press+Start+2P&family=Black+Ops+One&family=Dela+Gothic+One&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#070c09;
-  --bg2:#0b140f;
-  --line:#1c3325;
-  --dim:#2a4a36;
-  --mid:#4f8a63;
-  --green:#8ee6a8;
-  --neon:#5dff8f;
-  --text:#b9d6c2;
-  --wide:'Archivo', 'Arial Black', sans-serif;
-  --mono:'Space Mono', ui-monospace, monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--mono);
-  overflow-x:hidden;
-  cursor:none;
-  -webkit-font-smoothing:antialiased;
-}
-body.loading{overflow:hidden}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:none}
-@media (hover:none){ body,button{cursor:auto} .cursor{display:none} }
-
-/* ---------- GRAIN + DOT GRID ---------- */
-.dots{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle, rgba(93,255,143,.16) 1px, transparent 1.4px);
-  background-size:22px 22px;
-  mask-image:radial-gradient(ellipse at 50% 40%, #000 30%, transparent 85%);
-  -webkit-mask-image:radial-gradient(ellipse at 50% 40%, #000 30%, transparent 85%);
-}
-.grain{
-  position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.07;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1s steps(6) infinite;
-}
-@keyframes grain{
-  0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}
-  60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}
-}
-.vignette{position:fixed;inset:0;pointer-events:none;z-index:1;
-  background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.75) 100%)}
-
-/* ---------- CURSOR ---------- */
-.cursor{position:fixed;left:0;top:0;z-index:200;pointer-events:none;mix-blend-mode:screen}
-.cursor .ring{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border:1px solid var(--green);border-radius:50%;
-  transition:width .3s,height .3s,margin .3s,background .3s}
-.cursor .pt{position:absolute;width:4px;height:4px;margin:-2px 0 0 -2px;background:var(--green);border-radius:50%}
-.cursor.hover .ring{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(142,230,168,.08)}
-
-/* ---------- LOADER ---------- */
-.loader{
-  position:fixed;inset:0;z-index:150;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  transition:clip-path 1.1s cubic-bezier(.77,0,.18,1);
-  clip-path:inset(0 0 0 0);
-}
-.loader.done{clip-path:inset(0 0 100% 0)}
-.loader .tag{font-size:10px;letter-spacing:.5em;color:var(--mid);text-transform:uppercase}
-.loader .big{font-family:var(--wide);font-weight:900;font-stretch:125%;font-size:clamp(40px,9vw,120px);
-  color:transparent;-webkit-text-stroke:1px var(--dim);position:relative;line-height:1;letter-spacing:-.01em}
-.loader .big span{position:absolute;inset:0;color:var(--green);-webkit-text-stroke:0;
-  clip-path:inset(0 100% 0 0);transition:clip-path .15s linear;text-shadow:0 0 30px rgba(93,255,143,.35)}
-.loader .bar{width:min(360px,70vw);height:2px;background:var(--line);position:relative;overflow:hidden}
-.loader .bar i{position:absolute;inset:0;background:var(--green);transform-origin:left;transform:scaleX(0)}
-.loader .row{display:flex;justify-content:space-between;width:min(360px,70vw);font-size:10px;letter-spacing:.3em;color:var(--mid)}
-
-/* ---------- TOP MARQUEE (blurred like frost) ---------- */
-.marquee{
-  position:fixed;top:0;left:0;right:0;height:64px;z-index:20;overflow:hidden;pointer-events:none;
-  background:linear-gradient(var(--bg) 20%, transparent);
-}
-.marquee .track{display:flex;white-space:nowrap;animation:scroll 40s linear infinite;filter:blur(3px);opacity:.45}
-.marquee .track span{font-family:var(--wide);font-weight:900;font-stretch:125%;font-size:56px;line-height:64px;
-  color:var(--dim);padding-right:60px;letter-spacing:.02em}
-@keyframes scroll{to{transform:translateX(-50%)}}
-
-/* ---------- PIXEL DECOR ---------- */
-.pix{position:fixed;z-index:5;width:32px;height:32px;pointer-events:none}
-.pix::before,.pix::after{content:"";position:absolute;width:16px;height:16px;background:#1f4a2c}
-.pix::before{left:0;bottom:0}.pix::after{right:0;top:0;background:#2b6a3d}
-.pix.tl{top:120px;left:88px}
-.pix.br{bottom:16px;right:100px}
-.pix.br2{bottom:48px;right:60px;transform:scale(.6)}
-@media (max-width:700px){.pix.tl{left:16px;top:84px}.pix.br{right:16px}.pix.br2{display:none}}
-
-/* ---------- HERO ---------- */
-main{position:relative;z-index:2}
-.hero{
-  min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;position:relative;padding:100px 16px 120px;overflow:hidden;
-}
-.radar{
-  position:absolute;left:50%;top:40%;width:min(620px,110vw);aspect-ratio:1;transform:translate(-50%,-50%);
-  border-radius:50%;pointer-events:none;opacity:.9;
-  background:
-    radial-gradient(circle, transparent 0 24.6%, rgba(93,255,143,.12) 24.8% 25%, transparent 25.2% 49.6%, rgba(93,255,143,.1) 49.8% 50%, transparent 50.2% 74.6%, rgba(93,255,143,.08) 74.8% 75%, transparent 75.2%),
-    radial-gradient(circle, rgba(93,255,143,.08), transparent 60%);
-}
-.radar::before{content:"";position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(from 0deg, rgba(93,255,143,.28), transparent 18%, transparent);
-  animation:spin 6s linear infinite;
-  mask-image:radial-gradient(circle, #000 0 70%, transparent 71%);-webkit-mask-image:radial-gradient(circle, #000 0 70%, transparent 71%)}
-.radar::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 49.9%,rgba(93,255,143,.12) 50%,transparent 50.1%),
-             linear-gradient(0deg,transparent 49.9%,rgba(93,255,143,.12) 50%,transparent 50.1%)}
-.blip{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 12px var(--neon);animation:blip 3s ease-out infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes blip{0%,100%{opacity:0}10%{opacity:1}60%{opacity:0}}
-
-.portrait{
-  position:absolute;left:50%;top:6vh;height:min(66vh,760px);aspect-ratio:447/559;transform:translateX(-50%);
-  z-index:0;pointer-events:none;
-  mask-image:linear-gradient(#000 55%,transparent 92%);-webkit-mask-image:linear-gradient(#000 55%,transparent 92%);
-}
-.portrait img{width:100%;height:100%;object-fit:contain;display:block;
-  filter:saturate(.8) contrast(1.08) brightness(1.05) drop-shadow(0 0 40px rgba(93,255,143,.12));
-  opacity:0;transform:scale(1.06);transition:opacity 1.6s ease, transform 2.4s cubic-bezier(.2,.8,.2,1)}
-.ready .portrait img{opacity:1;transform:scale(1)}
-.portrait::after{content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
-  mask-image:url(jolagreen.png);-webkit-mask-image:url(jolagreen.png);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center}
-.hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;margin-top:30vh}
-@media (max-width:700px){.portrait{top:11vh;height:54vh}.hero-content{margin-top:28vh}}
-.logo{width:44px;height:22px;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(93,255,143,.55))}
-.season{font-size:10px;letter-spacing:.35em;color:var(--mid);margin-bottom:30px}
-.xp{font-family:var(--mono);font-size:clamp(12px,1.5vw,16px);letter-spacing:1.1em;color:var(--text);margin-right:-1.1em;opacity:.8}
-.name{
-  font-family:var(--wide);font-weight:900;font-stretch:112%;
-  font-size:clamp(52px,12vw,176px);line-height:.9;letter-spacing:-.01em;
-  color:var(--green);text-shadow:0 0 60px rgba(93,255,143,.25);
-  position:relative;margin:10px 0 18px;
-}
-.name .glitch{position:absolute;inset:0;color:var(--neon);opacity:0;mix-blend-mode:screen}
-.name:hover .glitch{animation:glitch .5s steps(2) infinite}
-@keyframes glitch{
-  0%{opacity:.7;clip-path:inset(10% 0 70% 0);transform:translate(-4px,0)}
-  25%{clip-path:inset(60% 0 10% 0);transform:translate(4px,0)}
-  50%{clip-path:inset(30% 0 45% 0);transform:translate(-2px,0)}
-  75%{clip-path:inset(80% 0 2% 0);transform:translate(3px,0)}
-  100%{opacity:.7;clip-path:inset(5% 0 85% 0);transform:translate(0,0)}
-}
-.collab{font-size:10px;letter-spacing:.4em;color:var(--text);margin-bottom:18px;margin-right:-.4em}
-.collab b{color:#fff;font-weight:700}
-.subtitle{font-family:var(--mono);font-style:italic;font-size:clamp(11px,1.4vw,15px);color:var(--mid);letter-spacing:1.2em;margin-right:-1.2em;line-height:2.4}
-.hero .scroll{position:absolute;bottom:96px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.4em;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:10px}
-.hero .scroll::after{content:"";width:1px;height:40px;background:linear-gradient(var(--mid),transparent);animation:drop 2s ease-in-out infinite}
-@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-
-.hud{position:absolute;font-size:9px;letter-spacing:.25em;color:var(--dim);line-height:1.9;text-align:left}
-.hud b{color:var(--mid);font-weight:400}
-.hud.l{left:32px;bottom:40px}.hud.r{right:32px;top:100px;text-align:right}
-@media (max-width:700px){.hud{display:none}}
-
-.reveal{opacity:0;transform:translateY(30px);transition:opacity 1s, transform 1s cubic-bezier(.2,.8,.2,1)}
-.ready .reveal{opacity:1;transform:none}
-.ready .reveal.d1{transition-delay:.15s}.ready .reveal.d2{transition-delay:.3s}
-.ready .reveal.d3{transition-delay:.45s}.ready .reveal.d4{transition-delay:.6s}.ready .reveal.d5{transition-delay:.75s}
-
-/* ---------- COLLECTIONS ---------- */
-.collections{position:relative;padding:60px 16px 200px;display:flex;flex-direction:column;align-items:center}
-.collections .head{text-align:center;margin-bottom:60px}
-.collections .head .season{margin-bottom:0}
-.col{
-  position:relative;display:flex;flex-direction:column;align-items:center;
-  padding:50px 0;width:100%;text-align:center;z-index:3;
-}
-.col .num{font-size:10px;letter-spacing:.4em;color:var(--dim);margin-bottom:6px;transition:color .4s}
-.col .title{
-  font-family:var(--wide);font-weight:900;font-stretch:125%;
-  font-size:clamp(46px,11vw,168px);line-height:.88;letter-spacing:-.01em;
-  color:rgba(20,40,27,.35);-webkit-text-stroke:1.2px #213b2b;
-  transition:color .45s, -webkit-text-stroke-color .45s, text-shadow .45s, transform .6s cubic-bezier(.2,.8,.2,1);
-  position:relative;z-index:4;white-space:nowrap;
-}
-.col .sub{
-  font-family:var(--wide);font-weight:900;font-stretch:125%;
-  font-size:clamp(18px,3.2vw,46px);line-height:1;letter-spacing:.01em;margin-top:4px;
-  color:transparent;-webkit-text-stroke:1px #2a4535;
-  transition:color .45s, -webkit-text-stroke-color .45s;position:relative;z-index:4
-}
-.col .theme{margin-top:14px;font-size:10px;letter-spacing:.45em;color:var(--dim);transition:color .4s;position:relative;z-index:4}
-.col.active .title{color:var(--green);-webkit-text-stroke-color:var(--green);text-shadow:0 0 50px rgba(93,255,143,.3);transform:scale(1.02)}
-.col.active .sub{color:#c9f5d6;-webkit-text-stroke-color:#c9f5d6}
-.col.active .num,.col.active .theme{color:var(--green)}
-.col.locked .title{-webkit-text-stroke-dasharray:4}
-.lockbar{margin-top:18px;width:min(420px,80vw);position:relative;z-index:4}
-.lockbar .track{height:6px;border:1px solid var(--dim);padding:1px}
-.lockbar .fill{height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 6px,transparent 6px 8px);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
-.lockbar .meta{display:flex;justify-content:space-between;margin-top:8px;font-size:9px;letter-spacing:.3em;color:var(--mid)}
-.lockbar .count{font-family:'Press Start 2P',monospace;font-size:clamp(10px,1.4vw,14px);color:var(--green);margin-top:14px;letter-spacing:.08em}
-
-/* floating preview (follows cursor, like frost) */
-.preview{
-  position:fixed;left:0;top:0;z-index:1;pointer-events:none;
-  width:min(620px,78vw);aspect-ratio:16/9;
-  transform:translate(-50%,-50%) scale(.85);opacity:0;
-  transition:opacity .35s, transform .5s cubic-bezier(.2,.8,.2,1);
-  overflow:hidden;
-  box-shadow:0 40px 120px rgba(0,0,0,.6);
-}
-.preview.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.preview .scene{position:absolute;inset:0;opacity:0;transition:opacity .35s}
-.preview .scene.on{opacity:1}
-.scene .corner{position:absolute;font-size:9px;letter-spacing:.3em;color:rgba(220,255,230,.75);font-family:var(--mono)}
-.scene .corner.a{left:14px;top:12px}.scene .corner.b{right:14px;bottom:12px}
-
-/* WAR scene */
-.s-war{background:#1a2419}
-.s-war svg.camo{position:absolute;inset:0;width:100%;height:100%}
-.s-war .hazard{position:absolute;left:0;right:0;bottom:0;height:18px;
-  background:repeating-linear-gradient(-45deg,#0a0f0a 0 14px,#8ee6a8 14px 28px);opacity:.85}
-.s-war .stencil{position:absolute;right:6%;top:14%;font-family:'Black Ops One',var(--wide);font-size:clamp(40px,9vw,110px);color:rgba(10,15,10,.75);letter-spacing:.05em;line-height:.9;text-align:right}
-.s-war .stencil small{display:block;font-size:.22em;letter-spacing:.3em;color:rgba(10,15,10,.8)}
-.s-war .cross{position:absolute;left:30%;top:50%;width:120px;height:120px;transform:translate(-50%,-50%);border:1px solid rgba(200,255,215,.7);border-radius:50%;animation:aim 4s ease-in-out infinite}
-.s-war .cross::before,.s-war .cross::after{content:"";position:absolute;background:rgba(200,255,215,.7)}
-.s-war .cross::before{left:50%;top:-20px;bottom:-20px;width:1px}
-.s-war .cross::after{top:50%;left:-20px;right:-20px;height:1px}
-@keyframes aim{0%,100%{transform:translate(-50%,-50%)}30%{transform:translate(-30%,-65%)}60%{transform:translate(-65%,-40%)}}
-.s-war .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0 2px,transparent 2px 4px)}
-
-/* GAME scene */
-.s-game{background:#06140b}
-.s-game .grid{position:absolute;inset:-50% 0 0;background-image:linear-gradient(rgba(93,255,143,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(93,255,143,.35) 1px,transparent 1px);
-  background-size:40px 40px;transform:perspective(300px) rotateX(60deg);transform-origin:bottom;animation:gridmove 1.2s linear infinite;
-  mask-image:linear-gradient(transparent 30%,#000);-webkit-mask-image:linear-gradient(transparent 30%,#000)}
-@keyframes gridmove{to{background-position:0 40px}}
-.s-game .sun{position:absolute;left:50%;top:18%;width:34%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;
-  background:repeating-linear-gradient(180deg,#8ee6a8 0 10px,transparent 10px 14px);opacity:.8;
-  mask-image:linear-gradient(#000 40%,transparent 80%);-webkit-mask-image:linear-gradient(#000 40%,transparent 80%)}
-.s-game .xpbig{position:absolute;left:0;right:0;top:34%;text-align:center;font-family:'Press Start 2P',monospace;font-size:clamp(28px,6vw,64px);color:#d9ffe4;text-shadow:4px 4px 0 #1b6b36,0 0 30px rgba(93,255,143,.6);animation:float 2s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-8px)}}
-.s-game .hpbar{position:absolute;left:14px;top:34px;width:40%;font-family:'Press Start 2P',monospace;font-size:8px;color:#d9ffe4}
-.s-game .hpbar i{display:block;margin-top:6px;height:10px;border:2px solid #d9ffe4;padding:1px}
-.s-game .hpbar i::after{content:"";display:block;height:100%;width:99%;background:#5dff8f;animation:hp 3s steps(12) infinite}
-@keyframes hp{0%{width:20%}100%{width:99%}}
-.s-game .lvl{position:absolute;right:14px;top:14px;font-family:'Press Start 2P',monospace;font-size:9px;color:#8ee6a8;animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:0}}
-.s-game .press{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:'Press Start 2P',monospace;font-size:9px;color:#d9ffe4;letter-spacing:.2em;animation:blink 1.2s steps(2) infinite}
-
-/* ANIME scene */
-.s-anime{background:#0c1a11}
-.s-anime .lines{position:absolute;inset:-40%;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(200,255,215,.18) 0 1.2deg,transparent 1.2deg 7deg);animation:spin 40s linear infinite}
-.s-anime .halo{position:absolute;left:50%;top:50%;width:46%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
-  background:radial-gradient(circle,#c9f5d6 0 38%,#5dff8f 39% 41%,transparent 42%);box-shadow:0 0 90px rgba(93,255,143,.45)}
-.s-anime .halftone{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.55) 1.4px,transparent 1.8px);background-size:8px 8px;
-  mask-image:linear-gradient(90deg,#000,transparent 60%);-webkit-mask-image:linear-gradient(90deg,#000,transparent 60%)}
-.s-anime .jp{position:absolute;right:5%;top:8%;writing-mode:vertical-rl;font-family:'Dela Gothic One',sans-serif;font-size:clamp(22px,4.4vw,52px);color:#07110b;line-height:1;text-shadow:0 0 1px #c9f5d6}
-.s-anime .jp2{position:absolute;left:6%;bottom:12%;font-family:'Dela Gothic One',sans-serif;font-size:clamp(14px,2.4vw,26px);color:#c9f5d6;letter-spacing:.1em}
-.s-anime .lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5%;gap:10px;background:rgba(4,10,6,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-.s-anime .lock b{font-family:'Press Start 2P',monospace;font-size:clamp(10px,1.6vw,14px);color:#d9ffe4;letter-spacing:.1em}
-.s-anime .lock .ld{width:50%;height:8px;border:1px solid #8ee6a8;padding:1px}
-.s-anime .lock .ld i{display:block;height:100%;background:#8ee6a8;animation:ld 2.4s ease-in-out infinite}
-@keyframes ld{0%{width:0}80%,100%{width:100%}}
-.s-anime .lock span{font-size:9px;letter-spacing:.4em;color:#8ee6a8}
-
-/* ---------- MENU PILL ---------- */
-.pill{
-  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;
-  display:flex;align-items:center;gap:22px;padding:8px 34px 8px 8px;
-  border-radius:40px;background:rgba(20,40,27,.55);border:1px solid #1f3a29;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  font-size:11px;letter-spacing:.3em;color:var(--text);
-  transition:background .3s,border-color .3s;
-}
-.pill:hover{background:rgba(35,70,46,.7);border-color:var(--mid)}
-.pill .ico{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(93,255,143,.08)}
-.pill .ico svg{width:22px;height:22px;transition:transform .5s}
-.pill:hover .ico svg{transform:rotate(90deg)}
-.menu-open .pill .ico svg{transform:rotate(45deg)}
-
-.overlay{
-  position:fixed;inset:0;z-index:55;background:rgba(5,9,6,.94);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;
-  clip-path:circle(0% at 50% calc(100% - 45px));transition:clip-path .8s cubic-bezier(.77,0,.18,1);
-}
-.menu-open .overlay{clip-path:circle(150% at 50% calc(100% - 45px))}
-.overlay a{font-family:var(--wide);font-weight:900;font-stretch:125%;font-size:clamp(30px,7vw,84px);line-height:1.1;
-  color:transparent;-webkit-text-stroke:1px var(--mid);transition:color .3s;display:flex;align-items:baseline;gap:16px}
-.overlay a small{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.3em;-webkit-text-stroke:0;color:var(--mid)}
-.overlay a:hover{color:var(--green);-webkit-text-stroke-color:var(--green)}
-.overlay .foot{position:absolute;top:90px;font-size:10px;letter-spacing:.4em;color:var(--dim)}
-
-footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-size:9px;letter-spacing:.4em;color:var(--dim)}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=202610071401">
+<script>
+  // Sécurité : si un script échoue, l'écran de chargement s'efface quand même.
+  (function () {
+    function unblock() {
+      var l = document.getElementById('loader');
+      if (l) l.parentNode.removeChild(l);
+      if (document.body) { document.body.classList.remove('is-loading'); document.body.classList.add('ready'); }
+    }
+    window.__ylFailsafe = setTimeout(unblock, 6000);
+    window.addEventListener('error', function () { setTimeout(unblock, 300); });
+  })();
+</script>
 </head>
-<body class="loading">
+<body class="is-loading" data-page="home">
 
-<!-- LOADER -->
-<div class="loader" id="loader">
-  <div class="tag">Chargement du niveau</div>
-  <div class="big">JOLAGREEN<span id="ldFill">JOLAGREEN</span></div>
-  <div class="bar"><i id="ldBar"></i></div>
-  <div class="row"><span id="ldTxt">INIT...</span><span id="ldPct">000%</span></div>
-</div>
-
-<div class="dots"></div>
-<div class="vignette"></div>
-<div class="grain"></div>
-
-<div class="cursor" id="cursor"><div class="ring"></div><div class="pt"></div></div>
-
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span>UNIQLO × JOLAGREEN ✦ R&amp;D ✦ 99XP ✦ GOTY EDITION ✦</span><span>UNIQLO × JOLAGREEN ✦ R&amp;D ✦ 99XP ✦ GOTY EDITION ✦</span>
-    <span>UNIQLO × JOLAGREEN ✦ R&amp;D ✦ 99XP ✦ GOTY EDITION ✦</span><span>UNIQLO × JOLAGREEN ✦ R&amp;D ✦ 99XP ✦ GOTY EDITION ✦</span>
+<!-- ========== ÉCRAN DE CHARGEMENT ========== -->
+<div id="loader" role="status" aria-label="Chargement du portfolio">
+  <div class="ld-panel ld-top"></div>
+  <div class="ld-panel ld-bottom"></div>
+  <div class="ld-inner">
+    <div class="ld-meta"><span>Portfolio</span><span id="ld-year">2026</span></div>
+    <span class="tracked ld-role">Photographe</span>
+    <p class="ld-name" aria-hidden="true"><span class="ld-out">YANIS LASNE</span><span class="ld-fill" id="ld-fill">YANIS LASNE</span></p>
+    <div class="ld-foot">
+      <span class="ld-status" id="ld-status">Développement de la pellicule…</span>
+      <span class="ld-count"><b id="ld-count">000</b>%</span>
+    </div>
+    <div class="ld-bar"><i id="ld-bar"></i></div>
   </div>
 </div>
 
-<div class="pix tl"></div><div class="pix br"></div><div class="pix br2"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-prog" aria-hidden="true"><i id="scroll-prog"></i></div>
+<div id="flash" aria-hidden="true"></div>
 
-<main>
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="radar">
-      <span class="blip" style="left:66%;top:30%"></span>
-      <span class="blip" style="left:28%;top:62%;animation-delay:1.3s"></span>
-      <span class="blip" style="left:58%;top:74%;animation-delay:2.1s"></span>
+<div id="cursor" aria-hidden="true">
+  <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+  <i class="c-dot"></i><span class="c-label"></span>
+</div>
+
+<!-- ========== NAV + HUD GAMIFICATION ========== -->
+<header class="nav">
+  <a href="#top" class="logo" data-cursor="link">YL<span class="logo-dot"></span></a>
+  <nav class="nav-links">
+    <a href="#galeries" data-cursor="link">Galeries</a>
+    <a href="#selection" data-cursor="link">Sélection</a>
+    <a href="#apropos" data-cursor="link">À propos</a>
+    <a href="#contact" data-cursor="link">Contact</a>
+  </nav>
+  <div class="hud">
+    <button class="hud-level" id="hud-level" data-cursor="link" aria-label="Voir les trophées">
+      <span class="hud-lvl-name" id="hud-lvl-name">Rookie</span>
+      <span class="hud-bar"><i id="hud-bar"></i></span>
+      <span class="hud-xp" id="hud-xp">0 XP</span>
+    </button>
+    <button class="hud-btn" id="hud-trophy" data-cursor="link" aria-label="Trophées">🏆<b id="hud-trophy-count">0</b></button>
+    <button class="hud-btn" id="hud-sound" data-cursor="link" aria-label="Activer le son">🔇</button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ========== HERO : viseur ========== -->
+<section id="hero" class="hero">
+  <div class="hero-slides" id="hero-slides" aria-hidden="true"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-dim" id="hero-dim" aria-hidden="true"></div>
+
+  <div class="vf" aria-hidden="true">
+    <i class="vf-c tl"></i><i class="vf-c tr"></i><i class="vf-c bl"></i><i class="vf-c br"></i>
+    <div class="vf-top">
+      <span><b class="rec"></b> REC</span>
+      <span class="batt"><i></i><i></i><i></i></span>
     </div>
+    <div class="vf-focus" id="vf-focus"></div>
+  </div>
 
-    <div class="portrait"><img src="jolagreen.png" alt="Jolagreen"></div>
+  <div class="hero-inner" id="hero-inner">
+    <span class="tracked top">Photographe</span>
+    <h1 class="hero-name" aria-label="Yanis Lasne">
+      <span class="line" data-split>YANIS</span>
+      <span class="line line-2" data-split>LASNE</span>
+    </h1>
+    <span class="tracked bottom">Sport · Portrait · Concerts · Paysages</span>
+  </div>
 
-    <div class="hero-content">
-    <div class="collab reveal d1"><b>UNIQLO</b> × JOLAGREEN</div>
-    <div class="xp reveal d2">+99XP</div>
-    <h1 class="name reveal d3" data-hover>JOLAGREEN<span class="glitch" aria-hidden="true">JOLAGREEN</span></h1>
-    <div class="subtitle reveal d4">RECHERCHE<br>&amp;<br>DESTRUCTION</div>
+  <div class="hero-side">
+    <div class="hero-read"><span id="vf-shutter">1/1000</span><span id="vf-ap">F2.8</span><span id="vf-iso">ISO 3200</span><span>[<b id="vf-shots">036</b>]</span></div>
+    <div class="hero-count"><b id="hero-idx">01</b><span>/</span><span id="hero-total">06</span></div>
+    <div class="hero-bars" id="hero-bars"></div>
+  </div>
+  <p class="hero-hint">Clique pour déclencher <kbd>●</kbd></p>
+  <a href="#selection" class="scroll-cue" data-cursor="link" aria-label="Défiler"><span></span></a>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+<!-- ========== SÉLECTION (défilement horizontal) ========== -->
+<section id="selection" class="hs">
+  <div class="hs-sticky">
+    <header class="hs-head">
+      <span class="sec-num">( sélection )</span>
+      <h2 class="hs-title">La <em>sélection</em></h2>
+      <p class="hs-count"><b id="hs-idx">01</b> / <span id="hs-total">10</span></p>
+    </header>
+    <div class="hs-track" id="hs-track"></div>
+    <div class="hs-progress"><i id="hs-bar"></i></div>
+  </div>
+</section>
+
+<!-- ========== PELLICULES ========== -->
+<section id="galeries" class="section">
+  <header class="sec-head">
+    <span class="sec-num">( 01 )</span>
+    <h2 class="sec-title">Pellicules</h2>
+    <p class="sec-desc">Chaque série est une pellicule. Certaines sont encore <em>en développement</em> : reviens bientôt.</p>
+  </header>
+  <div class="rolls" id="rolls"></div>
+</section>
+
+
+
+<!-- ========== À PROPOS ========== -->
+<section id="apropos" class="section about">
+  <header class="sec-head">
+    <span class="sec-num">( 02 )</span>
+    <h2 class="sec-title">À propos</h2>
+  </header>
+  <div class="about-grid">
+    <div class="polaroid" id="polaroid" data-cursor="link">
+      <div class="polaroid-img" id="about-photo"><span>YL</span></div>
+      <p class="polaroid-cap">derrière le viseur</p>
     </div>
-
-
-    <div class="hud l">
-      <div>LAT <b>48.8566° N</b></div>
-      <div>LON <b>2.3522° E</b></div>
-      <div>STATUS <b>EN MISSION</b></div>
-    </div>
-    <div class="hud r">
-      <div>PLAYER <b>JOLA</b></div>
-      <div>LVL <b>99</b></div>
-      <div>MODE <b>HARDCORE</b></div>
-    </div>
-  </section>
-
-  <!-- COLLECTIONS -->
-  <section class="collections" id="collections">
-    <div class="head">
-      <svg class="logo" viewBox="0 0 44 22" fill="none" stroke="#8ee6a8" stroke-width="2">
-        <path d="M11 2 L20 11 L11 20 L2 11 Z"/><path d="M33 2 L42 11 L33 20 L24 11 Z"/>
-      </svg>
-      <div class="season">3 ALBUMS · 3 CAPSULES UNIQLO</div>
-    </div>
-
-    <a href="collection.html#rd" class="col" data-scene="war" data-hover id="c-rd">
-      <div class="num">01 / ALBUM</div>
-      <div class="title">R&amp;D</div>
-      <div class="sub">COLLECTION</div>
-      <div class="theme">GUERRE · APOCALYPSE — 5 PIÈCES</div>
-    </a>
-
-    <a href="collection.html#99xp" class="col" data-scene="game" data-hover id="c-99">
-      <div class="num">02 / ALBUM</div>
-      <div class="title">99XP</div>
-      <div class="sub">COLLECTION</div>
-      <div class="theme">JEUX VIDÉO — 5 PIÈCES</div>
-    </a>
-
-    <a href="collection.html#goty" class="col locked" data-scene="anime" data-hover id="c-goty">
-      <div class="num">03 / ALBUM · VERROUILLÉ</div>
-      <div class="title">GOTY</div>
-      <div class="sub">EDITION</div>
-      <div class="theme">ANIMÉ — 5 PIÈCES</div>
-      <div class="lockbar">
-        <div class="track"><div class="fill" id="gotyFill"></div></div>
-        <div class="meta"><span>CHARGEMENT</span><span id="gotyPct">0%</span></div>
-        <div class="count" id="gotyCount">23J 00H 00M 00S</div>
+    <div class="about-body">
+      <div class="about-text" id="about-text"></div>
+      <div class="stats">
+        <div><b data-count id="st-photos">0</b><small>photos en ligne</small></div>
+        <div><b data-count id="st-rolls">0</b><small>pellicules</small></div>
+        <div><b id="st-trophies">0/0</b><small>trophées débloqués par toi</small></div>
       </div>
-    </a>
-  </section>
+    </div>
+  </div>
+</section>
 
-  <footer>UNIQLO × JOLAGREEN — R&amp;D · 99XP · GOTY EDITION<br><br>PROJET CONCEPT · NON OFFICIEL</footer>
+<!-- ========== CONTACT ========== -->
+<section id="contact" class="section contact">
+  <div class="contact-wrap">
+    <figure class="contact-photo" id="contact-photo" data-cursor="photo">
+      <div class="cp-frame">
+        <img id="contact-img" src="photos/moi.jpg" alt="Yanis Lasne, appareil photo à la main, devant un coucher de soleil" loading="lazy" decoding="async">
+        <i class="cp-c tl"></i><i class="cp-c tr"></i><i class="cp-c bl"></i><i class="cp-c br"></i>
+        <span class="cp-rec"><b class="rec"></b> Yanis</span>
+      </div>
+      <figcaption><span>Derrière le viseur</span><span>Photographe</span></figcaption>
+    </figure>
+    <div class="contact-text">
+      <p class="sec-num">( 03 )</p>
+      <h2 class="contact-title" data-split-words>On shoote <em>ensemble&nbsp;?</em></h2>
+      <p class="contact-sub">Matchs, tournois, concerts, portraits : écris-moi, je réponds vite.</p>
+      <div class="contact-actions" id="contact-actions"></div>
+    </div>
+  </div>
+</section>
 </main>
 
-<!-- FLOATING PREVIEW -->
-<div class="preview" id="preview" aria-hidden="true">
-  <div class="scene s-war" data-s="war">
-    <svg class="camo" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
-      <rect width="400" height="225" fill="#27361f"/>
-      <path fill="#3e5a30" d="M-10 30 C40 0 90 40 130 20 S200 60 170 90 S80 110 40 90 S-30 60 -10 30Z"/>
-      <path fill="#121a10" d="M150 120 C190 90 260 110 280 140 S250 210 200 200 S120 170 150 120Z"/>
-      <path fill="#56733f" d="M260 10 C300 -10 380 20 390 60 S340 110 300 90 S230 40 260 10Z"/>
-      <path fill="#1c2716" d="M20 150 C60 130 110 160 100 200 S30 240 10 210 S-10 170 20 150Z"/>
-      <path fill="#121a10" d="M300 150 C340 130 410 160 400 200 S330 240 310 220 S270 170 300 150Z"/>
-      <path fill="#3e5a30" d="M190 30 C220 20 250 40 240 60 S200 80 185 65 S170 38 190 30Z"/>
-      <path fill="#121a10" d="M60 60 C80 50 110 60 100 75 S70 90 60 80Z"/>
-      <path fill="#56733f" d="M110 190 C140 175 170 200 150 225 L100 230Z"/>
-    </svg>
-    <div class="scan"></div>
-    <div class="cross"></div>
-    <div class="stencil">R&amp;D<small>RECHERCHE &amp; DESTRUCTION</small></div>
-    <div class="hazard"></div>
-    <div class="corner a">ZONE 01 — TERRAIN HOSTILE</div>
-  </div>
+<footer class="foot">
+  <span>© <span id="year"></span> Yanis Lasne</span>
+  <span>Fait avec de la lumière <button class="hidden-ball" id="hidden-ball" aria-label="Un bouchon d'objectif ?"></button> et du grain</span>
+  <span class="foot-konami">↑↑↓↓←→←→BA</span>
+</footer>
 
-  <div class="scene s-game" data-s="game">
-    <div class="sun"></div>
-    <div class="grid"></div>
-    <div class="hpbar">HP<i></i></div>
-    <div class="lvl">LEVEL UP!</div>
-    <div class="xpbig">+99XP</div>
-    <div class="press">▶ PRESS START</div>
+<!-- ========== LIGHTBOX ========== -->
+<div id="lb" class="lb" aria-hidden="true" role="dialog" aria-label="Photo">
+  <div class="lb-bg"></div>
+  <div class="lb-stage" id="lb-stage"></div>
+  <div class="lb-top">
+    <span id="lb-count">01 / 09</span>
+    <button class="lb-close" id="lb-close" data-cursor="link" aria-label="Fermer">Fermer ✕</button>
   </div>
+  <button class="lb-nav prev" id="lb-prev" data-cursor="link" aria-label="Précédente">←</button>
+  <button class="lb-nav next" id="lb-next" data-cursor="link" aria-label="Suivante">→</button>
+  <div class="lb-bottom">
+    <span id="lb-caption"></span>
+    <span id="lb-exif"></span>
+  </div>
+</div>
 
-  <div class="scene s-anime" data-s="anime">
-    <div class="lines"></div>
-    <div class="halo"></div>
-    <div class="halftone"></div>
-    <div class="jp">ジョラグリーン</div>
-    <div class="jp2">第三章 · GOTY</div>
-    <div class="lock">
-      <b>DÉBLOCAGE J-<span id="gotyDays">23</span></b>
-      <div class="ld"><i></i></div>
-      <span>NOW LOADING</span>
+<!-- ========== TROPHÉES ========== -->
+<div id="trophies" class="modal" aria-hidden="true" role="dialog" aria-label="Trophées">
+  <div class="modal-bg" data-close></div>
+  <div class="modal-card">
+    <button class="modal-x" data-close data-cursor="link" aria-label="Fermer">✕</button>
+    <p class="sec-num">Vestiaire</p>
+    <h3 class="modal-title">Tes trophées</h3>
+    <div class="modal-level">
+      <b id="tr-level">Rookie</b>
+      <span class="hud-bar big"><i id="tr-bar"></i></span>
+      <small id="tr-next"></small>
     </div>
+    <ul class="ach-list" id="ach-list"></ul>
+    <button class="link-btn" id="tr-reset" data-cursor="link">Remettre à zéro</button>
   </div>
 </div>
 
-<!-- MENU -->
-<div class="overlay" id="overlay">
-  <div class="foot">MENU PRINCIPAL</div>
-  <a href="collection.html#rd" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
-  <a href="collection.html#99xp" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
-  <a href="collection.html#goty" data-close data-hover>GOTY <small>03 · ANIMÉ · J-23</small></a>
-</div>
-<button class="pill" id="pill" data-hover aria-label="Menu">
-  <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#8ee6a8" stroke-width="1.5"><path d="M12 2 L22 12 L12 22 L2 12 Z"/></svg></span>
-  MENU
-</button>
+<div id="toasts" aria-live="polite"></div>
+<div id="levelup" aria-hidden="true"><small>Level up</small><b id="levelup-name"></b></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
 
-<script>
-(function(){
-  /* ----- LOADER ----- */
-  var steps = ['INIT...','CHARGEMENT DES ARMES','SPAWN DU JOUEUR','+99XP','PRÊT'];
-  var p = 0, fill = document.getElementById('ldFill'), bar = document.getElementById('ldBar'),
-      pct = document.getElementById('ldPct'), txt = document.getElementById('ldTxt');
-  var t = setInterval(function(){
-    p = Math.min(100, p + Math.random()*9 + 2);
-    fill.style.clipPath = 'inset(0 ' + (100-p) + '% 0 0)';
-    bar.style.transform = 'scaleX(' + p/100 + ')';
-    pct.textContent = String(Math.floor(p)).padStart(3,'0') + '%';
-    txt.textContent = steps[Math.min(steps.length-1, Math.floor(p/100*(steps.length-1)))];
-    if(p >= 100){
-      clearInterval(t);
-      setTimeout(function(){
-        document.getElementById('loader').classList.add('done');
-        document.body.classList.remove('loading');
-        document.body.classList.add('ready');
-      }, 350);
-    }
-  }, 90);
-
-  /* ----- CURSOR ----- */
-  var cur = document.getElementById('cursor'), mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
-  addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; });
-  document.querySelectorAll('[data-hover]').forEach(function(el){
-    el.addEventListener('mouseenter', function(){ cur.classList.add('hover'); });
-    el.addEventListener('mouseleave', function(){ cur.classList.remove('hover'); });
-  });
-
-  /* ----- FLOATING PREVIEW ----- */
-  var prev = document.getElementById('preview'), px = mx, py = my;
-  var scenes = prev.querySelectorAll('.scene');
-  function show(name){
-    scenes.forEach(function(s){ s.classList.toggle('on', s.dataset.s === name); });
-    prev.classList.add('show');
-  }
-  function hide(){ prev.classList.remove('show'); }
-  var cols = document.querySelectorAll('.col');
-  cols.forEach(function(c){
-    c.addEventListener('mouseenter', function(){ c.classList.add('active'); show(c.dataset.scene); });
-    c.addEventListener('mouseleave', function(){ c.classList.remove('active'); hide(); });
-  });
-
-  // Touch: activate the row closest to screen center
-  var isTouch = matchMedia('(hover:none)').matches;
-  if(isTouch){
-    addEventListener('scroll', function(){
-      var mid = innerHeight/2, best = null, bd = 1e9;
-      cols.forEach(function(c){
-        var r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height/2 - mid);
-        if(d < bd){ bd = d; best = c; }
-      });
-      cols.forEach(function(c){ c.classList.toggle('active', c === best && bd < 160); });
-      if(best && bd < 160){ show(best.dataset.scene); mx = innerWidth/2; my = mid; } else hide();
-    }, {passive:true});
-  }
-
-  function loop(){
-    cx += (mx-cx)*.25; cy += (my-cy)*.25;
-    px += (mx-px)*.09; py += (my-py)*.09;
-    cur.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
-    prev.style.left = px + 'px'; prev.style.top = py + 'px';
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  /* ----- MENU ----- */
-  document.getElementById('pill').addEventListener('click', function(){ document.body.classList.toggle('menu-open'); });
-  document.querySelectorAll('[data-close]').forEach(function(a){
-    a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); });
-  });
-
-  /* ----- GOTY : déblocage 23 jours plus tard ----- */
-  var TOTAL = 23*24*3600*1000, start = Date.now();
-  try{
-    var s = localStorage.getItem('jola_goty_start');
-    if(s) start = +s; else localStorage.setItem('jola_goty_start', start);
-  }catch(e){}
-  var end = start + TOTAL;
-  var gFill = document.getElementById('gotyFill'), gPct = document.getElementById('gotyPct'),
-      gCount = document.getElementById('gotyCount'), gDays = document.getElementById('gotyDays');
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function tick(){
-    var left = Math.max(0, end - Date.now());
-    var done = Math.max(1, (1 - left/TOTAL)*100);
-    gFill.style.width = done + '%';
-    gPct.textContent = done.toFixed(2) + '%';
-    var d = Math.floor(left/864e5), h = Math.floor(left/36e5)%24, m = Math.floor(left/6e4)%60, sec = Math.floor(left/1e3)%60;
-    gCount.textContent = left ? (d + 'J ' + pad(h) + 'H ' + pad(m) + 'M ' + pad(sec) + 'S') : 'DISPONIBLE';
-    gDays.textContent = Math.ceil(left/864e5);
-  }
-  tick(); setInterval(tick, 1000);
-})();
-</script>
+<script src="config.js?v=202610071401"></script>
+<script src="photos.js?v=202610071401"></script>
+<script src="app.js?v=202610071401"></script>
 </body>
 </html>
