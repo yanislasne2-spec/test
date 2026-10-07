@@ -10,6 +10,7 @@ window.SITE = {
   email: 'ylasne.pro@gmail.com',
   instagram: 'yanis_lsn',  // sans le @
   aboutPhoto: '',          // ex. 'photos/moi.jpg' (sinon un monogramme s'affiche)
+  contactPhoto: 'photos/moi.jpg', // photo de toi dans la section « On shoote ensemble ? » (vide = pas de photo)
 
   // Photos du diaporama plein écran de l'accueil (dans l'ordre). Vide = les premières photos.
   hero: [
