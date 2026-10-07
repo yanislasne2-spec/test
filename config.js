@@ -12,16 +12,16 @@ window.SITE = {
   aboutPhoto: '',          // ex. 'photos/moi.jpg' (sinon un monogramme s'affiche)
   contactPhoto: 'photos/moi.jpg', // photo de toi dans la section « On shoote ensemble ? » (vide = pas de photo)
 
-  // Photos du diaporama plein écran de l'accueil (dans l'ordre). Vide = les premières photos.
+  // Photos du diaporama plein écran de l'accueil (dans l'ordre, 8 max). Vide = les premières photos.
   hero: [
     'photos/sport/sport-01.jpg',
+    'photos/portrait/portrait-02.jpg',
     'photos/paysage/paysage-02.jpg',
     'photos/sport/sport-03.jpg',
     'photos/paysage/paysage-01.jpg',
     'photos/sport/sport-04.jpg',
-    'photos/concert/concert-02.jpg',
-    'photos/paysage/paysage-06.jpg',
-    'photos/sport/sport-02.jpg'
+    'photos/portrait/portrait-04.jpg',
+    'photos/concert/concert-02.jpg'
   ],
 
   about: [
@@ -42,7 +42,7 @@ window.SITE = {
     {
       id: 'portrait', roll: '02', title: 'Portrait', kicker: 'Visages',
       accent: '#ff9aa2', open: false,
-      intro: "Des regards, des silhouettes, des histoires en une image."
+      intro: "Néons de station-service, allées de parc : des visages et des silhouettes, chacun dans son décor."
     },
     {
       id: 'concert', roll: '03', title: 'Concerts', kicker: 'Scène',

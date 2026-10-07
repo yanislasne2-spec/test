@@ -86,7 +86,48 @@ window.PHOTOS = /*DATA*/{
       "ratio": 0.667
     }
   ],
-  "portrait": [],
+  "portrait": [
+    {
+      "src": "photos/portrait/portrait-01.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "50% 30%"
+    },
+    {
+      "src": "photos/portrait/portrait-02.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "50% 62%"
+    },
+    {
+      "src": "photos/portrait/portrait-03.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.513,
+      "focus": "50% 45%"
+    },
+    {
+      "src": "photos/portrait/portrait-04.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "48% 55%"
+    },
+    {
+      "src": "photos/portrait/portrait-05.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 0.667,
+      "focus": "50% 55%"
+    }
+  ],
   "concert": [
     {
       "src": "photos/concert/concert-01.jpg",
