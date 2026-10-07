@@ -28,6 +28,12 @@ const galleries = S.galleries.map(g => {
   return { ...g, photos, items, unlocked };
 });
 const totalPhotos = galleries.reduce((a, g) => a + g.photos.length, 0);
+const allPhotos = galleries.flatMap(g => g.photos);
+const heroPics = (() => {
+  const pick = (S.hero || []).map(src => allPhotos.find(p => p.src === src)).filter(Boolean);
+  return (pick.length ? pick : allPhotos).slice(0, 8);
+})();
+let startHero = () => {};
 
 /* ================= SON ================= */
 let actx = null;
@@ -66,10 +72,9 @@ const ACH = [
   { id: 'burst', ico: '⚡', title: 'Rafale', desc: 'Déclenche 10 fois dans le viseur en moins de 4 s.', xp: 25 },
   { id: 'full-roll', ico: '🎞️', title: 'Pellicule complète', desc: "Vois toutes les photos d'une galerie.", xp: 60 },
   { id: 'curious', ico: '🔒', title: 'Trop pressé', desc: 'Essaie d\'ouvrir une pellicule pas encore développée.', xp: 10 },
-  { id: 'decisive', ico: '✨', title: 'Instant décisif', desc: 'Déclenche pile quand le sujet s\'illumine.', xp: 30 },
-  { id: 'centered', ico: '🎯', title: 'Pile au centre', desc: 'Un sujet parfaitement centré dans le cadre.', xp: 30 },
-  { id: 'streak', ico: '🔥', title: 'Œil sûr', desc: '4 photos réussies d\'affilée.', xp: 40 },
-  { id: 'pro-roll', ico: '👑', title: 'Planche parfaite', desc: 'Fais 300 points ou plus en une partie.', xp: 60 },
+  { id: 'slideshow', ico: '🎬', title: 'Diaporama', desc: 'Regarde toutes les photos de l\'accueil défiler.', xp: 30 },
+  { id: 'selection', ico: '🎯', title: 'Sur le terrain', desc: 'Fais défiler toute la sélection.', xp: 30 },
+  { id: 'gallery', ico: '🖼️', title: 'Dans la galerie', desc: 'Ouvre la page d\'une pellicule.', xp: 20 },
   { id: 'hidden-ball', ico: '👁️', title: 'Œil de lynx', desc: 'Trouve le bouchon d\'objectif caché sur le site.', xp: 40 },
   { id: 'konami', ico: '🕹️', title: 'Old school', desc: 'Entre le code secret → mode argentique.', xp: 40 },
   { id: 'explorer', ico: '🧭', title: 'Explorateur', desc: 'Descends jusqu\'au bout du site.', xp: 15 },
@@ -177,37 +182,61 @@ function cfLoop() {
   if (parts.length) requestAnimationFrame(cfLoop); else { cfRun = false; cx.clearRect(0, 0, innerWidth, innerHeight); }
 }
 
+/* ================= SCROLL ================= */
+const scrollFx = [];
+let scrollQueued = false;
+const runScroll = () => {
+  scrollQueued = false;
+  const bar = $('#scroll-prog'), max = document.documentElement.scrollHeight - innerHeight;
+  if (bar) bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  scrollFx.forEach(f => f());
+};
+const queueScroll = () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(runScroll); } };
+addEventListener('scroll', queueScroll, { passive: true });
+addEventListener('resize', queueScroll);
+
 /* ================= FLASH ================= */
 const flashEl = $('#flash');
 function flash() { flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go'); sound.shutter(); }
 
-/* ================= LOADER (diaphragme) ================= */
+/* ================= ÉCRAN DE CHARGEMENT ================= */
 function runLoader() {
   const loader = $('#loader');
-  if (!loader) { document.body.classList.remove('is-loading'); requestAnimationFrame(() => document.body.classList.add('ready')); return; }
-  const finish = () => {
+  const ready = () => {
     document.body.classList.remove('is-loading');
     requestAnimationFrame(() => document.body.classList.add('ready'));
-    loader.classList.add('done'); setTimeout(() => loader.remove(), 500);
+    startHero();
   };
-  if (reduce) return finish();
-  const R = 40, pts = Array.from({ length: 6 }, (_, i) => { const a = Math.PI / 3 * i - Math.PI / 2; return [Math.cos(a) * R, Math.sin(a) * R]; });
-  $('#iris-poly').setAttribute('points', pts.map(p => p.join(',')).join(' '));
-  $('#iris-blades').innerHTML = pts.map((p, i) => {
-    const q = pts[(i + 1) % 6], dx = q[0] - p[0], dy = q[1] - p[1];
-    return `<line x1="${q[0]}" y1="${q[1]}" x2="${q[0] + dx * 6}" y2="${q[1] + dy * 6}"/>`;
-  }).join('');
-  const hole = $('#iris-hole'), blades = $('#iris-blades'), fEl = $('#loader-f');
-  const stops = ['f/22', 'f/16', 'f/11', 'f/8', 'f/5.6', 'f/4', 'f/2.8', 'f/2', 'f/1.4'];
-  const T = 1500, t0 = performance.now();
+  if (!loader) { ready(); return; }
+  let again = false;
+  try { again = sessionStorage.getItem('yl:loaded') === '1'; sessionStorage.setItem('yl:loaded', '1'); } catch (e) {}
+  const yr = $('#ld-year'); if (yr) yr.textContent = new Date().getFullYear();
+  const srcs = heroPics.map(p => p.src);
+  let done = 0; const total = srcs.length + 1;
+  srcs.forEach(src => { const im = new Image(); im.onload = im.onerror = () => done++; im.src = src; });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => done++, () => done++);
+  const STATUS = ['Développement de la pellicule…', 'Révélateur, fixateur…', 'Séchage des tirages…', 'Mise au point…', 'Prêt.'];
+  const minT = reduce ? 0 : again ? 450 : 2300, maxT = 8000, t0 = performance.now();
+  const countEl = $('#ld-count'), barEl = $('#ld-bar'), fillEl = $('#ld-fill'), stEl = $('#ld-status');
+  let shown = 0, finished = false;
+  const finish = () => {
+    if (finished) return; finished = true;
+    loader.classList.add('open');
+    flash(); ready();
+    setTimeout(() => loader.remove(), 1400);
+  };
   const tick = now => {
-    const t = Math.min((now - t0) / T, 1);
-    const e = t < .55 ? .02 + .08 * (t / .55) : .1 + Math.pow((t - .55) / .45, 3) * 5;
-    const rot = t * 140;
-    const tr = `rotate(${rot}) scale(${e})`;
-    hole.setAttribute('transform', tr); blades.setAttribute('transform', tr);
-    fEl.textContent = stops[Math.min(stops.length - 1, Math.floor(t * stops.length))];
-    if (t < 1) requestAnimationFrame(tick); else { flash(); finish(); }
+    const el = now - t0;
+    const real = el > maxT ? 1 : done / total;
+    const target = Math.min(real, minT ? el / minT : 1);
+    shown += (target - shown) * (reduce ? 1 : .14);
+    if (target >= 1 && shown > .995) shown = 1;
+    const pct = Math.round(shown * 100);
+    countEl.textContent = pad(pct, 3);
+    barEl.style.width = pct + '%';
+    fillEl.style.clipPath = `inset(${100 - pct}% 0 0 0)`;
+    stEl.textContent = STATUS[Math.min(STATUS.length - 1, Math.floor(shown * (STATUS.length - 1) + .001))];
+    if (shown >= 1) setTimeout(finish, reduce ? 0 : 280); else requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 }
@@ -268,59 +297,85 @@ hero.addEventListener('click', e => {
   burst = burst.filter(t => now - t < 4000); burst.push(now);
   if (burst.length >= 10) unlock('burst');
 });
-/* photo centrale du hero (diaporama) */
+/* diaporama plein écran */
 (() => {
-  const pics = galleries.flatMap(g => g.photos).slice(0, 6);
-  const box = $('#hero-photo');
-  if (!pics.length || !box) return;
-  box.innerHTML = pics.map((p, i) => `<div class="slide ${i ? '' : 'on'}" style="background-image:url('${encodeURI(p.src)}')"></div>`).join('');
-  if (pics.length > 1 && !reduce) { let k = 0; setInterval(() => { const s = $$('.slide', box); s[k].classList.remove('on'); k = (k + 1) % s.length; s[k].classList.add('on'); }, 5000); }
-})();
-
-/* fond de points ondulant (réagit à la souris) */
-(() => {
-  const c = $('#dots'); if (!c) return;
-  const x = c.getContext('2d');
-  let W = 0, H = 0, on = true, t = 0, mx = -999, my = -999;
-  const size = () => { const d = Math.min(devicePixelRatio || 1, 2); W = c.clientWidth; H = c.clientHeight; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0); };
-  size(); addEventListener('resize', size);
-  hero.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
-  hero.addEventListener('pointerleave', () => { mx = my = -999; });
-  new IntersectionObserver(([en]) => { on = en.isIntersecting; if (on) requestAnimationFrame(draw); }).observe(c);
-  function draw() {
-    if (!on) return;
-    t += reduce ? 0 : .012;
-    x.clearRect(0, 0, W, H);
-    const gap = W < 640 ? 16 : 20;
-    for (let j = 0; j * gap < H + gap; j++) for (let i = 0; i * gap < W + gap; i++) {
-      const px = i * gap, py = j * gap;
-      const edge = Math.min(1, Math.abs(px - W / 2) / (W * .5));
-      const wave = Math.sin(i * .16 + t * 2) * Math.cos(j * .13 - t) ;
-      const dx = px - mx, dy = py - my, dm = Math.hypot(dx, dy), push = dm < 140 ? (1 - dm / 140) * 14 : 0;
-      const ox = dm ? dx / dm * push : 0, oy = (dm ? dy / dm * push : 0) + wave * 6 * edge;
-      const a = (.05 + .35 * edge * (wave * .5 + .5)) + (push ? push / 30 : 0);
-      x.fillStyle = `rgba(255,77,90,${Math.min(a, .8).toFixed(3)})`;
-      x.fillRect(px + ox, py + oy, 1.6, 1.6);
-    }
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
-
-/* lignes « terminal » façon démarrage d'appareil */
-(() => {
-  const el = $('#term'); if (!el) return;
-  const lines = ['◆ initialisation du capteur…', '> charger "pellicule_sport" [ok]', '> mise au point "af-c" [verrouillée]', '> balance des blancs "salle" [ok]'];
-  if (reduce) { el.innerHTML = lines.map(esc).join('\n'); return; }
-  let li = 0, ci = 0, out = '';
-  const type = () => {
-    if (li >= lines.length) return;
-    out += lines[li][ci++] || '';
-    if (ci > lines[li].length) { li++; ci = 0; out += '\n'; }
-    el.innerHTML = esc(out).replace(/\[(.*?)\]/g, '<b>[$1]</b>');
-    setTimeout(type, ci === 0 ? 220 : 18);
+  const box = $('#hero-slides'), bars = $('#hero-bars');
+  if (!box || !heroPics.length) return;
+  box.innerHTML = heroPics.map(p => `<div class="hslide" style="background-image:url('${encodeURI(p.src)}');background-position:${esc(p.focus || '50% 40%')}"></div>`).join('');
+  bars.innerHTML = heroPics.map((_, i) => `<button class="hb" data-i="${i}" data-cursor="link" aria-label="Photo ${i + 1}"><i></i></button>`).join('');
+  $('#hero-total').textContent = pad(heroPics.length);
+  const DUR = 5500, seenSlides = new Set();
+  let cur = -1, timer = 0;
+  const show = i => {
+    const sl = $$('.hslide', box), prev = cur;
+    cur = (i + sl.length) % sl.length;
+    sl.forEach((s, k) => { s.classList.toggle('on', k === cur); s.classList.toggle('prev', k === prev && prev !== cur); });
+    $$('.hb', bars).forEach((b, k) => { b.classList.toggle('done', k < cur); b.classList.remove('run'); if (k === cur) { void b.offsetWidth; b.classList.add('run'); } });
+    $('#hero-idx').textContent = pad(cur + 1);
+    seenSlides.add(cur);
+    if (seenSlides.size === sl.length && sl.length > 1) unlock('slideshow');
+    clearTimeout(timer);
+    if (!reduce && sl.length > 1) timer = setTimeout(() => show(cur + 1), DUR);
   };
-  setTimeout(type, 1900);
+  bars.addEventListener('click', e => { const b = e.target.closest('.hb'); if (b) { e.stopPropagation(); show(+b.dataset.i); } });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && cur >= 0) show(cur); });
+  startHero = () => { if (cur < 0) show(0); };
+})();
+
+/* sélection : défilement horizontal piloté par le scroll */
+(() => {
+  const sec = $('#selection'), track = $('#hs-track');
+  if (!sec || !track) return;
+  const items = galleries.flatMap(g => g.photos.map((p, i) => ({ g, p, i })));
+  if (!items.length) { sec.remove(); return; }
+  track.innerHTML = items.map(({ g, p, i }, k) => `
+    <figure class="hs-item shot" data-g="${g.id}" data-i="${i}" data-cursor="photo" tabindex="0" role="button" aria-label="Ouvrir la photo ${k + 1}">
+      <div class="frame"><img src="${esc(p.src)}" alt="${esc(p.alt || g.title + ' ' + (k + 1))}" loading="lazy" decoding="async"></div>
+      <figcaption><span class="fr">${pad(k + 1)}</span><span>${esc(g.title)}</span></figcaption>
+    </figure>`).join('');
+  $('#hs-total').textContent = pad(items.length);
+  $$('.hs-item', track).forEach(el => {
+    el.addEventListener('click', () => openLB(el.dataset.g, +el.dataset.i));
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(el.dataset.g, +el.dataset.i); } });
+  });
+  const imgs = $$('img', track), figs = $$('.hs-item', track);
+  let span = 0, last = 0, vel = 0;
+  const size = () => {
+    span = Math.max(0, track.scrollWidth - innerWidth);
+    sec.style.height = (span + innerHeight) + 'px';
+  };
+  size(); addEventListener('resize', size);
+  scrollFx.push(() => {
+    const r = sec.getBoundingClientRect(), total = sec.offsetHeight - innerHeight;
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+    const x = -p * span;
+    vel += ((x - last) - vel) * .2; last = x;
+    track.style.transform = `translate3d(${x}px,0,0) skewX(${reduce ? 0 : Math.max(-6, Math.min(6, vel * .06))}deg)`;
+    $('#hs-bar').style.width = p * 100 + '%';
+    $('#hs-idx').textContent = pad(Math.min(items.length, Math.round(p * (items.length - 1)) + 1));
+    if (p > .985) unlock('selection');
+    if (!reduce) figs.forEach((f, k) => {
+      const b = f.getBoundingClientRect(), off = ((b.left + b.width / 2) - innerWidth / 2) / innerWidth;
+      imgs[k].style.transform = `translate3d(${-off * 10}%,0,0) scale(1.18)`;
+    });
+  });
+})();
+
+/* titres : l'accueil s'efface en parallaxe au scroll */
+(() => {
+  const slides = $('#hero-slides'), inner = $('#hero-inner'), name = $('.hero-name'), side = $('.hero-side');
+  if (!slides || reduce) return;
+  scrollFx.push(() => {
+    const vh = innerHeight, p = Math.min(scrollY / vh, 1.2);
+    if (p > 1.15) return;
+    slides.style.transform = `translate3d(0,${p * vh * .3}px,0) scale(${1 + p * .15})`;
+    slides.style.filter = `brightness(${1 - p * .55})`;
+    inner.style.transform = `translate3d(0,${-p * vh * .22}px,0)`;
+    inner.style.opacity = Math.max(0, 1 - p * 1.4);
+    name.style.letterSpacing = (-.02 + p * .12) + 'em';
+    if (side) side.style.opacity = Math.max(0, 1 - p * 2);
+  });
 })();
 
 /* ================= MARQUEE ================= */
@@ -391,7 +446,7 @@ function renderGalleries() {
   const box = $('#gallery-sections'); if (!box) return;
   const id = currentId();
   const g0 = galleries.find(x => x.id === id);
-  if (g0) document.title = `${g0.title} — ${S.name}`;
+  if (g0) { document.title = `${g0.title} — ${S.name}`; setTimeout(() => unlock('gallery'), 1200); }
   box.innerHTML = galleries.filter(g => g.id === id).map(g => {
     const empty = !g.photos.length;
     return `<section class="gal gal-page" id="g-${g.id}" style="--g:${g.accent}">
@@ -553,7 +608,12 @@ addEventListener('keydown', e => {
 
 if (HOME) {
 /* ================= ABOUT / CONTACT ================= */
-$('#about-text').innerHTML = (S.about || []).map(p => `<p>${esc(p)}</p>`).join('');
+$('#about-text').innerHTML = (S.about || []).map(p => `<p>${esc(p).split(/(\s+)/).map(w => /^\s+$/.test(w) || !w ? w : `<span class="aw">${w}</span>`).join('')}</p>`).join('');
+const words = $$('#about-text .aw');
+scrollFx.push(() => {
+  const lim = innerHeight * .72;
+  words.forEach(w => w.classList.toggle('lit', w.getBoundingClientRect().top < lim));
+});
 if (S.aboutPhoto) { const a = $('#about-photo'); a.style.backgroundImage = `url('${encodeURI(S.aboutPhoto)}')`; a.innerHTML = ''; }
 $('#st-photos').dataset.count = totalPhotos;
 $('#st-rolls').dataset.count = galleries.length;
@@ -638,6 +698,7 @@ addEventListener('hashchange', () => {
 });
 renderHud(); renderTrophies();
 runLoader();
+queueScroll();
 
 window.YL = { unlock, addXP, sound, toast, flash };
 })();

@@ -14,7 +14,8 @@ Site statique, sans build : `index.html`, `style.css`, `app.js`, `game.js`.
    Le script garde ce que tu as écrit.
 
 Une pellicule « Bientôt » se déverrouille automatiquement dès qu'elle contient au moins une photo.
-Les premières photos servent aussi de fond animé au hero.
+Le diaporama plein écran de l'accueil utilise la liste `hero` de `config.js` (sinon les premières photos).
+Dans `photos.js`, le champ `focus` (ex. `"50% 40%"`) règle le cadrage de chaque photo en plein écran.
 Cliquer sur une pellicule ouvre `galerie.html#<id>`, une page dédiée avec toutes les photos du thème.
 
 Conseil : exporte en JPG, environ 2000 px sur le grand côté, qualité 80 : le site reste rapide.
@@ -34,7 +35,5 @@ python3 -m http.server 8000
 ## Gamification
 
 - XP + niveaux (Débutant → Légende) : on en gagne en ouvrant des photos et en débloquant des trophées
-- 12 trophées (🏆 en haut à droite), progression sauvegardée dans le navigateur
-- Mini-jeu **Instant décisif** : vise les sujets avec le cadre et déclenche ; quand un sujet s'illumine, c'est ×3.
-  12 poses, 30 secondes, record et planche contact de ta partie
+- 11 trophées (🏆 en haut à droite), progression sauvegardée dans le navigateur
 - Secrets : un bouchon d'objectif caché dans le footer, et le code Konami (↑↑↓↓←→←→BA) qui active le mode argentique
