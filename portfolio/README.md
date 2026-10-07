@@ -2,7 +2,19 @@
 
 Site statique, sans build : `index.html`, `style.css`, `app.js`, `game.js`.
 
-## Ajouter tes photos
+## Ajouter des photos depuis GitHub (le plus simple, sans limite de nombre)
+
+1. Ouvre le dossier de la galerie sur GitHub, par exemple
+   https://github.com/yanislasne2-spec/test/tree/main/portfolio/photos/paysage
+   (ou `sport`, `portrait`, `concert`).
+2. **Add file → Upload files**, glisse tes photos (JPG, PNG, HEIC d'iPhone… jusqu'à 100 par envoi, 25 Mo max chacune).
+3. En bas, laisse « Commit directly to the main branch » et clique **Commit changes**.
+4. Attends 2 à 3 minutes : GitHub convertit et redimensionne les photos, les renomme (`paysage-11.jpg`…),
+   met à jour la galerie puis republie le site (onglet **Actions** pour suivre).
+
+Une photo illisible est mise de côté dans `photos-refusees/` sans bloquer les autres.
+
+## Ajouter tes photos (à la main, sur ton ordinateur)
 
 1. Dépose tes images dans le bon dossier :
    - `photos/sport/` (basket)

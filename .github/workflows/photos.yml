@@ -1,0 +1,57 @@
+# Dès que des photos sont déposées dans portfolio/photos/ sur main :
+# conversion / redimensionnement, mise à jour de photos.js, puis republication du site.
+name: Préparer les photos du portfolio
+
+on:
+  push:
+    branches: [main]
+    paths: ['portfolio/photos/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: portfolio-photos
+  cancel-in-progress: false
+
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installer Pillow (+ HEIC)
+        run: pip install pillow pillow-heif
+
+      - name: Préparer les photos et mettre à jour les galeries
+        run: python portfolio/preparer-photos.py
+
+      - name: Enregistrer les changements
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A portfolio
+          if git diff --cached --quiet; then
+            echo "Rien à enregistrer"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "Portfolio : photos préparées automatiquement"
+            git pull --rebase origin main
+            git push origin HEAD:main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # un commit fait par ce workflow ne relance pas GitHub Pages tout seul : on le demande
+      - name: Republier le site
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+        env:
+          GH_TOKEN: ${{ github.token }}
