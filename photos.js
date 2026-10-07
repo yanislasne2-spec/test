@@ -126,6 +126,30 @@ window.PHOTOS = /*DATA*/{
       "exif": "",
       "ratio": 0.667,
       "focus": "50% 55%"
+    },
+    {
+      "src": "photos/portrait/portrait-06.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "32% 50%"
+    },
+    {
+      "src": "photos/portrait/portrait-07.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "34% 50%"
+    },
+    {
+      "src": "photos/portrait/portrait-08.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "58% 55%"
     }
   ],
   "concert": [
