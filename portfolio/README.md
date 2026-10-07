@@ -15,6 +15,7 @@ Site statique, sans build : `index.html`, `style.css`, `app.js`, `game.js`.
 
 Une pellicule « Bientôt » se déverrouille automatiquement dès qu'elle contient au moins une photo.
 Les premières photos servent aussi de fond animé au hero.
+Cliquer sur une pellicule ouvre `galerie.html#<id>`, une page dédiée avec toutes les photos du thème.
 
 Conseil : exporte en JPG, environ 2000 px sur le grand côté, qualité 80 : le site reste rapide.
 

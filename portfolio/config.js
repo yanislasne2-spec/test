@@ -13,7 +13,7 @@ window.SITE = {
 
   about: [
     "Je photographie ce qui vit : un regard, une foule, une lumière qui tombe au bon endroit.",
-    "Sport, portraits, concerts, paysages : je cherche l'instant où tout se joue, puis je le travaille en noir et blanc avec une touche de couleur."
+    "Sport, portraits, concerts, paysages : je cherche l'instant où tout se joue, et la lumière qui le raconte."
   ],
 
   /* Chaque galerie = une « pellicule ».
@@ -24,7 +24,7 @@ window.SITE = {
     {
       id: 'sport', roll: '01', title: 'Sport', kicker: 'Basket',
       accent: '#ff4d5a', open: true, placeholders: 9,
-      intro: "Projecteurs, sueur et parquet. Le noir et blanc pour l'intensité, la couleur du maillot pour l'identité."
+      intro: "Parquet, projecteurs et concentration. Le jeu vu au plus près des joueurs."
     },
     {
       id: 'portrait', roll: '02', title: 'Portrait', kicker: 'Visages',

@@ -233,7 +233,7 @@ body.ready .hero-sub{opacity:1;transform:none}
 .gal-empty-note{font-family:var(--mono);font-size:12px;color:var(--muted);margin:-16px 0 28px;letter-spacing:.04em}
 .gal-empty-note code{color:var(--g)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:16px;align-items:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:16px;align-items:start}
 .shot{position:relative;min-width:0}
 .shot .frame{position:relative;overflow:hidden;border-radius:6px;background:var(--ink-2);
   clip-path:inset(100% 0 0 0 round 6px);transition:clip-path 1.2s var(--ease);transition-delay:var(--d,0s)}
@@ -449,3 +449,12 @@ body.in-game #cursor{opacity:0}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
   html{scroll-behavior:auto}
 }
+
+/* ---------- page galerie ---------- */
+.gal-page{border-top:0;padding-top:calc(clamp(96px,14vh,140px) + env(safe-area-inset-top, 0px));min-height:100svh}
+.back{display:inline-flex;margin-bottom:clamp(20px,4vh,40px);font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.back:hover,.back:focus-visible{color:var(--accent)}
+.others{border-top:1px solid var(--line)}
+.roll.is-current{border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
+a.roll{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}

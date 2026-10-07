@@ -2,6 +2,8 @@
 'use strict';
 document.body.classList.add('is-loading');
 const S = window.SITE;
+const PAGE = document.body.dataset.page || 'home';
+const HOME = PAGE === 'home';
 const P = window.PHOTOS || {};
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -91,7 +93,7 @@ function renderHud(bump) {
   $('#tr-level').textContent = L.name;
   $('#tr-bar').style.width = pct + '%';
   $('#tr-next').textContent = L.next ? `${state.xp} XP · encore ${L.next[0] - state.xp} XP pour « ${L.next[1]} »` : `${state.xp} XP · niveau max atteint, respect.`;
-  $('#st-trophies').textContent = state.ach.size + '/' + ACH.length;
+  const st = $('#st-trophies'); if (st) st.textContent = state.ach.size + '/' + ACH.length;
   if (bump) { const el = $('#hud-level'); el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
 }
 function addXP(n) {
@@ -182,6 +184,7 @@ function flash() { flashEl.classList.remove('go'); void flashEl.offsetWidth; fla
 /* ================= LOADER (diaphragme) ================= */
 function runLoader() {
   const loader = $('#loader');
+  if (!loader) { document.body.classList.remove('is-loading'); requestAnimationFrame(() => document.body.classList.add('ready')); return; }
   const finish = () => {
     document.body.classList.remove('is-loading');
     requestAnimationFrame(() => document.body.classList.add('ready'));
@@ -236,6 +239,7 @@ if (fine && !reduce) {
   loop();
 }
 
+if (HOME) {
 /* ================= HERO ================= */
 $$('[data-split]').forEach((el, li) => {
   el.innerHTML = [...el.textContent].map((c, i) => `<span class="ch" style="--i:${i + li * 5}">${esc(c)}</span>`).join('');
@@ -306,7 +310,7 @@ hero.addEventListener('click', e => {
 /* lignes « terminal » façon démarrage d'appareil */
 (() => {
   const el = $('#term'); if (!el) return;
-  const lines = ['◆ initialisation du capteur…', '> charger "pellicule_sport" [ok]', '> mise au point "af-c" [verrouillée]', '> mode "noir & blanc + couleur" [activé]'];
+  const lines = ['◆ initialisation du capteur…', '> charger "pellicule_sport" [ok]', '> mise au point "af-c" [verrouillée]', '> balance des blancs "salle" [ok]'];
   if (reduce) { el.innerHTML = lines.map(esc).join('\n'); return; }
   let li = 0, ci = 0, out = '';
   const type = () => {
@@ -321,7 +325,7 @@ hero.addEventListener('click', e => {
 
 /* ================= MARQUEE ================= */
 (() => {
-  const words = ['Sport', 'Portrait', 'Concerts', 'Paysages', 'Noir & blanc', 'Lumière'];
+  const words = ['Sport', 'Portrait', 'Concerts', 'Paysages', 'Mouvement', 'Lumière'];
   const html = words.map(w => `<span>${w} ·</span>`).join('');
   const tr = $('#marquee'); tr.innerHTML = html + html + html;
   let x = 0, lastY = scrollY, vel = 0;
@@ -337,6 +341,8 @@ hero.addEventListener('click', e => {
   loop();
 })();
 
+}
+
 /* ================= PELLICULES ================= */
 const phArt = (g, extra = '') => `<div class="ph-art" style="--g:${g.accent};${extra}"></div>`;
 function seenCount(g) { return g.items.filter(it => state.seen.has(it.id)).length; }
@@ -347,17 +353,19 @@ function renderRolls() {
     const foot = g.unlocked
       ? `<div class="roll-foot"><span>${n} pose${n > 1 ? 's' : ''}</span><span class="roll-prog">vu <span data-rp>${s}/${n}</span><span class="hud-bar"><i data-rpbar style="width:${n ? s / n * 100 : 0}%"></i></span></span></div>`
       : `<div class="dev">Révélateur en cours…<i class="dev-bar"></i></div>`;
-    return `<button class="roll reveal ${g.unlocked ? '' : 'is-locked'}" style="--g:${g.accent}" data-id="${g.id}" data-cursor="${g.unlocked ? 'link' : 'lock'}">
+    const tag = g.unlocked ? `a href="galerie.html#${g.id}"` : 'button type="button"';
+    const current = !HOME && g.id === currentId() ? ' is-current' : '';
+    return `<${tag} class="roll reveal${current} ${g.unlocked ? '' : 'is-locked'}" style="--g:${g.accent}" data-id="${g.id}" data-cursor="${g.unlocked ? 'link' : 'lock'}">
       <div class="roll-media">${media}</div>
       <div class="roll-top"><span>Pellicule ${g.roll}</span><span class="roll-status">${g.unlocked ? 'Ouverte' : '<span class="lock-ico">🔒</span> Bientôt'}</span></div>
       <span class="roll-num" aria-hidden="true">${g.roll}</span>
       <div><h3 class="roll-title">${esc(g.title)}</h3><p class="roll-kicker">${esc(g.kicker)}</p>${foot}</div>
-    </button>`;
+    </${g.unlocked ? 'a' : 'button'}>`;
   }).join('');
   $$('.roll').forEach(el => {
     const g = galleries.find(x => x.id === el.dataset.id);
-    el.addEventListener('click', () => {
-      if (g.unlocked) { document.getElementById('g-' + g.id).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
+    el.addEventListener('click', e => {
+      if (g.unlocked) { if (!e.metaKey && !e.ctrlKey) flash(); return; }
       el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
       toast('🔒', 'Pellicule ' + g.roll, g.title + ' : en développement', 'Revient très bientôt');
       unlock('curious');
@@ -374,11 +382,20 @@ function renderRolls() {
 }
 
 /* ================= GALERIES ================= */
+function currentId() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const g = galleries.find(x => x.id === h && x.unlocked) || galleries.find(x => x.unlocked);
+  return g && g.id;
+}
 function renderGalleries() {
-  $('#gallery-sections').innerHTML = galleries.filter(g => g.unlocked).map(g => {
+  const box = $('#gallery-sections'); if (!box) return;
+  const id = currentId();
+  const g0 = galleries.find(x => x.id === id);
+  if (g0) document.title = `${g0.title} — ${S.name}`;
+  box.innerHTML = galleries.filter(g => g.id === id).map(g => {
     const empty = !g.photos.length;
-    return `<section class="gal" id="g-${g.id}" style="--g:${g.accent}">
-      <div class="sprockets"></div>
+    return `<section class="gal gal-page" id="g-${g.id}" style="--g:${g.accent}">
+      <a class="back" href="index.html" data-cursor="link">← Toutes les pellicules</a>
       <header class="gal-head reveal">
         <div>
           <span class="gal-roll">Pellicule ${g.roll} — ${esc(g.kicker)}</span>
@@ -394,7 +411,7 @@ function renderGalleries() {
             <div class="frame">${it.placeholder
               ? `<div class="ph-art" style="--g:${g.accent};aspect-ratio:${it.ratio}"><div class="ph-label"><span>Photo à venir</span><b>${pad(it.n)}</b></div></div>`
               : `<img src="${esc(it.src)}" alt="${esc(it.alt || it.caption || g.title + ' ' + it.n)}" loading="lazy" decoding="async">`}</div>
-            <figcaption><span class="fr">▸ ${pad(it.n)}A</span><span>${esc(it.caption || '')}</span><span class="seen-tag">✓ vu</span></figcaption>
+            <figcaption><span class="fr">▸ ${pad(it.n)}A</span>${it.caption ? `<span>${esc(it.caption)}</span>` : ''}<span class="seen-tag">✓ vu</span></figcaption>
           </figure>`).join('')}
       </div>
     </section>`;
@@ -534,6 +551,7 @@ addEventListener('keydown', e => {
   }
 });
 
+if (HOME) {
 /* ================= ABOUT / CONTACT ================= */
 $('#about-text').innerHTML = (S.about || []).map(p => `<p>${esc(p)}</p>`).join('');
 if (S.aboutPhoto) { const a = $('#about-photo'); a.style.backgroundImage = `url('${encodeURI(S.aboutPhoto)}')`; a.innerHTML = ''; }
@@ -553,6 +571,7 @@ $('#polaroid').addEventListener('click', () => { flash(); const p = $('#polaroid
     m.addEventListener('pointerleave', () => { m.style.transform = ''; });
   });
 })();
+}
 $$('[data-split-words]').forEach(el => {
   let i = 0;
   const walk = node => [...node.childNodes].forEach(n => {
@@ -609,9 +628,14 @@ setTimeout(() => $$('.reveal:not(.in), .shot:not(.in), .contact-title:not(.in)')
 addEventListener('scroll', () => $('.nav').classList.toggle('scrolled', scrollY > 40), { passive: true });
 
 /* ================= INIT ================= */
-renderRolls();
+if ($('#rolls')) renderRolls();
 renderGalleries();
 observe();
+addEventListener('hashchange', () => {
+  renderGalleries();
+  if ($('#rolls')) renderRolls();
+  observe(); scrollTo(0, 0);
+});
 renderHud(); renderTrophies();
 runLoader();
 

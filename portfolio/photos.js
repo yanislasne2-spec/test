@@ -5,27 +5,33 @@
 window.PHOTOS = /*DATA*/{
   "sport": [
     {
-      "src": "photos/sport/01-dunk-ada-blois.jpg",
-      "alt": "Dunk à deux mains d'un joueur de l'ADA Blois, maillot vert, accroché au cercle",
-      "caption": "ADA Blois — dunk",
+      "src": "photos/sport/sport-01.jpg",
+      "alt": "",
+      "caption": "",
       "exif": ""
     },
     {
-      "src": "photos/sport/02-ada-blois-6.jpg",
-      "alt": "Joueur de l'ADA Blois numéro 6, debout face à l'objectif, gradins en fond",
-      "caption": "ADA Blois — #6",
+      "src": "photos/sport/sport-02.jpg",
+      "alt": "",
+      "caption": "",
       "exif": ""
     },
     {
-      "src": "photos/sport/03-nantes-95.jpg",
-      "alt": "Joueur de Nantes numéro 95, contre-plongée sous les projecteurs",
-      "caption": "Nantes — #95",
+      "src": "photos/sport/sport-03.jpg",
+      "alt": "",
+      "caption": "",
       "exif": ""
     },
     {
-      "src": "photos/sport/04-nantes-8.jpg",
-      "alt": "Joueur de Nantes numéro 8 de profil, panier flou en arrière-plan",
-      "caption": "Nantes — #8",
+      "src": "photos/sport/sport-04.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": ""
+    },
+    {
+      "src": "photos/sport/sport-05.jpg",
+      "alt": "",
+      "caption": "",
       "exif": ""
     }
   ],
