@@ -150,6 +150,22 @@ window.PHOTOS = /*DATA*/{
       "exif": "",
       "ratio": 1.5,
       "focus": "58% 55%"
+    },
+    {
+      "src": "photos/portrait/portrait-09.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "50% 45%"
+    },
+    {
+      "src": "photos/portrait/portrait-10.jpg",
+      "alt": "",
+      "caption": "",
+      "exif": "",
+      "ratio": 1.5,
+      "focus": "52% 45%"
     }
   ],
   "concert": [
