@@ -9,7 +9,7 @@ window.SITE = {
   location: '',            // ex. 'Nantes, France'
   email: 'ylasne.pro@gmail.com',
   instagram: 'yanis_lsn',  // sans le @
-  aboutPhoto: '',          // ex. 'photos/moi.jpg' (sinon un monogramme s'affiche)
+  aboutPhoto: 'photos/moi-travail.jpg', // photo de la section « À propos » (vide = monogramme)
   contactPhoto: 'photos/moi.jpg', // photo de toi dans la section « On shoote ensemble ? » (vide = pas de photo)
 
   // Photos du diaporama plein écran de l'accueil (dans l'ordre, 8 max). Vide = les premières photos.
