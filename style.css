@@ -652,3 +652,5 @@ body:not(.music-on) .mp-list button.on .eq i{animation:none;height:4px}
 .mp-list button:not(.on) .eq{visibility:hidden}
 .mp-note{margin-top:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--muted);line-height:1.5}
 @media (max-width:640px){ .mp{top:calc(64px + env(safe-area-inset-top, 0px))} }
+
+.polaroid-img{background-position:50% 48%}
