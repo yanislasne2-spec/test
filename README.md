@@ -33,6 +33,11 @@ Cliquer sur une pellicule ouvre `galerie.html#<id>`, une page dédiée avec tout
 
 Conseil : exporte en JPG, environ 2000 px sur le grand côté, qualité 80 : le site reste rapide.
 
+## Studio RAW (appliquer un preset à tout un shooting)
+
+Le dossier [`studio-raw/`](studio-raw/README.md) contient une appli à lancer sur ton ordinateur :
+tu glisses ton preset Lightroom (`.xmp`) et tes RAW, elle les développe et les exporte en JPG.
+
 ## Personnaliser
 
 Tout se règle dans `config.js` : email, Instagram, photo « à propos », textes, couleurs et intros des galeries.

@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio RAW</title>
+<style>
+  :root {
+    --bg: #0e0e10; --panel: #17171a; --line: #2a2a2f; --text: #ececf0; --muted: #8d8d97;
+    --accent: #f5b544; --accent-ink: #1a1306; --ok: #6fcf97; --err: #ff7a6b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 32px 16px 80px; }
+  header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; }
+  h1 { font-size: 26px; margin: 0; letter-spacing: -.02em; }
+  h1 span { color: var(--accent); }
+  header p { margin: 0; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 12px; }
+  .step { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+          background: var(--line); color: var(--text); font-size: 12px; margin-right: 6px; }
+  .drop { border: 1.5px dashed #3a3a42; border-radius: 12px; padding: 22px 14px; text-align: center; cursor: pointer;
+          transition: .15s; color: var(--muted); }
+  .drop:hover, .drop.over { border-color: var(--accent); color: var(--text); background: #1d1b16; }
+  .drop strong { display: block; color: var(--text); font-size: 16px; margin-bottom: 4px; }
+  .drop.filled { border-style: solid; border-color: #3d3a30; }
+  .small { font-size: 13px; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; max-height: 92px; overflow: auto; }
+  .chip { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: #222228; color: #c8c8d0; }
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: end; }
+  @media (max-width: 760px) { .options { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  select, input[type=range] { width: 100%; }
+  select { background: #101013; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: inherit; }
+  .check { display: flex; gap: 8px; align-items: center; color: var(--text); font-size: 14px; margin: 0; cursor: pointer; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  button { font: inherit; border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); cursor: pointer;
+           background: #222228; color: var(--text); }
+  button:hover:not(:disabled) { border-color: #4a4a52; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button:disabled { opacity: .45; cursor: default; }
+  .bar { height: 8px; background: #222228; border-radius: 99px; overflow: hidden; margin: 10px 0 6px; }
+  .bar div { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+  .status { font-size: 14px; }
+  .errors { color: var(--err); font-size: 13px; margin: 8px 0 0; padding-left: 18px; }
+  .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 14px; }
+  .thumbs a { display: block; aspect-ratio: 3/2; background: #101013; border-radius: 8px; overflow: hidden; }
+  .thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .compare { position: relative; margin-top: 14px; border-radius: 10px; overflow: hidden; background: #000;
+             user-select: none; touch-action: none; }
+  .compare img { display: block; width: 100%; }
+  .compare .after { position: absolute; inset: 0; clip-path: inset(0 0 0 50%); }
+  .compare .after img { height: 100%; object-fit: cover; }
+  .compare .handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--accent); cursor: ew-resize; }
+  .compare .tag { position: absolute; top: 10px; font-size: 12px; padding: 2px 8px; border-radius: 6px; background: #000a; }
+  .hidden { display: none !important; }
+  .path { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); word-break: break-all; }
+  footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Studio <span>RAW</span></h1>
+    <p>Ton preset Lightroom appliqué à tout ton shooting, en un clic.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2><span class="step">1</span>Preset</h2>
+      <div class="drop" id="presetDrop">
+        <strong id="presetTitle">Glisse ton preset ici</strong>
+        <span id="presetInfo">.xmp (Lightroom / Camera Raw), .lrtemplate ou DNG avec réglages</span>
+      </div>
+      <input type="file" id="presetInput" class="hidden" accept=".xmp,.lrtemplate,.dng,.jpg,.jpeg">
+      <div class="chips" id="presetChips"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span>Photos du shooting</h2>
+      <div class="drop" id="photoDrop">
+        <strong id="photoTitle">Glisse tes RAW ici</strong>
+        <span id="photoInfo">CR2, CR3, NEF, ARW, RAF, DNG, ORF, RW2… (JPG aussi) — fichiers ou dossier entier</span>
+      </div>
+      <input type="file" id="photoInput" class="hidden" multiple>
+      <input type="file" id="folderInput" class="hidden" webkitdirectory>
+      <p class="small" style="margin:10px 0 0">ou <a href="#" id="pickFolder" style="color:var(--accent)">choisir un dossier</a>
+        · <a href="#" id="clearPhotos" style="color:var(--muted)">vider</a></p>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2><span class="step">3</span>Export</h2>
+    <div class="options">
+      <div>
+        <label for="taille">Taille</label>
+        <select id="taille">
+          <option value="">Pleine résolution</option>
+          <option value="4000">4000 px (grand côté)</option>
+          <option value="3000">3000 px</option>
+          <option value="2048">2048 px (web / Instagram)</option>
+          <option value="1080">1080 px</option>
+        </select>
+      </div>
+      <div>
+        <label for="qualite">Qualité JPG : <b id="qv">92</b></label>
+        <input type="range" id="qualite" min="60" max="100" value="92">
+      </div>
+      <label class="check"><input type="checkbox" id="wb"> Garder la balance des blancs de l'appareil</label>
+    </div>
+    <div class="actions">
+      <button id="previewBtn" disabled>Aperçu avant / après</button>
+      <button id="goBtn" class="primary" disabled>Développer et exporter</button>
+    </div>
+    <div id="compare" class="compare hidden">
+      <img id="imgBefore" alt="Avant">
+      <div class="after"><img id="imgAfter" alt="Après"></div>
+      <div class="handle"></div>
+      <span class="tag" style="left:10px">Avant</span><span class="tag" style="right:10px">Après</span>
+    </div>
+    <p id="previewMsg" class="small"></p>
+  </section>
+
+  <section class="card hidden" id="progressCard" style="margin-top:16px">
+    <h2><span class="step">4</span>Résultat</h2>
+    <div class="status" id="status"></div>
+    <div class="bar"><div id="bar"></div></div>
+    <ul class="errors" id="errors"></ul>
+    <div class="actions hidden" id="doneActions">
+      <button class="primary" id="zipBtn">Télécharger tout (.zip)</button>
+      <button id="openBtn">Ouvrir le dossier</button>
+      <button id="againBtn">Nouveau shooting</button>
+    </div>
+    <p class="path" id="path"></p>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+
+  <footer>Tout se passe sur ton ordinateur : aucune photo n'est envoyée sur internet.</footer>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const RAW = /\.(3fr|ari|arw|bay|cr2|cr3|crw|dcr|dng|erf|fff|iiq|k25|kdc|mef|mos|mrw|nef|nrw|orf|pef|raf|raw|rw2|rwl|sr2|srf|srw|x3f|jpe?g|png|tiff?|webp|heic|heif)$/i;
+let preset = null, photos = [], job = null;
+
+function setupDrop(zone, input, onFiles) {
+  zone.onclick = () => input.click();
+  input.onchange = () => { onFiles([...input.files]); input.value = ""; };
+  zone.ondragover = (e) => { e.preventDefault(); zone.classList.add("over"); };
+  zone.ondragleave = () => zone.classList.remove("over");
+  zone.ondrop = async (e) => {
+    e.preventDefault(); zone.classList.remove("over");
+    const entries = [...e.dataTransfer.items].map((i) => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+    onFiles(entries.length ? await readEntries(entries) : [...e.dataTransfer.files]);
+  };
+}
+async function readEntries(entries) {  // fichiers + dossiers (récursif)
+  const out = [];
+  async function walk(entry) {
+    if (entry.isFile) out.push(await new Promise((res, rej) => entry.file(res, rej)));
+    else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      let batch;
+      do {
+        batch = await new Promise((res, rej) => reader.readEntries(res, rej));
+        for (const e of batch) await walk(e);
+      } while (batch.length);
+    }
+  }
+  for (const e of entries) await walk(e);
+  return out;
+}
+
+const fmtSize = (b) => b > 1e9 ? (b / 1e9).toFixed(1) + " Go" : (b / 1e6).toFixed(0) + " Mo";
+function refresh() {
+  const ready = preset && photos.length;
+  $("goBtn").disabled = !ready;
+  $("previewBtn").disabled = !ready;
+  if (photos.length) {
+    const total = photos.reduce((s, f) => s + f.size, 0);
+    $("photoTitle").textContent = `${photos.length} photo${photos.length > 1 ? "s" : ""} prête${photos.length > 1 ? "s" : ""}`;
+    $("photoInfo").textContent = `${fmtSize(total)} · clique ou glisse pour en ajouter`;
+    $("photoDrop").classList.add("filled");
+  } else {
+    $("photoTitle").textContent = "Glisse tes RAW ici";
+    $("photoInfo").textContent = "CR2, CR3, NEF, ARW, RAF, DNG, ORF, RW2… (JPG aussi) — fichiers ou dossier entier";
+    $("photoDrop").classList.remove("filled");
+  }
+  $("goBtn").textContent = photos.length ? `Développer et exporter ${photos.length} photo${photos.length > 1 ? "s" : ""}` : "Développer et exporter";
+}
+
+const NAMES = { Exposure2012: "Exposition", Contrast2012: "Contraste", Highlights2012: "Hautes lumières",
+  Shadows2012: "Ombres", Whites2012: "Blancs", Blacks2012: "Noirs", Texture: "Texture", Clarity2012: "Clarté",
+  Dehaze: "Voile", Vibrance: "Vibrance", Saturation: "Saturation", Temperature: "Température", Tint: "Teinte",
+  ToneCurvePV2012: "Courbe", PostCropVignetteAmount: "Vignetage", GrainAmount: "Grain", Sharpness: "Netteté",
+  ColorGradeShadowHue: "Étalonnage ombres", ColorGradeShadowSat: "Étalonnage ombres (sat.)",
+  ColorGradeMidtoneHue: "Étalonnage tons moyens", ColorGradeMidtoneSat: "Étalonnage tons moyens (sat.)",
+  ColorGradeHighlightHue: "Étalonnage hautes lum.", ColorGradeHighlightSat: "Étalonnage hautes lum. (sat.)",
+  ColorGradeBlending: "Fusion étalonnage", SplitToningShadowHue: "Virage ombres", SplitToningHighlightHue: "Virage hautes lum.",
+  ParametricShadows: "Courbe : ombres", ParametricDarks: "Courbe : tons foncés", ParametricLights: "Courbe : tons clairs",
+  ParametricHighlights: "Courbe : hautes lum.", ToneCurvePV2012Red: "Courbe rouge", ToneCurvePV2012Green: "Courbe verte",
+  ToneCurvePV2012Blue: "Courbe bleue", LuminanceSmoothing: "Réduction du bruit" };
+const FR_COLORS = { Red: "rouges", Orange: "oranges", Yellow: "jaunes", Green: "verts", Aqua: "cyans", Blue: "bleus", Purple: "violets", Magenta: "magentas" };
+const label = (k) => {
+  const m = k.match(/^(Hue|Saturation|Luminance)Adjustment(\w+)$/);
+  if (m) return `${{ Hue: "Teinte", Saturation: "Saturation", Luminance: "Luminance" }[m[1]]} ${FR_COLORS[m[2]] || m[2]}`;
+  return NAMES[k] || k.replace(/2012$/, "");
+};
+
+async function loadPreset(files) {
+  const f = files[0];
+  if (!f) return;
+  const fd = new FormData(); fd.append("preset", f);
+  $("presetTitle").textContent = "Lecture…";
+  const r = await fetch("/api/preset", { method: "POST", body: fd });
+  const data = await r.json();
+  if (!r.ok) {
+    preset = null; $("presetTitle").textContent = "Preset non reconnu"; $("presetInfo").textContent = data.error;
+    $("presetChips").innerHTML = ""; refresh(); return;
+  }
+  preset = f;
+  $("presetTitle").textContent = data.name;
+  $("presetInfo").textContent = `${data.count} réglages lus · balance des blancs : ${data.wb === "As Shot" ? "celle de l'appareil" : data.wb + (data.temperature ? " " + data.temperature + " K" : "")}`;
+  $("presetDrop").classList.add("filled");
+  $("presetChips").innerHTML = data.keys.map((k) => `<span class="chip">${label(k)}</span>`).join("");
+  refresh();
+}
+
+function addPhotos(files) {
+  const known = new Set(photos.map((f) => f.name + f.size));
+  for (const f of files) if (RAW.test(f.name) && !f.name.startsWith(".") && !known.has(f.name + f.size)) photos.push(f);
+  photos.sort((a, b) => a.name.localeCompare(b.name, "fr", { numeric: true }));
+  refresh();
+}
+
+setupDrop($("presetDrop"), $("presetInput"), loadPreset);
+setupDrop($("photoDrop"), $("photoInput"), addPhotos);
+$("pickFolder").onclick = (e) => { e.preventDefault(); $("folderInput").click(); };
+$("folderInput").onchange = () => { addPhotos([...$("folderInput").files]); $("folderInput").value = ""; };
+$("clearPhotos").onclick = (e) => { e.preventDefault(); photos = []; refresh(); };
+$("qualite").oninput = () => ($("qv").textContent = $("qualite").value);
+
+function baseForm() {
+  const fd = new FormData();
+  fd.append("preset", preset);
+  fd.append("taille", $("taille").value);
+  fd.append("qualite", $("qualite").value);
+  fd.append("wb_appareil", $("wb").checked ? "1" : "0");
+  return fd;
+}
+
+// ---------- aperçu avant / après
+$("previewBtn").onclick = async () => {
+  $("previewBtn").disabled = true;
+  $("previewMsg").textContent = `Aperçu de ${photos[0].name}…`;
+  try {
+    const get = async (avant) => {
+      const fd = baseForm(); fd.append("photo", photos[0]); fd.append("avant", avant ? "1" : "0");
+      const r = await fetch("/api/apercu", { method: "POST", body: fd });
+      if (!r.ok) throw new Error((await r.json()).error);
+      return URL.createObjectURL(await r.blob());
+    };
+    const [a, b] = await Promise.all([get(true), get(false)]);
+    $("imgBefore").src = a; $("imgAfter").src = b;
+    $("compare").classList.remove("hidden");
+    $("previewMsg").textContent = `${photos[0].name} — fais glisser le curseur pour comparer.`;
+  } catch (err) {
+    $("previewMsg").textContent = err.message;
+  }
+  $("previewBtn").disabled = false;
+};
+(function compareSlider() {
+  const box = $("compare");
+  let drag = false;
+  const move = (x) => {
+    const r = box.getBoundingClientRect();
+    const p = Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100));
+    box.querySelector(".after").style.clipPath = `inset(0 0 0 ${p}%)`;
+    box.querySelector(".handle").style.left = p + "%";
+  };
+  box.addEventListener("pointerdown", (e) => { drag = true; box.setPointerCapture(e.pointerId); move(e.clientX); });
+  box.addEventListener("pointermove", (e) => drag && move(e.clientX));
+  box.addEventListener("pointerup", () => (drag = false));
+})();
+
+// ---------- traitement
+function upload(url, fd, onProgress) {
+  return new Promise((res, rej) => {
+    const x = new XMLHttpRequest();
+    x.open("POST", url);
+    x.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded);
+    x.onload = () => (x.status < 300 ? res() : rej(new Error(JSON.parse(x.responseText || "{}").error || x.statusText)));
+    x.onerror = () => rej(new Error("connexion perdue avec l'appli"));
+    x.send(fd);
+  });
+}
+
+$("goBtn").onclick = async () => {
+  $("goBtn").disabled = $("previewBtn").disabled = true;
+  $("progressCard").classList.remove("hidden");
+  $("doneActions").classList.add("hidden");
+  $("thumbs").innerHTML = $("errors").innerHTML = $("path").textContent = "";
+  $("progressCard").scrollIntoView({ behavior: "smooth" });
+  const list = photos.slice();
+  try {
+    const r = await fetch("/api/jobs", { method: "POST", body: baseForm() });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error);
+    job = data.id;
+    // envoi des photos à l'appli (copie locale), 2 à la fois
+    const total = list.reduce((s, f) => s + f.size, 0);
+    const sent = new Array(list.length).fill(0);
+    let next = 0;
+    const show = () => {
+      const s = sent.reduce((a, b) => a + b, 0);
+      $("status").textContent = `Préparation des photos… ${fmtSize(s)} / ${fmtSize(total)}`;
+      $("bar").style.width = (s / total) * 100 + "%";
+    };
+    const failed = [];
+    async function lane() {
+      while (next < list.length) {
+        const i = next++;
+        const fd = new FormData(); fd.append("photo", list[i], list[i].name);
+        try { await upload(`/api/jobs/${job}/photos`, fd, (n) => { sent[i] = n; show(); }); }
+        catch (err) { failed.push(`${list[i].name} — ${err.message}`); }
+        sent[i] = list[i].size; show();
+      }
+    }
+    await Promise.all([lane(), lane()]);
+    const s = await fetch(`/api/jobs/${job}/start`, { method: "POST" });
+    if (!s.ok) throw new Error((await s.json()).error);
+    poll(failed);
+  } catch (err) {
+    $("status").textContent = "Erreur : " + err.message;
+    refresh();
+  }
+};
+
+async function poll(uploadErrors) {
+  const r = await fetch(`/api/jobs/${job}`);
+  const d = await r.json();
+  $("bar").style.width = (d.total ? (d.done / d.total) * 100 : 0) + "%";
+  const shown = new Set([...$("thumbs").children].map((a) => a.dataset.name));
+  for (const name of d.items) {
+    if (shown.has(name)) continue;
+    const a = document.createElement("a");
+    a.dataset.name = name; a.href = `/api/jobs/${job}/photo/${encodeURIComponent(name)}`; a.target = "_blank";
+    a.innerHTML = `<img loading="lazy" alt="" src="/api/jobs/${job}/vignette/${encodeURIComponent(name)}">`;
+    $("thumbs").appendChild(a);
+  }
+  $("errors").innerHTML = [...uploadErrors, ...d.errors].map((e) => `<li>${e.replace(/</g, "&lt;")}</li>`).join("");
+  if (!d.finished) {
+    const eta = d.done ? Math.round((d.secondes / d.done) * (d.total - d.done)) : null;
+    $("status").textContent = `Développement… ${d.done} / ${d.total}` + (eta !== null ? ` · encore ~${eta < 90 ? eta + " s" : Math.round(eta / 60) + " min"}` : "");
+    setTimeout(() => poll(uploadErrors), 1000);
+    return;
+  }
+  $("status").innerHTML = `<b style="color:var(--ok)">✓ ${d.items.length} photo${d.items.length > 1 ? "s" : ""} exportée${d.items.length > 1 ? "s" : ""}</b> avec « ${d.preset} » en ${Math.round(d.secondes)} s`;
+  $("path").textContent = "Dossier : " + d.dossier;
+  $("doneActions").classList.remove("hidden");
+  refresh();
+}
+
+$("zipBtn").onclick = () => (location.href = `/api/jobs/${job}/zip`);
+$("openBtn").onclick = () => fetch(`/api/jobs/${job}/ouvrir`, { method: "POST" });
+$("againBtn").onclick = () => {
+  photos = []; refresh();
+  $("progressCard").classList.add("hidden"); $("compare").classList.add("hidden"); $("previewMsg").textContent = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+</script>
+</body>
+</html>
