@@ -6,7 +6,7 @@ Publiée avec le site sur **https://yanislasne.fr/cinema/**.
 
 ## L'installer sur iPhone
 Safari → https://yanislasne.fr/cinema/ → **Partager** → **Sur l'écran d'accueil** → **Ajouter**.
-L'appli s'ouvre alors en plein écran, comme une vraie appli, et marche hors connexion.
+L'appli s'ouvre ensuite en plein écran, comme une vraie appli, et marche hors connexion.
 
 ## Fonctionnement
 - **Statut** : niveau, rang du chasseur (E → D → C → B → A → S → Légende), barre d'XP, 6 stats
