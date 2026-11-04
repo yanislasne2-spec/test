@@ -1,14 +1,14 @@
 {
-  "name": "Pépite — une info par jour",
+  "name": "Pépite — 10 infos par jour",
   "short_name": "Pépite",
-  "description": "Apprends quelque chose de nouveau chaque jour, en 3 minutes.",
+  "description": "10 infos par jour pour améliorer ta culture générale.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FFFFFF",
-  "theme_color": "#58CC02",
+  "theme_color": "#FFFFFF",
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },

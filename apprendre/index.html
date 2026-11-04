@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-palette="pepite">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <title>Pépite · une info par jour</title>
-  <meta name="description" content="Apprends quelque chose de nouveau chaque jour, en 3 minutes.">
-  <meta name="theme-color" content="#58CC02">
+  <title>Pépite · 10 infos par jour</title>
+  <meta name="description" content="10 infos par jour pour améliorer ta culture générale.">
+  <meta name="theme-color" content="#FFFFFF">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,34 +16,36 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1">
+  <script>
+    // Applique le thème de couleur avant l'affichage (évite un flash)
+    try { var p = JSON.parse(localStorage.getItem("pepite-v2") || "{}").palette; if (p) document.documentElement.dataset.palette = p; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <div id="app">
-    <!-- Barre du haut -->
-    <header class="topbar" id="topbar">
-      <div class="stat" id="stat-streak" title="Série de jours"><span class="ico">🔥</span><span id="streak-n">0</span></div>
-      <div class="stat gem" id="stat-xp" title="XP total"><span class="ico">💎</span><span id="xp-n">0</span></div>
-      <div class="stat heart" id="stat-learned" title="Infos apprises"><span class="ico">📚</span><span id="learned-n">0</span></div>
+    <header class="topbar">
+      <div class="brand" id="brand"></div>
+      <div class="stats">
+        <div class="stat" id="stat-streak" title="Série de jours"><span class="ico">🔥</span><span id="streak-n">0</span></div>
+        <div class="stat read" title="Infos lues"><span class="ico">📚</span><span id="read-n">0</span></div>
+      </div>
     </header>
 
     <main id="view"></main>
 
-    <!-- Barre d'onglets -->
-    <nav class="tabbar" id="tabbar">
+    <nav class="tabbar">
       <button data-tab="home" class="tab active"><span class="tab-ico">🏠</span><span>Aujourd'hui</span></button>
       <button data-tab="themes" class="tab"><span class="tab-ico">🧭</span><span>Thèmes</span></button>
       <button data-tab="library" class="tab"><span class="tab-ico">📚</span><span>Mes infos</span></button>
-      <button data-tab="profile" class="tab"><span class="tab-ico">👤</span><span>Profil</span></button>
+      <button data-tab="profile" class="tab"><span class="tab-ico">⚙️</span><span>Réglages</span></button>
     </nav>
   </div>
 
-  <!-- Écran de leçon plein écran -->
-  <section id="lesson" class="lesson hidden" aria-live="polite"></section>
-
+  <section id="reader" class="reader hidden" aria-live="polite"></section>
   <div id="toast" class="toast"></div>
 
-  <script src="data.js?v=1"></script>
-  <script src="app.js?v=1"></script>
+  <script src="data.js?v=2"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
