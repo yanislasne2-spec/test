@@ -1,7 +1,7 @@
 // Pépite : fonctionne hors connexion.
 // Change VERSION à chaque mise à jour pour que l'iPhone récupère la nouvelle version.
-const VERSION = "pepite-1";
-const FILES = ["./", "index.html", "style.css?v=1", "data.js?v=1", "app.js?v=1", "manifest.webmanifest",
+const VERSION = "pepite-2";
+const FILES = ["./", "index.html", "style.css?v=2", "data.js?v=2", "app.js?v=2", "manifest.webmanifest",
   "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png"];
 
 self.addEventListener("install", (e) => {
