@@ -391,7 +391,7 @@
     const pct = Math.round(100 * L.cur / L.next);
     const g = S.gate && byId[S.gate.id];
     const done = doneList().length, todo = Object.values(S.items).filter(r => r.status !== "done").length;
-    const install = !S.installDismissed && /iPhone|iPad|iPod/.test(navigator.userAgent) && !navigator.standalone;
+    const install = !window.EVEIL_EMBED && !S.installDismissed && /iPhone|iPad|iPod/.test(navigator.userAgent) && !navigator.standalone;
     return `
       ${install ? `<div class="panel install"><b>Installe Éveil sur ton iPhone</b><br>Dans Safari : bouton <b>Partager</b> ⎙ → <b>Sur l'écran d'accueil</b>.<button class="x" data-act="dismissInstall">✕</button></div>` : ""}
       <section class="panel status-win">
@@ -535,9 +535,8 @@
         <div class="win-head">RÉGLAGES</div>
         <div class="kv"><span>Sons du Système</span><button class="toggle ${S.sound ? "on" : ""}" data-act="sound"><span></span></button></div>
         <div class="kv"><span>Nom du chasseur</span><button class="btn small ghost" data-act="rename">Modifier</button></div>
-        <p class="muted small">Ta progression est enregistrée sur ce téléphone. Fais une sauvegarde de temps en temps (ou pour changer de téléphone).</p>
+        <p class="muted small">Ta progression est enregistrée dans ce navigateur. Fais une sauvegarde de temps en temps, et pour passer d’une version de l’appli à l’autre.</p>
         <div class="btn-row"><button class="btn ghost" data-act="export">Exporter</button><button class="btn ghost" data-act="import">Importer</button></div>
-        <input type="file" id="import-file" accept="application/json,.json" hidden>
         <button class="btn danger wide" data-act="reset">Réinitialiser ma progression</button>
       </section>
       <section class="panel how">
@@ -647,8 +646,6 @@
     window.scrollTo(0, keepScroll ? y : 0);
     const q = document.getElementById("ex-q");
     if (q) q.oninput = (e) => { exQuery = e.target.value; const pos = e.target.selectionStart; render(true); const n = document.getElementById("ex-q"); n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} };
-    const f = document.getElementById("import-file");
-    if (f) f.onchange = importFile;
   };
   const go = (t) => { tab = t; render(); };
   document.querySelectorAll(".tab").forEach(b => b.onclick = () => { sfx.tap(); go(b.dataset.tab); });
@@ -656,28 +653,44 @@
   // Rafraîchir la fiche ouverte + la vue après une action
   const refresh = (reopenId) => { render(true); if (reopenId && !$wrap.classList.contains("hidden")) openItem(reopenId); };
 
+  // ---------- Confirmation intégrée (pas de confirm()/prompt() natifs) ----------
+  let pending = null;
+  const askConfirm = (title, text, okLabel, fn) => {
+    pending = fn;
+    openSheet(`<div class="win-head center">CONFIRMATION</div><h2 class="center">${title}</h2><p class="center muted">${text}</p>
+      <button class="btn danger wide" data-act="confirmYes">${okLabel}</button><button class="btn ghost wide" data-act="close">Annuler</button>`);
+  };
+  const openRename = () => openSheet(`<div class="win-head center">NOM DU CHASSEUR</div>
+      <label class="field">Ton nom<input id="r-name" type="text" maxlength="24" value="${esc(S.name || "")}" placeholder="Ex. : Yanis"></label>
+      <button class="btn primary wide" data-act="saveName">Enregistrer</button><button class="btn ghost wide" data-act="close">Annuler</button>`);
+
   // ---------- Sauvegarde ----------
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(S, null, 1)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = `eveil-sauvegarde-${today()}.json`;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    toast("Sauvegarde exportée");
+  const backupText = () => JSON.stringify(S);
+  const openExport = () => openSheet(`<div class="win-head center">SAUVEGARDE</div>
+      <p class="muted small">Copie ce texte et garde-le dans tes Notes. Pour récupérer ta progression, utilise « Importer » et colle-le.</p>
+      <textarea id="backup-out" rows="6" readonly>${esc(backupText())}</textarea>
+      <button class="btn primary wide" data-act="copyBackup">Copier la sauvegarde</button>
+      ${window.EVEIL_EMBED ? "" : `<button class="btn ghost wide" data-act="downloadBackup">Télécharger un fichier</button>`}`);
+  const openImport = () => openSheet(`<div class="win-head center">IMPORTER</div>
+      <p class="muted small">Colle ici le texte de ta sauvegarde, ou choisis un fichier .json. Ta progression actuelle sera remplacée.</p>
+      <textarea id="backup-in" rows="6" placeholder="Colle ta sauvegarde ici…"></textarea>
+      <button class="btn primary wide" data-act="importText">Importer</button>
+      <button class="btn ghost wide" data-act="pickFile">Choisir un fichier</button>
+      <input type="file" id="import-file" accept="application/json,.json,.txt" hidden>`);
+  const loadBackup = (txt) => {
+    try {
+      const data = JSON.parse(txt);
+      if (!data || typeof data !== "object" || !("items" in data)) throw new Error("format");
+      S = Object.assign(defaults(), data); save(); reindex(); closeSheet(); render(); toast("Sauvegarde importée");
+    } catch (er) { toast("Sauvegarde illisible : colle le texte complet"); }
   };
   const importFile = (e) => {
     const file = e.target.files && e.target.files[0]; if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const data = JSON.parse(reader.result);
-        if (!data || typeof data !== "object" || !("items" in data)) throw new Error("format");
-        if (!confirm("Remplacer ta progression actuelle par cette sauvegarde ?")) return;
-        S = Object.assign(defaults(), data); save(); reindex(); render(); toast("Sauvegarde importée");
-      } catch (er) { toast("Fichier de sauvegarde invalide"); }
-    };
+    reader.onload = () => loadBackup(reader.result);
     reader.readAsText(file);
   };
+  document.addEventListener("change", (e) => { if (e.target.id === "import-file") importFile(e); });
 
   // ---------- Clics ----------
   document.addEventListener("click", (e) => {
@@ -705,8 +718,9 @@
       }
       case "remove": {
         const r = rec(id);
-        if (r && r.status === "done" && !confirm(`Retirer « ${byId[id].t} » des vus ? Les ${r.xp || 0} XP gagnés seront retirés.`)) break;
-        removeItem(id); closeSheet(); render(true); break;
+        const go2 = () => { removeItem(id); closeSheet(); render(true); };
+        if (r && r.status === "done") askConfirm(`Retirer « ${esc(byId[id].t)} » des vus ?`, `Les ${r.xp || 0} XP gagnés seront retirés.`, "Retirer", go2); else go2();
+        break;
       }
       case "close": closeSheet(); break;
       case "go": go(el.dataset.tab); break;
@@ -729,16 +743,33 @@
       }
       case "rerollGate": ensureGate(true); render(true); break;
       case "rename": {
-        const n = prompt("Ton nom de chasseur :", S.name || "");
-        if (n !== null) { S.name = n.trim().slice(0, 24); save(); render(true); }
-        break;
+        openRename(); break;
       }
       case "equip": S.equipped = id; save(); render(true); toast(`Titre équipé : ${titleName(id)}`); break;
       case "sound": S.sound = !S.sound; save(); render(true); break;
-      case "export": exportData(); break;
-      case "import": document.getElementById("import-file").click(); break;
+      case "saveName": S.name = document.getElementById("r-name").value.trim().slice(0, 24); save(); closeSheet(); render(true); break;
+      case "confirmYes": { const fn = pending; pending = null; if (fn) fn(); break; }
+      case "export": openExport(); break;
+      case "copyBackup": {
+        const ta = document.getElementById("backup-out");
+        const fallback = () => { ta.focus(); ta.select(); toast("Texte sélectionné : touche « Copier »"); };
+        try { navigator.clipboard.writeText(ta.value).then(() => toast("Sauvegarde copiée"), fallback); } catch (er) { fallback(); }
+        break;
+      }
+      case "downloadBackup": {
+        try {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(new Blob([backupText()], { type: "application/json" })); a.download = `eveil-sauvegarde-${today()}.json`;
+          document.body.appendChild(a); a.click(); a.remove();
+          toast("Si rien ne se télécharge, utilise « Copier »");
+        } catch (er) { toast("Téléchargement impossible ici : utilise « Copier »"); }
+        break;
+      }
+      case "import": openImport(); break;
+      case "importText": loadBackup(document.getElementById("backup-in").value); break;
+      case "pickFile": document.getElementById("import-file").click(); break;
       case "reset":
-        if (confirm("Tout effacer : liste, XP, titres, donjons ? (Exporte une sauvegarde avant si besoin.)")) { S = defaults(); save(); reindex(); render(); toast("Progression réinitialisée"); }
+        askConfirm("Tout effacer ?", "Liste, XP, titres et donjons seront supprimés. Fais une sauvegarde avant si besoin.", "Tout effacer", () => { S = defaults(); save(); reindex(); closeSheet(); render(); toast("Progression réinitialisée"); });
         break;
       case "dismissInstall": S.installDismissed = true; save(); render(true); break;
       case "addCustom": openCustom(); break;
@@ -752,7 +783,7 @@
         S.custom.push(it); reindex(); addToList(it.id); closeSheet(); render(true); break;
       }
       case "deleteCustom":
-        if (confirm("Supprimer ce titre perso ?")) { removeItem(id); S.custom = S.custom.filter(x => x.id !== id); reindex(); save(); closeSheet(); render(true); }
+        askConfirm("Supprimer ce titre perso ?", esc(byId[id].t), "Supprimer", () => { removeItem(id); S.custom = S.custom.filter(x => x.id !== id); reindex(); save(); closeSheet(); render(true); });
         break;
     }
   });
