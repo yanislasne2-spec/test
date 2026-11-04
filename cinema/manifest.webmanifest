@@ -1,0 +1,17 @@
+{
+  "name": "Éveil — le Système du cinéphile",
+  "short_name": "Éveil",
+  "description": "Ta to-do list de films, séries et documentaires, avec niveaux, rangs, quêtes et donjons.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#04060D",
+  "theme_color": "#04060D",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
