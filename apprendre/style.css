@@ -1,41 +1,40 @@
-/* Pépite — style épuré, 4 thèmes de couleur (data-palette sur <html>) */
-:root, html[data-palette="pepite"] {
-  --bg: #FFFFFF;
-  --surface: #FFFFFF;
-  --soft: #F7F7F7;
-  --line: #E5E5E5;
-  --line-dark: #D0D0D0;
-  --text: #3C3C3C;
-  --muted: #777777;
-  --faint: #AFAFAF;
-  --p: #58CC02;        /* couleur principale */
-  --p-dark: #58A700;
-  --p-soft: #D7FFB8;
-  --p-line: #A5ED6E;
-  --p-text: #4B9B00;
-  --streak: #FF9600;
+/* Pépite — thème néon Tokyo (violet, noir, rose) : data-palette="nuit" (sombre) ou "jour" (clair) */
+:root, html[data-palette="nuit"] {
+  --bg: #0B0713;
+  --surface: #140E20;
+  --soft: #1B1329;
+  --line: #2C2142;
+  --line-dark: #221936;
+  --text: #F5EEFF;
+  --muted: #A99BC6;
+  --faint: #685A86;
+  --p: #9146FF;          /* violet néon */
+  --p-dark: #6527C9;
+  --p-soft: #251740;
+  --p-line: #4E2E8A;
+  --p-text: #C29BFF;
+  --pink: #FF2E97;       /* rose néon */
+  --pink-dark: #C0156C;
+  --cyan: #2DE2FF;
+  --grad: linear-gradient(120deg, #9146FF 0%, #C13BFF 50%, #FF2E97 100%);
+  --glow: 0 0 22px rgba(145, 70, 255, .45);
+  --glow-pink: 0 0 18px rgba(255, 46, 151, .5);
+  --streak: #FF4FAE;
   --gold: #FFC800;
   --gold-dark: #E5A800;
   --radius: 16px;
   --tabbar-h: 64px;
   --font: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: light;
-}
-html[data-palette="ocean"] {
-  --bg: #FFFFFF; --soft: #F3F9FD; --line: #E1EAF0; --line-dark: #C9D6DF;
-  --text: #2F3D48; --muted: #6B7C88;
-  --p: #1CB0F6; --p-dark: #1899D6; --p-soft: #DDF4FF; --p-line: #84D8FF; --p-text: #1584BA;
-}
-html[data-palette="framboise"] {
-  --bg: #FFFFFF; --soft: #FFF6F9; --line: #F1E3E8; --line-dark: #E2CDD5;
-  --text: #45323A; --muted: #8A727C;
-  --p: #FF4F8B; --p-dark: #D93A73; --p-soft: #FFE3EE; --p-line: #FFADC9; --p-text: #C92E66;
-}
-html[data-palette="nuit"] {
-  --bg: #131F24; --surface: #131F24; --soft: #1C2B33; --line: #37464F; --line-dark: #2A3940;
-  --text: #F1F7FB; --muted: #A8B6BE; --faint: #607580;
-  --p: #9B7BFF; --p-dark: #7656E0; --p-soft: #2A2547; --p-line: #4D3F8C; --p-text: #B9A3FF;
   color-scheme: dark;
+}
+html[data-palette="jour"] {
+  --bg: #F8F4FF; --surface: #FFFFFF; --soft: #F1EAFF; --line: #E3D8F7; --line-dark: #D2C3EE;
+  --text: #1C1330; --muted: #6C5F88; --faint: #A698C2;
+  --p: #8A3FFC; --p-dark: #6524D6; --p-soft: #EEE3FF; --p-line: #CFB5FF; --p-text: #7428EE;
+  --pink: #F0168A; --pink-dark: #B80C67; --cyan: #00A6C8;
+  --glow: 0 0 18px rgba(138, 63, 252, .22); --glow-pink: 0 0 14px rgba(240, 22, 138, .25);
+  --streak: #F0168A;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -165,7 +164,7 @@ h2 { font-size: 21px; }
 .peek { display: flex; gap: 12px; align-items: center; }
 .peek .t { flex: 1; min-width: 0; }
 .peek .t b { display: block; font-size: 16px; line-height: 1.3; }
-.peek .t span { color: var(--muted); font-size: 14px; }
+.peek .t span { display: block; color: var(--muted); font-size: 14px; }
 
 /* ---------- Badge et tuile de thème ---------- */
 .chip {
@@ -317,3 +316,116 @@ h2 { font-size: 21px; }
 .x { float: right; color: var(--faint); font-size: 20px; margin: -4px -4px 0 8px; }
 
 @media (min-width: 600px) { #view { padding-left: 24px; padding-right: 24px; } }
+
+/* =========================================================
+   Habillage néon (Tokyo by night)
+   ========================================================= */
+body {
+  background:
+    radial-gradient(520px 320px at 100% -80px, rgba(255, 46, 151, .16), transparent 70%),
+    radial-gradient(560px 360px at -10% -40px, rgba(145, 70, 255, .24), transparent 70%),
+    var(--bg);
+  background-repeat: no-repeat;
+}
+html[data-palette="jour"] body {
+  background:
+    radial-gradient(520px 320px at 100% -80px, rgba(240, 22, 138, .10), transparent 70%),
+    radial-gradient(560px 360px at -10% -40px, rgba(138, 63, 252, .14), transparent 70%),
+    var(--bg);
+  background-repeat: no-repeat;
+}
+.topbar, .tabbar {
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+.brand { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 8px rgba(193, 59, 255, .45)); }
+.brand svg { filter: none; }
+.card, .theme-card, .fact-item, .palette, .stat-box { background: var(--surface); }
+.btn { --btn-bg: var(--grad); background: var(--btn-bg); box-shadow: 0 4px 0 var(--d), var(--glow); text-shadow: 0 1px 0 rgba(0,0,0,.15); }
+.btn:active { box-shadow: 0 0 0 var(--d), var(--glow); }
+.btn.gold { --btn-bg: var(--gold); box-shadow: 0 4px 0 var(--gold-dark); text-shadow: none; }
+.btn.ghost { background: var(--surface); text-shadow: none; }
+.tab.active { box-shadow: var(--glow); }
+.switch.on { background: var(--grad); box-shadow: var(--glow); }
+.segments i.done { background: var(--grad); box-shadow: 0 0 8px rgba(193, 59, 255, .5); }
+.palette.on { border-color: var(--p); box-shadow: 0 4px 0 var(--p-dark), var(--glow); }
+.palette.on::after { background: var(--grad); }
+.icon-btn.on, html[data-palette="nuit"] .icon-btn.on { background: color-mix(in srgb, var(--pink) 16%, var(--surface)); border-color: var(--pink); box-shadow: 0 4px 0 var(--pink-dark), var(--glow-pink); color: var(--pink); }
+.week .d.on i, html[data-palette="nuit"] .week .d.on i { background: color-mix(in srgb, var(--pink) 20%, var(--surface)); border-color: var(--pink); box-shadow: var(--glow-pink); }
+html[data-palette="nuit"] .fact-card { box-shadow: 0 5px 0 var(--line), 0 0 30px rgba(145, 70, 255, .18); }
+.fact-card .content { background: var(--surface); }
+.level .badge { background: var(--grad); box-shadow: 0 4px 0 var(--p-dark), var(--glow); }
+.finish h1 { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.count-line b { color: var(--pink); }
+.mascot { overflow: visible; }
+
+/* Bouton « Demander à Néko » dans la lecture */
+.ask-btn {
+  display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 16px; text-align: left;
+  padding: 14px 16px; border-radius: 18px; border: 2px solid var(--p-line);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--p) 14%, var(--surface)), color-mix(in srgb, var(--pink) 10%, var(--surface)));
+  box-shadow: 0 4px 0 var(--p-line), var(--glow); transition: transform .06s, box-shadow .06s;
+}
+.ask-btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--p-line), var(--glow); }
+.ask-btn .mascot { width: 44px; height: 44px; flex: none; }
+.ask-btn b { display: block; font-size: 16px; color: var(--p-text); }
+.ask-btn .t span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.ask-btn .n { margin-left: auto; flex: none; font-size: 12px; padding: 4px 9px; border-radius: 99px; background: var(--pink); color: #fff; }
+
+/* =========================================================
+   Chat avec Néko (l'IA)
+   ========================================================= */
+.chat { position: fixed; inset: 0; z-index: 70; display: flex; flex-direction: column; justify-content: flex-end; background: rgba(5, 2, 10, .55); animation: fadeIn .2s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.sheet {
+  max-width: 560px; width: 100%; margin: 0 auto; height: 90%; display: flex; flex-direction: column;
+  background: var(--bg); border-radius: 26px 26px 0 0; border: 2px solid var(--p-line); border-bottom: 0;
+  box-shadow: 0 -10px 40px rgba(145, 70, 255, .35); animation: sheetUp .3s cubic-bezier(.2,.8,.2,1); overflow: hidden;
+}
+@keyframes sheetUp { from { transform: translateY(40px); opacity: .3; } to { transform: none; opacity: 1; } }
+.sheet-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 2px solid var(--line); }
+.sheet-head .mascot { width: 42px; height: 42px; flex: none; }
+.sheet-head .t { flex: 1; min-width: 0; }
+.sheet-head b { display: block; font-size: 17px; }
+.sheet-head span { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; -webkit-user-select: text; user-select: text; }
+.msg { max-width: 88%; padding: 11px 14px; border-radius: 18px; font-size: 16px; line-height: 1.5; font-weight: 600; word-wrap: break-word; }
+.msg.user { align-self: flex-end; background: var(--grad); color: #fff; border-bottom-right-radius: 6px; box-shadow: var(--glow); }
+.msg.ai { align-self: flex-start; background: var(--surface); border: 2px solid var(--line); border-bottom-left-radius: 6px; }
+.msg.ai p { margin: 0 0 8px; } .msg.ai p:last-child { margin-bottom: 0; }
+.msg.ai ul { margin: 4px 0 8px; padding-left: 20px; }
+.msg.ai b { color: var(--p-text); }
+.msg.err { align-self: stretch; max-width: none; background: color-mix(in srgb, #FF4B4B 14%, var(--surface)); border: 2px solid color-mix(in srgb, #FF4B4B 50%, transparent); font-size: 14.5px; }
+.msg.intro { align-self: stretch; max-width: none; background: transparent; border: 2px dashed var(--line); color: var(--muted); font-size: 14.5px; }
+.typing { display: inline-flex; gap: 5px; padding: 4px 2px; }
+.typing i { width: 8px; height: 8px; border-radius: 50%; background: var(--p-text); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .2s; } .typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+.suggest { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 10px; scrollbar-width: none; }
+.suggest::-webkit-scrollbar { display: none; }
+.suggest button { flex: none; padding: 8px 13px; border-radius: 99px; border: 2px solid var(--p-line); color: var(--p-text); font-size: 14px; background: var(--surface); white-space: nowrap; }
+.composer { display: flex; gap: 10px; align-items: flex-end; padding: 10px 12px calc(env(safe-area-inset-bottom) + 12px); border-top: 2px solid var(--line); background: var(--bg); }
+.composer textarea {
+  flex: 1; resize: none; max-height: 120px; min-height: 46px; padding: 12px 14px; border-radius: 16px;
+  border: 2px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: 16px; font-weight: 600; outline: none;
+  -webkit-user-select: text; user-select: text;
+}
+.composer textarea:focus { border-color: var(--p); box-shadow: var(--glow); }
+.send { width: 46px; height: 46px; flex: none; border-radius: 50%; background: var(--grad); color: #fff; display: grid; place-items: center; box-shadow: var(--glow); font-size: 20px; }
+.send:disabled { opacity: .4; box-shadow: none; }
+.send svg { width: 20px; height: 20px; }
+
+/* Configuration de la clé */
+.key-setup { padding: 16px; overflow-y: auto; flex: 1; }
+.key-setup ol { padding-left: 20px; margin: 10px 0 14px; color: var(--muted); line-height: 1.55; font-size: 14.5px; }
+.key-setup ol b { color: var(--text); }
+.key-setup a { color: var(--p-text); }
+.key-input {
+  width: 100%; padding: 13px 14px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); color: var(--text);
+  font: inherit; font-size: 15px; outline: none; -webkit-user-select: text; user-select: text;
+}
+.key-input:focus { border-color: var(--p); box-shadow: var(--glow); }
+.small-note { font-size: 12.5px; color: var(--muted); line-height: 1.45; margin: 10px 2px 0; font-weight: 700; }
+
+/* Clair : bande sombre derrière la barre d'état de l'iPhone (texte blanc) */
+html[data-palette="jour"] .topbar, html[data-palette="jour"] .reader { box-shadow: inset 0 env(safe-area-inset-top) 0 0 #1C1330; }

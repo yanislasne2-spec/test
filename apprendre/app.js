@@ -10,11 +10,10 @@
   const KEY = "pepite-v2";
 
   // 4 thèmes de couleur de l'appli
+  // 2 versions du thème néon (sombre / clair)
   const PALETTES = [
-    { id: "pepite",    name: "Pépite",    desc: "Vert, clair",    bg: "#FFFFFF", line: "#E5E5E5", p: "#58CC02", d: "#58A700", bar: "#FFFFFF" },
-    { id: "ocean",     name: "Océan",     desc: "Bleu, clair",    bg: "#FFFFFF", line: "#E1EAF0", p: "#1CB0F6", d: "#1899D6", bar: "#FFFFFF" },
-    { id: "framboise", name: "Framboise", desc: "Rose, clair",    bg: "#FFFFFF", line: "#F1E3E8", p: "#FF4F8B", d: "#D93A73", bar: "#FFFFFF" },
-    { id: "nuit",      name: "Nuit",      desc: "Violet, sombre", bg: "#131F24", line: "#37464F", p: "#9B7BFF", d: "#7656E0", bar: "#131F24" }
+    { id: "nuit", name: "Néon nuit", desc: "Violet & noir, sombre", bg: "#0B0713", line: "#2C2142", p: "#9146FF", d: "#6527C9", bar: "#0B0713" },
+    { id: "jour", name: "Néon jour", desc: "Violet & rose, clair",  bg: "#F8F4FF", line: "#E3D8F7", p: "#8A3FFC", d: "#6524D6", bar: "#F8F4FF" }
   ];
 
   // ---------- Dates ----------
@@ -30,7 +29,7 @@
     daily: null,       // { date, ids, pos, done }
     streak: 0, bestStreak: 0, lastDay: null,
     days: {},          // date -> nb d'infos lues
-    palette: "pepite",
+    palette: "nuit",
     sound: true,
     installDismissed: false
   });
@@ -51,7 +50,8 @@
 
   // ---------- Couleurs ----------
   function applyPalette() {
-    const p = PALETTES.find(x => x.id === S.palette) || PALETTES[0];
+    if (!PALETTES.some(x => x.id === S.palette)) S.palette = "nuit"; // anciennes couleurs -> néon
+    const p = PALETTES.find(x => x.id === S.palette);
     document.documentElement.dataset.palette = p.id;
     const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = p.bar;
   }
@@ -102,18 +102,36 @@
   const plural = (n, s, p = s + "s") => `${n} ${n > 1 ? p : s}`;
   const SHARE_SVG = `<svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V1M4 5l4-4 4 4"/><path d="M5 8H2v11h12V8h-3"/></svg>`;
 
+  // Néko, chat néon de Tokyo (SVG). mood : "happy" | "wow" | "think"
+  let mascotN = 0;
+  const NEKO_PATH = "M24 54 L20 14 Q21 10 25 12 L48 30 Q60 27 72 30 L95 12 Q99 10 100 14 L96 54 Q102 66 99 80 Q92 106 60 107 Q28 106 21 80 Q18 66 24 54 Z";
   function mascot(mood = "happy", style = "") {
-    const eyes = `<ellipse cx="44" cy="52" rx="7" ry="8.5" fill="#4B3A00"/><ellipse cx="76" cy="52" rx="7" ry="8.5" fill="#4B3A00"/><circle cx="46.5" cy="49" r="2.6" fill="#fff"/><circle cx="78.5" cy="49" r="2.6" fill="#fff"/>`;
+    const id = "nk" + (++mascotN);
+    const eyes = mood === "think"
+      ? `<path d="M36 66 q8 -8 16 0" stroke="#2DE2FF" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#${id}g)"/><path d="M68 66 q8 -8 16 0" stroke="#2DE2FF" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#${id}g)"/>`
+      : `<g filter="url(#${id}g)"><ellipse cx="43" cy="64" rx="${mood === "wow" ? 10.5 : 9.5}" ry="${mood === "wow" ? 12 : 10.5}" fill="#2DE2FF"/><ellipse cx="77" cy="64" rx="${mood === "wow" ? 10.5 : 9.5}" ry="${mood === "wow" ? 12 : 10.5}" fill="#2DE2FF"/></g>
+         <ellipse cx="43" cy="65" rx="${mood === "wow" ? 5 : 3.6}" ry="${mood === "wow" ? 7 : 7.5}" fill="#0B0713"/><ellipse cx="77" cy="65" rx="${mood === "wow" ? 5 : 3.6}" ry="${mood === "wow" ? 7 : 7.5}" fill="#0B0713"/>
+         <circle cx="46.5" cy="59.5" r="2.8" fill="#fff"/><circle cx="80.5" cy="59.5" r="2.8" fill="#fff"/>`;
     const mouth = mood === "wow"
-      ? `<ellipse cx="60" cy="74" rx="8" ry="9" fill="#4B3A00"/><ellipse cx="60" cy="78" rx="5" ry="4" fill="#FF7A7A"/>`
-      : `<path d="M47 68 q13 14 26 0" stroke="#4B3A00" stroke-width="4.5" fill="#fff" stroke-linecap="round" stroke-linejoin="round"/>`;
+      ? `<ellipse cx="60" cy="88" rx="5.5" ry="6.5" fill="#FF2E97"/>`
+      : `<path d="M51 84 q4.5 5 9 0 q4.5 5 9 0" stroke="#FF2E97" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
     return `<svg class="mascot" style="${style}" viewBox="0 0 120 120" aria-hidden="true">
-      <ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(0,0,0,.08)"/>
-      <path d="M60 8 L102 34 L96 88 L60 108 L24 88 L18 34 Z" fill="#FFC800" stroke="#E5A800" stroke-width="5" stroke-linejoin="round"/>
-      <path d="M60 8 L102 34 L60 40 L18 34 Z" fill="#FFE066"/>
-      <path d="M30 30 L44 24" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
-      <ellipse cx="34" cy="68" rx="7" ry="4.5" fill="#FF9EAA" opacity=".7"/><ellipse cx="86" cy="68" rx="7" ry="4.5" fill="#FF9EAA" opacity=".7"/>
-      ${eyes}${mouth}</svg>`;
+      <defs>
+        <linearGradient id="${id}n" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B07CFF"/><stop offset=".55" stop-color="#C13BFF"/><stop offset="1" stop-color="#FF2E97"/></linearGradient>
+        <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1A52"/><stop offset="1" stop-color="#160C29"/></linearGradient>
+        <filter id="${id}g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <ellipse cx="60" cy="114" rx="30" ry="4" fill="rgba(145,70,255,.25)"/>
+      <path d="${NEKO_PATH}" fill="url(#${id}b)"/>
+      <path d="${NEKO_PATH}" fill="none" stroke="url(#${id}n)" stroke-width="4.5" stroke-linejoin="round" filter="url(#${id}g)"/>
+      <path d="M28 22 L32 44 L45 33 Z" fill="#FF2E97" opacity=".55"/><path d="M92 22 L88 44 L75 33 Z" fill="#FF2E97" opacity=".55"/>
+      <ellipse cx="31" cy="80" rx="7" ry="4" fill="#FF2E97" opacity=".35"/><ellipse cx="89" cy="80" rx="7" ry="4" fill="#FF2E97" opacity=".35"/>
+      ${eyes}
+      <path d="M56.5 77 h7 l-3.5 4 z" fill="#FF2E97"/>
+      ${mouth}
+      <g stroke="#2DE2FF" stroke-width="2" stroke-linecap="round" opacity=".75"><path d="M18 76 l14 2"/><path d="M19 86 l13 -3"/><path d="M102 76 l-14 2"/><path d="M101 86 l-13 -3"/></g>
+      <path d="M38 22 q3 -1 4 2" stroke="#fff" stroke-width="0" fill="none"/>
+    </svg>`;
   }
 
   function ring(p) {
@@ -243,7 +261,7 @@
       <div class="theme-head" style="${tv(t)}"><span class="e">${t.icon}</span><div><h1>${esc(t.name)}</h1><p>${got.length} sur ${all.length} infos lues</p></div></div>
       <div class="card"><div class="toggle-line"><div><b>Dans mes infos du jour</b><p class="sub" style="margin:2px 0 0;font-size:13px">Désactive pour ne plus recevoir ce thème</p></div>
         <button class="switch ${on ? "on" : ""}" data-act="toggle-theme" data-id="${id}" aria-label="Activer le thème"></button></div></div>
-      ${left ? `<div class="btn-row"><button class="btn" style="--c:${t.color};--d:${t.dark}" data-act="theme-read" data-id="${id}">Lire ${Math.min(5, left)} infos de ce thème</button></div>` : ""}
+      ${left ? `<div class="btn-row"><button class="btn" style="--btn-bg:${t.color};--d:${t.dark}" data-act="theme-read" data-id="${id}">Lire ${Math.min(5, left)} infos de ce thème</button></div>` : ""}
       <h3 class="section-title">Les infos</h3>${list}`;
   }
 
@@ -269,14 +287,14 @@
     let li = 0; LEVELS.forEach((l, i) => { if (n >= l[0]) li = i; });
     const cur = LEVELS[li], next = LEVELS[li + 1], p = next ? (n - cur[0]) / (next[0] - cur[0]) : 1;
     const top = THEMES.map(t => [t, FACTS.filter(f => f.theme === t.id && S.read[f.id]).length]).sort((a, b) => b[1] - a[1])[0];
-    const pal = PALETTES.map(x => `<button class="palette ${S.palette === x.id ? "on" : ""}" data-pal="${x.id}" style="--pv-bg:${x.bg};--pv-line:${x.line};--pv-p:${x.p};--pv-d:${x.d}">
+    const pal = PALETTES.map(x => `<button class="palette ${S.palette === x.id ? "on" : ""}" data-pal="${x.id}" style="--pv-bg:${x.bg};--pv-line:${x.line};--pv-p:linear-gradient(120deg, ${x.p}, #FF2E97);--pv-d:${x.d}">
         <span class="preview"><span class="pv-dot"></span><span class="pv-line"></span><span class="pv-btn"></span></span>
         <span class="name">${x.name}<small>${x.desc}</small></span></button>`).join("");
     return `<h1>Réglages</h1><div style="height:16px"></div>
       <div class="card level"><span class="badge">${cur[2]}</span><div class="txt"><b>${cur[1]}</b>
         <p class="sub" style="margin:2px 0 8px;font-size:13px">${next ? `Encore ${plural(next[0] - n, "info")} avant « ${next[1]} »` : "Niveau maximum atteint !"}</p>
         <div class="bar" style="--tc:var(--gold)"><i style="width:${p * 100}%"></i></div></div></div>
-      <h3 class="section-title">Couleurs de l'appli</h3>
+      <h3 class="section-title">Thème néon</h3>
       <div class="palettes">${pal}</div>
       <h3 class="section-title">Statistiques</h3>
       <div class="stats-grid">
@@ -286,9 +304,17 @@
         <div class="stat-box"><span class="e">⭐</span><div><b>${Object.keys(S.favs).length}</b><span>Favoris</span></div></div>
       </div>
       ${top && top[1] ? `<div class="card" style="margin-top:14px"><div class="peek">${tile(top[0])}<div class="t"><span>Thème le plus lu</span><b>${esc(top[0].name)}</b></div></div></div>` : ""}
+      <h3 class="section-title">Néko, l'IA</h3>
+      <div class="card">${getKey()
+        ? `<div class="peek">${mascot("happy", "width:46px;height:46px;flex:none")}<div class="t"><b>Néko est activé</b><span>Clé ${esc(getKey().slice(0, 10))}…${esc(getKey().slice(-4))} · ${Object.keys(chats()).length} conversation(s)</span></div></div>
+           <div class="btn-row"><button class="btn ghost" data-act="clear-chats">Effacer les conversations</button><button class="btn ghost" style="color:#FF4B4B" data-act="remove-key">Supprimer la clé</button></div>`
+        : `<div class="peek">${mascot("think", "width:46px;height:46px;flex:none")}<div class="t"><b>Néko dort</b><span>Ajoute ta clé API Anthropic pour poser des questions sur chaque info.</span></div></div>
+           <div style="height:12px"></div><input class="key-input" id="key-set" type="password" placeholder="sk-ant-…" autocomplete="off" autocapitalize="off" spellcheck="false">
+           <div class="btn-row"><button class="btn" data-act="save-key-settings">Activer Néko</button></div>
+           <p class="small-note">Crée ta clé sur <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--p-text)">console.anthropic.com</a> (API Keys). Environ 1 centime par question. La clé reste sur ton iPhone.</p>`}</div>
       <h3 class="section-title">Préférences</h3>
       <div class="card"><div class="toggle-line"><b>🔊 Sons</b><button class="switch ${S.sound ? "on" : ""}" data-act="sound" aria-label="Sons"></button></div></div>
-      <div class="card"><p class="tip" style="margin:0">💡 <b>Astuce :</b> raconte une info du jour à quelqu'un. L'expliquer est la meilleure façon de la retenir.</p></div>
+      <div class="card"><p class="tip" style="margin:0">💡 <b>Astuce :</b> une info pas claire ? Touche « Demander à Néko » sous l'info et pose ta question.</p></div>
       <button class="link-danger" data-act="reset">Réinitialiser ma progression</button>`;
   }
 
@@ -304,7 +330,7 @@
   }
   function closeReader() { $("#reader").classList.add("hidden"); document.body.style.overflow = ""; R = null; render(); }
 
-  function renderCard() {
+  function renderCard(quiet) {
     const id = R.ids[R.i], f = factById[id], t = themeById[f.theme];
     if (R.mode !== "replay" && !S.read[id]) S.read[id] = new Date().toISOString();
     if (R.mode === "daily") S.daily.pos = Math.max(S.daily.pos, R.i + 1);
@@ -314,10 +340,11 @@
     $("#reader").innerHTML = `<div class="reader-inner">
         <div class="reader-top"><button class="close" data-act="close" aria-label="Fermer">✕</button>
           <div class="segments">${segs}</div><span class="counter">${R.i + 1}/${R.ids.length}</span></div>
-        <div class="reader-body" id="rbody"><div class="${R.dir > 0 ? "step-enter" : "step-back"}">
+        <div class="reader-body" id="rbody"><div class="${quiet ? "" : R.dir > 0 ? "step-enter" : "step-back"}">
           <div class="fact-card"><div class="band" style="${tv(t)}" data-icon="${t.icon}"><span class="e">${t.icon}</span>
             <div><div class="lbl">Thème</div><div class="nm">${esc(t.name)}</div></div></div>
             <div class="content"><h2>${esc(f.title)}</h2><p>${esc(f.text)}</p></div></div>
+          <button class="ask-btn" data-act="ask" data-id="${id}">${mascot("happy")}<div class="t"><b>Demander à Néko</b><span>Pas compris ? Envie d'en savoir plus ?</span></div>${nQuestions(id) ? `<span class="n">${nQuestions(id)} ❓</span>` : ""}</button>
           ${R.i === 0 && R.ids.length > 1 ? `<div class="swipe-hint">Glisse vers la gauche pour passer à la suivante</div>` : ""}
         </div></div></div>
       <div class="reader-foot"><div class="inner">
@@ -370,6 +397,171 @@
     } catch (e) { if (e && e.name !== "AbortError") toast("Partage impossible sur cet appareil"); }
   }
 
+  // ---------- Néko, l'IA (Claude, via la clé API de l'utilisateur) ----------
+  const AI_KEY = "pepite-ai-key", CHAT_KEY = "pepite-chat-v1";
+  const MODEL = "claude-opus-5-5";
+  const SDK_URL = "./vendor/anthropic-sdk-0.137.0.mjs"; // SDK officiel @anthropic-ai/sdk, empaqueté pour le navigateur
+  const SYSTEM = `Tu es Néko, le chat néon qui sert de guide dans Pépite, une appli de culture générale. L'utilisateur vient de lire une courte info et te pose des questions à son sujet.
+
+Réponds en français, en tutoyant, avec un ton chaleureux et clair. Fais court : en général 3 à 8 phrases, sauf si on te demande explicitement plus de détails. Va droit à la réponse, sans reformuler la question.
+- Si on te demande d'expliquer plus simplement : des mots simples, une comparaison concrète de la vie quotidienne.
+- Si on veut en savoir plus : ajoute du contexte, des dates, des chiffres, des personnages et une anecdote marquante.
+- Sois rigoureux : si un point est incertain, débattu ou une légende, dis-le. N'invente jamais de chiffre, de citation ou de source.
+- Tes connaissances s'arrêtent à une certaine date : pour l'actualité récente, précise que la situation a pu évoluer depuis.
+- Les questions qui s'éloignent de l'info sont bienvenues tant qu'elles restent de la culture générale.
+Mise en forme : pas de titres ni de tableaux. Tu peux utiliser du **gras** pour les mots clés et de courtes listes à puces.`;
+  const SUGGESTIONS = ["Explique-moi plus simplement", "Je veux en savoir plus", "Pourquoi c'est important ?", "Une anecdote en plus ?", "Et aujourd'hui, ça en est où ?"];
+  const SEND_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`;
+
+  let sdkP = null, C = null; // C = conversation ouverte { id, msgs, busy, partial, stream, error }
+  const getKey = () => { try { return localStorage.getItem(AI_KEY) || ""; } catch { return ""; } };
+  const setKey = (k) => { try { k ? localStorage.setItem(AI_KEY, k) : localStorage.removeItem(AI_KEY); } catch {} };
+  const chats = () => { try { return JSON.parse(localStorage.getItem(CHAT_KEY) || "{}"); } catch { return {}; } };
+  function saveChat(id, msgs) {
+    const all = chats(); all[id] = { msgs, at: Date.now() };
+    Object.keys(all).sort((a, b) => all[b].at - all[a].at).slice(40).forEach(k => delete all[k]); // garde les 40 dernières
+    try { localStorage.setItem(CHAT_KEY, JSON.stringify(all)); } catch {}
+  }
+  const nQuestions = (id) => ((chats()[id] || {}).msgs || []).filter(m => m.role === "user").length;
+  const loadSDK = () => (sdkP ||= import(SDK_URL).then(m => m.default).catch(e => { sdkP = null; throw e; }));
+  const msgText = (m) => typeof m.content === "string" ? m.content : m.content.filter(b => b.type === "text").map(b => b.text).join("");
+
+  // Petit rendu markdown sûr (gras, italique, listes)
+  const inlineMd = (t) => t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*(?!\s)([^*]+?)\*/g, "$1<i>$2</i>");
+  function md(txt) {
+    let html = "", list = false;
+    for (const line of esc(txt).split("\n")) {
+      const li = line.match(/^\s*[-•*]\s+(.*)/);
+      if (li) { if (!list) { html += "<ul>"; list = true; } html += `<li>${inlineMd(li[1])}</li>`; continue; }
+      if (list) { html += "</ul>"; list = false; }
+      if (line.trim()) html += `<p>${inlineMd(line.replace(/^#+\s*/, ""))}</p>`;
+    }
+    return html + (list ? "</ul>" : "");
+  }
+
+  // Après un relais de modèle (fallback) en cours de réponse, on ne renvoie pas les blocs internes situés avant le relais
+  function cleanContent(content) {
+    const last = content.map(b => b.type).lastIndexOf("fallback");
+    if (last < 0) return content;
+    return content.filter((b, i) => i > last || !["thinking", "redacted_thinking", "tool_use"].includes(b.type));
+  }
+
+  function errMsg(e, A) {
+    if (A && e instanceof A.AuthenticationError) return "Ta clé API n'est pas valide. Vérifie-la (ou remplace-la) dans ⚙️ Réglages.";
+    if (A && e instanceof A.PermissionDeniedError) return "Cette clé API n'a pas accès à ce modèle. Vérifie ton compte sur console.anthropic.com.";
+    if (A && e instanceof A.RateLimitError) return "Beaucoup de questions d'un coup ! Attends quelques secondes et réessaie.";
+    if (A && e instanceof A.BadRequestError) return /credit|balance|billing/i.test(e.message || "")
+      ? "Ton crédit Anthropic est épuisé. Recharge-le sur console.anthropic.com (rubrique Billing)."
+      : "La question n'a pas pu être envoyée : " + (e.message || "requête invalide") + ".";
+    if (A && e instanceof A.APIConnectionError) return "Pas de connexion internet. Néko a besoin du réseau pour répondre.";
+    if (A && e instanceof A.APIError && (e.status >= 500 || e.status === 529)) return "Les serveurs de Claude sont surchargés. Réessaie dans un instant.";
+    if (!A) return "Impossible de charger le module de l'IA. Vérifie ta connexion et réessaie.";
+    return "Oups, une erreur est survenue : " + (e.message || e) + ".";
+  }
+
+  function openChat(id) {
+    C = { id, msgs: (chats()[id] || {}).msgs || [], busy: false, partial: "", error: "" };
+    let el = $("#chat");
+    if (!el) { el = document.createElement("div"); el.id = "chat"; document.body.appendChild(el); }
+    el.className = "chat";
+    renderChat();
+    loadSDK().catch(() => {}); // préchargement
+  }
+  function closeChat() {
+    if (C && C.stream) { try { C.stream.abort(); } catch {} }
+    C = null; const el = $("#chat"); if (el) el.remove();
+    if (R && !R.finished) renderCard(true);
+  }
+
+  function chatHead() {
+    const f = factById[C.id], t = themeById[f.theme];
+    return `<div class="sheet-head">${mascot(C.busy ? "think" : "happy")}
+      <div class="t"><b>Néko</b><span>${t.icon} ${esc(f.title)}</span></div>
+      <button class="close" data-act="chat-close" aria-label="Fermer">✕</button></div>`;
+  }
+
+  function renderChat() {
+    const el = $("#chat"); if (!el || !C) return;
+    if (!getKey()) {
+      el.innerHTML = `<div class="sheet">${chatHead()}<div class="key-setup">
+        <div class="msg intro" style="margin-bottom:14px">Salut, moi c'est <b>Néko</b> 🐾 Je réponds à toutes tes questions sur les infos. Pour me réveiller, Pépite a besoin d'une clé pour Claude, l'IA d'Anthropic. C'est à faire une seule fois.</div>
+        <b>Comment obtenir ta clé</b>
+        <ol>
+          <li>Crée un compte sur <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>.</li>
+          <li>Dans <b>Billing</b>, ajoute un peu de crédit (5 $ suffisent pour des centaines de questions, environ 1 centime chacune).</li>
+          <li>Dans <b>API Keys</b>, touche <b>Create Key</b> et copie la clé (elle commence par <b>sk-ant-</b>).</li>
+          <li>Colle-la juste en dessous.</li>
+        </ol>
+        <input class="key-input" id="key-in" type="password" placeholder="sk-ant-…" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="btn-row"><button class="btn" data-act="save-key">Activer Néko</button></div>
+        <p class="small-note">🔒 La clé reste uniquement sur ton iPhone et n'est envoyée qu'à Anthropic. Ne la partage jamais et ne la publie nulle part. Tu peux la supprimer à tout moment dans les Réglages.</p>
+      </div></div>`;
+      return;
+    }
+    const bubbles = C.msgs.map(m => m.role === "user"
+      ? `<div class="msg user">${esc(m.show || m.content)}</div>`
+      : `<div class="msg ai">${md(msgText(m))}</div>`).join("");
+    const pending = C.busy ? `<div class="msg ai" id="partial">${C.partial ? md(C.partial) : `<span class="typing"><i></i><i></i><i></i></span>`}</div>` : "";
+    const intro = !C.msgs.length && !C.busy ? `<div class="msg intro">Pose-moi n'importe quelle question sur cette info : un mot pas compris, un détail, la suite de l'histoire… 🐾</div>` : "";
+    const err = C.error ? `<div class="msg err">${esc(C.error)}</div>` : "";
+    el.innerHTML = `<div class="sheet">${chatHead()}
+      <div class="msgs" id="msgs">${intro}${bubbles}${pending}${err}</div>
+      ${C.busy ? "" : `<div class="suggest">${SUGGESTIONS.map(q => `<button data-act="suggest" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>`}
+      <div class="composer"><textarea id="chat-in" rows="1" enterkeyhint="send" placeholder="Pose ta question à Néko…">${esc(C.draft || "")}</textarea>
+        <button class="send" data-act="chat-send" aria-label="Envoyer" ${C.busy ? "disabled" : ""}>${SEND_SVG}</button></div></div>`;
+    const box = $("#msgs"); box.scrollTop = box.scrollHeight;
+  }
+  function updatePartial() {
+    const p = $("#partial"); if (!p) return;
+    p.innerHTML = md(C.partial);
+    const box = $("#msgs"); box.scrollTop = box.scrollHeight;
+  }
+
+  async function ask(text) {
+    text = (text || "").trim();
+    if (!text || !C || C.busy) return;
+    const conv = C, f = factById[conv.id], t = themeById[f.theme];
+    const content = conv.msgs.length ? text
+      : `Voici l'info que je lis dans Pépite (nous sommes le ${new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}) :\n\nThème : ${t.name}\nTitre : ${f.title}\n« ${f.text} »\n\nMa question : ${text}`;
+    conv.msgs.push({ role: "user", content, show: text });
+    Object.assign(conv, { busy: true, partial: "", error: "", draft: "" });
+    renderChat();
+    let A = null;
+    try {
+      A = await loadSDK();
+      const client = new A({ apiKey: getKey(), dangerouslyAllowBrowser: true });
+      const stream = client.beta.messages.stream({
+        model: MODEL,
+        max_tokens: 16000,
+        output_config: { effort: "low" },               // réponses de chat : effort bas = rapide et économique
+        betas: ["server-side-fallback-2026-07-01"],
+        fallbacks: "default",                           // si la question est refusée par erreur, un autre modèle prend le relais
+        system: SYSTEM,
+        messages: conv.msgs.map(m => ({ role: m.role, content: m.content }))
+      });
+      conv.stream = stream;
+      for await (const ev of stream) {
+        if (ev.type === "content_block_delta" && ev.delta.type === "text_delta") {
+          conv.partial += ev.delta.text;
+          if (C === conv) updatePartial();
+        }
+      }
+      const final = await stream.finalMessage();
+      if (final.stop_reason === "refusal") {
+        conv.msgs.pop();
+        conv.error = "Néko ne peut pas répondre à cette question. Essaie de la formuler autrement.";
+      } else {
+        conv.msgs.push({ role: "assistant", content: cleanContent(final.content) });
+        saveChat(conv.id, conv.msgs);
+      }
+    } catch (e) {
+      conv.msgs.pop();
+      if (!(A && e instanceof A.APIUserAbortError)) { conv.error = errMsg(e, A); conv.draft = text; }
+    }
+    conv.busy = false; conv.stream = null;
+    if (C === conv) renderChat();
+  }
+
   // ---------- Événements ----------
   document.addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
@@ -407,6 +599,19 @@
       case "share": share(b.dataset.id); break;
       case "next": go(1); break;
       case "close": closeReader(); break;
+      case "ask": sfx.tap(); openChat(b.dataset.id); break;
+      case "chat-close": closeChat(); break;
+      case "chat-send": { const i = $("#chat-in"); if (i) ask(i.value); break; }
+      case "suggest": ask(b.dataset.q); break;
+      case "save-key": case "save-key-settings": {
+        const i = $(act === "save-key" ? "#key-in" : "#key-set"); const k = (i && i.value || "").trim();
+        if (!/^sk-ant-[\w-]{20,}$/.test(k)) { toast("Cette clé ne ressemble pas à une clé Anthropic (sk-ant-…)"); break; }
+        setKey(k); sfx.star(); toast("Néko est activé 🐾");
+        if (act === "save-key") renderChat(); else render();
+        break;
+      }
+      case "remove-key": if (confirm("Supprimer la clé API de cet appareil ?")) { setKey(""); render(); toast("Clé supprimée"); } break;
+      case "clear-chats": if (confirm("Effacer toutes tes conversations avec Néko ?")) { try { localStorage.removeItem(CHAT_KEY); } catch {} render(); toast("Conversations effacées"); } break;
     }
   });
 
@@ -419,10 +624,22 @@
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
   }, { passive: true });
   document.addEventListener("keydown", (e) => {
+    if (C) {
+      if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(e.target.value); }
+      if (e.target.id === "key-in" && e.key === "Enter") { e.preventDefault(); $('[data-act="save-key"]').click(); }
+      if (e.key === "Escape") closeChat();
+      return;
+    }
     if (!R || R.finished) return;
     if (e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); go(1); }
     if (e.key === "ArrowLeft") go(-1);
     if (e.key === "Escape") closeReader();
+  });
+  document.addEventListener("input", (e) => {
+    if (C && e.target.id === "chat-in") {
+      C.draft = e.target.value;
+      e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+    }
   });
   document.addEventListener("visibilitychange", () => { if (!document.hidden && !R) render(); });
 
