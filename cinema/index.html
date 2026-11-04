@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Éveil · Ciné</title>
+  <meta name="description" content="Ta to-do list de films, séries et documentaires, avec niveaux, rangs, quêtes et donjons.">
+  <meta name="theme-color" content="#04060D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Éveil">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◆</span> ÉVEIL <small>· CINÉ</small></div>
+      <div class="top-right">
+        <div class="pill" title="Jours d'éveil consécutifs">🔥 <b id="streak-n">0</b></div>
+        <div class="pill rank-pill" id="rank-pill">E</div>
+      </div>
+    </header>
+
+    <main id="view"></main>
+
+    <nav class="tabbar">
+      <button data-tab="status" class="tab active"><span class="tab-ico">◈</span><span>Statut</span></button>
+      <button data-tab="list" class="tab"><span class="tab-ico">☰</span><span>Ma liste</span></button>
+      <button data-tab="explore" class="tab"><span class="tab-ico">⌕</span><span>Explorer</span></button>
+      <button data-tab="dungeons" class="tab"><span class="tab-ico">⛬</span><span>Donjons</span></button>
+      <button data-tab="profile" class="tab"><span class="tab-ico">⚙</span><span>Profil</span></button>
+    </nav>
+  </div>
+
+  <div id="sheet-wrap" class="sheet-wrap hidden"><div class="sheet-backdrop"></div><section id="sheet" class="sheet"></section></div>
+  <div id="system" class="system hidden"></div>
+  <div id="toast" class="toast"></div>
+
+  <script src="data.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+  <script>
+    if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  </script>
+</body>
+</html>
