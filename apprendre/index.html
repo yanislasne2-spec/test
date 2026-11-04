@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="fr" data-palette="pepite">
+<html lang="fr" data-palette="nuit">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <title>Pépite · 10 infos par jour</title>
-  <meta name="description" content="10 infos par jour pour améliorer ta culture générale.">
-  <meta name="theme-color" content="#FFFFFF">
+  <meta name="description" content="10 infos par jour pour améliorer ta culture générale, et Néko, l'IA qui répond à tes questions.">
+  <meta name="theme-color" content="#0B0713">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pépite">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" type="image/png" href="icons/icon-192.png">
@@ -18,9 +18,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
   <script>
     // Applique le thème de couleur avant l'affichage (évite un flash)
-    try { var p = JSON.parse(localStorage.getItem("pepite-v2") || "{}").palette; if (p) document.documentElement.dataset.palette = p; } catch (e) {}
+    try { var p = JSON.parse(localStorage.getItem("pepite-v2") || "{}").palette; if (p === "jour" || p === "nuit") document.documentElement.dataset.palette = p; } catch (e) {}
   </script>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <div id="app">
@@ -45,7 +45,7 @@
   <section id="reader" class="reader hidden" aria-live="polite"></section>
   <div id="toast" class="toast"></div>
 
-  <script src="data.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="data.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
