@@ -6,7 +6,7 @@
 <title>UNIQLO × JOLAGREEN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Space+Mono:wght@400;700&family=Press+Start+2P&family=Black+Ops+One&family=Dela+Gothic+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Archivo+Narrow:wght@700&family=Space+Mono:wght@400;700&family=Press+Start+2P&family=Black+Ops+One&family=Dela+Gothic+One&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#070c09;
@@ -296,6 +296,40 @@ main{position:relative;z-index:2}
 .overlay .foot{position:absolute;top:90px;font-size:10px;letter-spacing:.4em;color:var(--dim)}
 
 footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-size:9px;letter-spacing:.4em;color:var(--dim)}
+
+/* ---------- DÉCOUVERTE (animation au scroll) ---------- */
+.discover{position:relative;height:320vh;z-index:3}
+.discover .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
+.discover .bgwrap{position:absolute;inset:0;clip-path:inset(var(--inset-y,0%) var(--inset-x,0%) round var(--radius,0px));will-change:clip-path}
+.discover .bgwrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(var(--bg-zoom,1));will-change:transform}
+.discover .tint{position:absolute;inset:0;background:#2f6b47;mix-blend-mode:color;opacity:.9}
+.discover .mult{position:absolute;inset:0;background:#2a4a36;mix-blend-mode:multiply;opacity:.7}
+.discover .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.2) 50%,rgba(0,0,0,.55))}
+.discover .fade{position:absolute;left:0;right:0;height:32vh;pointer-events:none;z-index:2}
+.discover .fade.t{top:0;background:linear-gradient(var(--bg),rgba(7,12,9,.45) 45%,rgba(7,12,9,0))}
+.discover .fade.b{bottom:0;background:linear-gradient(rgba(7,12,9,0),rgba(7,12,9,.45) 55%,var(--bg))}
+.discover .card{position:absolute;left:50%;top:50%;width:min(29.2vw,52vh);aspect-ratio:4/5;z-index:3;
+  transform:translate(-50%,calc(-50% + var(--card-y,0px)));opacity:var(--card-o,1);
+  box-shadow:0 40px 90px -10px rgba(0,0,0,.6),0 0 60px rgba(93,255,143,.12);outline:1px solid rgba(142,230,168,.35);overflow:hidden}
+.discover .card img{width:100%;height:100%;object-fit:cover;display:block}
+.discover .card::after{content:"";position:absolute;inset:0;background:#1d3a27;mix-blend-mode:color;opacity:.55}
+.discover .word{position:absolute;z-index:4;font-family:'Archivo Narrow','Archivo',sans-serif;font-weight:700;font-size:min(10.9vw,19.5vh);line-height:.85;letter-spacing:-.01em;color:#e6fff0;white-space:nowrap;will-change:transform,opacity}
+.discover .w1{left:6.25vw;top:10%;transform:translateX(var(--w1,0px));opacity:var(--wo,1)}
+.discover .w2{right:6.25vw;top:30.5%;transform:translateX(var(--w2,0px));opacity:var(--wo,1)}
+.discover .w3{left:9.4vw;top:51%;color:var(--green);text-shadow:0 0 40px rgba(93,255,143,.25);transform:translateX(var(--w3,0px));opacity:var(--wo,1)}
+.discover .side{position:absolute;right:6.25vw;top:max(76%,calc(50% + min(18.25vw,32.5vh) + 28px));z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:22px;text-align:right;
+  opacity:var(--side-o,1);transform:translateY(var(--side-y,0px))}
+.discover .side p{font-size:14px;line-height:22px;color:var(--text);max-width:520px}
+.discover .side a{display:inline-flex;gap:12px;padding:15px 26px;border-radius:30px;background:var(--green);color:#07110b;font-weight:700;font-size:12px;letter-spacing:.1em}
+.discover .coords{position:absolute;left:6.25vw;bottom:6%;z-index:5;font-size:11px;letter-spacing:.14em;color:var(--mid);opacity:var(--side-o,1)}
+@media (max-width:700px){
+  .discover .card{width:58vw}
+  .discover .word{font-size:17vw}
+  .discover .w1{top:14%}.discover .w2{top:30%}.discover .w3{top:59%}
+  .discover .side{left:16px;right:16px;top:auto;bottom:15%;align-items:flex-start;text-align:left}
+  .discover .side p{font-size:12px;line-height:18px}
+  .discover .coords{display:none}
+}
 </style>
 </head>
 <body class="loading">
@@ -351,6 +385,27 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
       <div>PLAYER <b>JOLA</b></div>
       <div>LVL <b>99</b></div>
       <div>MODE <b>HARDCORE</b></div>
+    </div>
+  </section>
+
+
+  <!-- DÉCOUVERTE — animation au scroll (test) -->
+  <section class="discover" id="decouverte" aria-label="Découvrez l'univers Jolagreen">
+    <div class="stage">
+      <div class="bgwrap">
+        <img src="img/luanda-nuit.jpg" alt="Luanda, capitale de l'Angola, de nuit">
+        <div class="tint"></div><div class="mult"></div><div class="shade"></div>
+      </div>
+      <div class="card"><img src="img/jola-portrait.jpg" alt="Jolagreen23"></div>
+      <div class="word w1">DÉCOUVREZ</div>
+      <div class="word w2">L'UNIVERS</div>
+      <div class="word w3">JOLAGREEN</div>
+      <div class="side">
+        <p>Rappeur franco-angolais, né d'une ville qui ne dort jamais.<br>Trois albums, trois capsules Uniqlo.</p>
+        <a href="#collections" data-hover>DÉCOUVRIR LES COLLECTIONS <span>↓</span></a>
+      </div>
+      <div class="coords">LUANDA · ANGOLA — 8.8390° S 13.2894° E</div>
+      <div class="fade t"></div><div class="fade b"></div>
     </div>
   </section>
 
@@ -543,6 +598,38 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
   }
   tick(); setInterval(tick, 1000);
 })();
+
+  /* ----- DÉCOUVERTE : animation pilotée par le scroll ----- */
+  (function(){
+    var sec = document.getElementById('decouverte'); if(!sec) return;
+    var st = sec.style;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var clamp = function(v){ return v < 0 ? 0 : v > 1 ? 1 : v; };
+    var seg = function(p, a, b){ return clamp((p - a) / (b - a)); };
+    var ease = function(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; };
+    function frame(){
+      var r = sec.getBoundingClientRect(), total = sec.offsetHeight - innerHeight;
+      var p = reduce ? 1 : clamp(-r.top / total);
+      var a = ease(seg(p, 0.02, 0.38));          // la photo grandit
+      var b = ease(seg(p, 0.32, 0.58));          // la carte monte
+      var c = ease(seg(p, 0.52, 0.80));          // le titre glisse
+      var d = ease(seg(p, 0.76, 0.92));          // accroche + bouton
+      st.setProperty('--inset-x', (19 * (1 - a)) + '%');
+      st.setProperty('--inset-y', (19 * (1 - a)) + '%');
+      st.setProperty('--radius', (18 * (1 - a)) + 'px');
+      st.setProperty('--bg-zoom', 1.15 - .15 * a);
+      st.setProperty('--card-y', (innerHeight * .6 * (1 - b)) + 'px');
+      st.setProperty('--card-o', b);
+      var off = innerWidth * .14 * (1 - c);
+      st.setProperty('--w1', -off + 'px'); st.setProperty('--w2', off + 'px'); st.setProperty('--w3', -off + 'px');
+      st.setProperty('--wo', c);
+      st.setProperty('--side-o', d); st.setProperty('--side-y', (30 * (1 - d)) + 'px');
+    }
+    var ticking = false;
+    addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(function(){ ticking = false; frame(); }); } }, {passive:true});
+    addEventListener('resize', frame);
+    frame();
+  })();
 </script>
 </body>
 </html>
