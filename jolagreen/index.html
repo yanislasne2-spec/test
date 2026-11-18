@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Archivo+Narrow:wght@700&family=Space+Mono:wght@400;700&family=Press+Start+2P&family=Black+Ops+One&family=Dela+Gothic+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <style>
 :root{
   --bg:#070c09;
@@ -200,7 +201,7 @@ main{position:relative;z-index:2}
 .col.locked .title{-webkit-text-stroke-dasharray:4}
 .lockbar{margin-top:18px;width:min(420px,80vw);position:relative;z-index:4}
 .lockbar .track{height:6px;border:1px solid var(--dim);padding:1px}
-.lockbar .fill{height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 6px,transparent 6px 8px);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.lockbar .fill{height:100%;background:var(--green);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
 .lockbar .meta{display:flex;justify-content:space-between;margin-top:8px;font-size:9px;letter-spacing:.3em;color:var(--mid)}
 .lockbar .count{font-family:'Press Start 2P',monospace;font-size:clamp(10px,1.4vw,14px);color:var(--green);margin-top:14px;letter-spacing:.08em}
 
@@ -295,7 +296,10 @@ main{position:relative;z-index:2}
 .overlay a:hover{color:var(--green);-webkit-text-stroke-color:var(--green)}
 .overlay .foot{position:absolute;top:90px;font-size:10px;letter-spacing:.4em;color:var(--dim)}
 
-footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-size:9px;letter-spacing:.4em;color:var(--dim)}
+.ftr{z-index:2;cursor:auto}
+.ftr a{cursor:pointer}
+.island,.island button{cursor:pointer}
+.pill{bottom:22px}
 
 /* ---------- DÉCOUVERTE (animation au scroll) ---------- */
 .discover{position:relative;height:320vh;z-index:3}
@@ -418,35 +422,51 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
       <div class="season">3 ALBUMS · 3 CAPSULES UNIQLO</div>
     </div>
 
-    <a href="collection.html#rd" class="col" data-scene="war" data-hover id="c-rd">
+    <a href="collection-rd.html" class="col" data-scene="war" data-hover id="c-rd">
       <div class="num">01 / ALBUM</div>
       <div class="title">R&amp;D</div>
       <div class="sub">COLLECTION</div>
       <div class="theme">GUERRE · APOCALYPSE — 5 PIÈCES</div>
     </a>
 
-    <a href="collection.html#99xp" class="col" data-scene="game" data-hover id="c-99">
+    <a href="collection-99xp.html" class="col" data-scene="game" data-hover id="c-99">
       <div class="num">02 / ALBUM</div>
       <div class="title">99XP</div>
       <div class="sub">COLLECTION</div>
       <div class="theme">JEUX VIDÉO — 5 PIÈCES</div>
     </a>
 
-    <a href="collection.html#goty" class="col locked" data-scene="anime" data-hover id="c-goty">
-      <div class="num">03 / ALBUM · VERROUILLÉ</div>
+    <a href="collection-goty.html" class="col" data-scene="anime" data-hover id="c-goty">
+      <div class="num">03 / ALBUM</div>
       <div class="title">GOTY</div>
       <div class="sub">EDITION</div>
       <div class="theme">ANIMÉ — 5 PIÈCES</div>
       <div class="lockbar">
         <div class="track"><div class="fill" id="gotyFill"></div></div>
-        <div class="meta"><span>CHARGEMENT</span><span id="gotyPct">0%</span></div>
+        <div class="meta"><span>FIN DE LA COLLAB</span><span>UNIQLO × JOLAGREEN23</span></div>
         <div class="count" id="gotyCount">23J 00H 00M 00S</div>
       </div>
     </a>
   </section>
 
-  <footer>UNIQLO × JOLAGREEN — R&amp;D · 99XP · GOTY EDITION<br><br>PROJET CONCEPT · NON OFFICIEL</footer>
 </main>
+
+<footer class="ftr">
+  <span class="halo h1"></span><span class="halo h2"></span><span class="halo h3"></span><span class="halo h4"></span>
+  <span class="band"></span><span class="fade"></span>
+  <nav class="links"><a class="dim" href="index.html">Accueil</a><a href="collection-rd.html">Collections</a><a href="projet.html">Le projet</a></nav>
+  <div class="orig"><div class="k">Origine :</div><div class="v">Luanda, Angola — Paris, France<br>Capsule Uniqlo × Jolagreen23 · 2026</div></div>
+  <div class="socials">
+    <a href="https://open.spotify.com/search/Jolagreen23" target="_blank" rel="noopener" aria-label="Spotify"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#E6FFF0"/><path d="M7 9.5c3.5-1 7.5-.6 10.5 1M7.5 12.6c3-.8 6-.4 8.5.9M8 15.5c2.4-.6 4.6-.3 6.6.7" stroke="#050806" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></a>
+    <a href="https://music.apple.com/fr/search?term=Jolagreen23" target="_blank" rel="noopener" aria-label="Apple Music"><svg viewBox="0 0 24 24"><path d="M19.5 2.5v13a3 3 0 1 1-2.2-2.9V7.4L9.7 8.9v9.1a3 3 0 1 1-2.2-2.9V4.6z" fill="#E6FFF0"/></svg></a>
+    <a href="https://www.deezer.com/search/Jolagreen23" target="_blank" rel="noopener" aria-label="Deezer"><svg viewBox="0 0 24 24"><rect x="1" y="16.6" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="5.6" y="16.6" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="5.6" y="13.2" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="10.2" y="16.6" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="10.2" y="13.2" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="10.2" y="9.8" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="10.2" y="6.4" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="14.799999999999999" y="16.6" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="14.799999999999999" y="13.2" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="14.799999999999999" y="9.8" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="19.4" y="16.6" width="3.6" height="2.6" fill="#E6FFF0"/><rect x="19.4" y="13.2" width="3.6" height="2.6" fill="#E6FFF0"/></svg></a>
+    <a href="https://music.youtube.com/search?q=Jolagreen23" target="_blank" rel="noopener" aria-label="YouTube Music"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#E6FFF0"/><circle cx="12" cy="12" r="5.6" stroke="#050806" stroke-width="1.3" fill="none"/><path d="M10.4 9.6v4.8l4-2.4z" fill="#050806"/></svg></a>
+  </div>
+  <div class="capsule">Capsule officielle<br>concept 2026</div>
+  <div class="badge"><svg viewBox="0 0 44 22" fill="none" stroke="#8EE6A8" stroke-width="2.2"><path d="M11 2 L20 11 L11 20 L2 11 Z"/><path d="M33 2 L42 11 L33 20 L24 11 Z"/></svg><b>UNIQLO × JOLA</b><hr><span>DROP 2026</span></div>
+  <div class="legal"><span>©2026 UNIQLO × Jolagreen23.</span><a href="projet.html">Mentions légales</a><span>Site par Yanis Lasne</span></div>
+  <div class="word" aria-hidden="true"><b>JOLAGREEN</b><span>23</span></div>
+</footer>
 
 <!-- FLOATING PREVIEW -->
 <div class="preview" id="preview" aria-hidden="true">
@@ -485,9 +505,9 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
     <div class="jp">ジョラグリーン</div>
     <div class="jp2">第三章 · GOTY</div>
     <div class="lock">
-      <b>DÉBLOCAGE J-<span id="gotyDays">23</span></b>
+      <b>FIN DE LA COLLAB J-<span id="gotyDays">23</span></b>
       <div class="ld"><i></i></div>
-      <span>NOW LOADING</span>
+      <span>DISPONIBLE MAINTENANT</span>
     </div>
   </div>
 </div>
@@ -495,9 +515,11 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
 <!-- MENU -->
 <div class="overlay" id="overlay">
   <div class="foot">MENU PRINCIPAL</div>
-  <a href="collection.html#rd" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
-  <a href="collection.html#99xp" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
-  <a href="collection.html#goty" data-close data-hover>GOTY <small>03 · ANIMÉ · J-23</small></a>
+  <a href="collection-rd.html" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
+  <a href="collection-99xp.html" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
+  <a href="collection-goty.html" data-close data-hover>GOTY <small>03 · ANIMÉ</small></a>
+  <a href="projet.html" data-close data-hover>LE PROJET <small>04 · LA COLLAB</small></a>
+  <a href="panier.html" data-close data-hover>PANIER <small>05 · COMMANDE</small></a>
 </div>
 <button class="pill" id="pill" data-hover aria-label="Menu">
   <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#8ee6a8" stroke-width="1.5"><path d="M12 2 L22 12 L12 22 L2 12 Z"/></svg></span>
@@ -577,23 +599,22 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
     a.addEventListener('click', function(){ document.body.classList.remove('menu-open'); });
   });
 
-  /* ----- GOTY : déblocage 23 jours plus tard ----- */
-  var TOTAL = 23*24*3600*1000, start = Date.now();
+  /* ----- Fin de la collab : il reste 23 jours sur ~3 mois de capsule ----- */
+  var LEFT0 = 23*24*3600*1000, TOTAL = 92*24*3600*1000, start = Date.now();
   try{
-    var s = localStorage.getItem('jola_goty_start');
-    if(s) start = +s; else localStorage.setItem('jola_goty_start', start);
+    var s = localStorage.getItem('jola_collab_start');
+    if(s) start = +s; else localStorage.setItem('jola_collab_start', start);
   }catch(e){}
-  var end = start + TOTAL;
-  var gFill = document.getElementById('gotyFill'), gPct = document.getElementById('gotyPct'),
+  var end = start + LEFT0;
+  var gFill = document.getElementById('gotyFill'),
       gCount = document.getElementById('gotyCount'), gDays = document.getElementById('gotyDays');
   function pad(n){ return String(n).padStart(2,'0'); }
   function tick(){
     var left = Math.max(0, end - Date.now());
     var done = Math.max(1, (1 - left/TOTAL)*100);
     gFill.style.width = done + '%';
-    gPct.textContent = done.toFixed(2) + '%';
     var d = Math.floor(left/864e5), h = Math.floor(left/36e5)%24, m = Math.floor(left/6e4)%60, sec = Math.floor(left/1e3)%60;
-    gCount.textContent = left ? (d + 'J ' + pad(h) + 'H ' + pad(m) + 'M ' + pad(sec) + 'S') : 'DISPONIBLE';
+    gCount.textContent = left ? (d + 'J ' + pad(h) + 'H ' + pad(m) + 'M ' + pad(sec) + 'S') : 'COLLAB TERMINÉE';
     gDays.textContent = Math.ceil(left/864e5);
   }
   tick(); setInterval(tick, 1000);
@@ -631,5 +652,17 @@ footer{position:relative;z-index:2;text-align:center;padding:0 16px 120px;font-s
     frame();
   })();
 </script>
+
+<div class="player at64">
+  <div class="island playing" role="button" tabindex="0" aria-label="Lecteur Jolagreen23 — ouvrir">
+    <div class="closed"><span class="cover"></span><span class="t1">800€</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+    <div class="opened">
+      <div class="row"><span class="cover"></span><div class="info"><b class="t2">800€</b><span class="art">Jolagreen23 · +99XP</span></div><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><button class="close" aria-label="Fermer le lecteur"><svg viewBox="0 0 18 18"><path d="M5 11l4-4 4 4" stroke="#8ee6a8" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      <div class="prog"><div class="bar"><span class="fill"></span><span class="knob"></span></div><div class="meta"><span class="num">PISTE 01/06</span><b>JOLAGREEN23</b></div></div>
+      <div class="ctrl"><button class="prev" aria-label="Piste précédente"><svg viewBox="0 0 24 24"><path d="M6 5.5h2v13H6zM19 5.5v13l-9.5-6.5z" fill="#e6fff0"/></svg></button><button class="pp" aria-label="Lecture / pause"><svg class="i-pause" viewBox="0 0 20 20"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="#07110b"/></svg><svg class="i-play" viewBox="0 0 20 20"><path d="M7 4l8 6-8 6z" fill="#07110b"/></svg></button><button class="next" aria-label="Piste suivante"><svg viewBox="0 0 24 24"><path d="M16 5.5h2v13h-2zM5 5.5v13l9.5-6.5z" fill="#e6fff0"/></svg></button></div>
+    </div>
+  </div>
+</div>
+<script src="assets/site.js"></script>
 </body>
 </html>
