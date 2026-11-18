@@ -15,7 +15,7 @@
 <header class="hdr">
   <a class="back" href="index.html">← ACCUEIL</a>
   <nav class="tabs off"><a href="collection-rd.html">01 R&amp;D</a><a href="collection-99xp.html">02 99XP</a><a href="collection-goty.html">03 GOTY</a></nav>
-  <a class="panier" href="panier.html">PANIER <i>3</i></a>
+  <a class="panier" href="panier.html">PANIER <i>0</i></a>
 </header>
   <section class="head">
     <div class="lab">UNIQLO × JOLAGREEN — COMMANDE</div>
@@ -23,7 +23,7 @@
     <p>Étape finale · vérifie ta commande et valide ton paiement</p>
   </section>
   <div class="cols">
-    <form class="checkout" onsubmit="event.preventDefault();this.querySelector('.pay-btn').textContent='COMMANDE VALIDÉE ✓ — MERCI !'">
+    <form class="checkout" id="checkout">
       <div class="h2row"><h2>Informations</h2><a href="#">Déjà un compte ? &nbsp;SE CONNECTER</a></div>
       <h3>INFORMATIONS PERSONNELLES</h3>
       <div class="fields"><label class="field"><input type="text" placeholder="Prénom" autocomplete="given-name" aria-label="Prénom"></label><label class="field"><input type="text" placeholder="Nom" autocomplete="family-name" aria-label="Nom"></label><label class="field"><input type="tel" placeholder="Téléphone" autocomplete="tel" aria-label="Téléphone"></label><label class="field"><input type="email" placeholder="E-mail" autocomplete="email" aria-label="E-mail"></label></div>
@@ -33,7 +33,7 @@
       <h2 style="margin-top:calc(60*var(--u))">Livraison</h2>
       <div style="margin-top:calc(6*var(--u))">
         <label class="opt"><input type="radio" name="liv" checked><span class="n">Livraison standard<small>Livraison en 3 à 5 jours ouvrés</small></span><span class="r free">Gratuite</span></label>
-        <label class="opt"><input type="radio" name="liv"><span class="n">Livraison express<small>Livraison en 1 à 2 jours ouvrés</small></span><span class="r">9,90 €</span></label>
+        <label class="opt"><input type="radio" name="liv" value="express"><span class="n">Livraison express<small>Livraison en 1 à 2 jours ouvrés</small></span><span class="r">9,90 €</span></label>
       </div>
       <h2 style="margin-top:calc(63*var(--u))">Paiement</h2>
       <div style="margin-top:calc(6*var(--u))" class="card-fields">
@@ -47,14 +47,15 @@
       <div class="foot"><span>Paiement sécurisé · Retours gratuits sous 30 jours</span><a href="collection-rd.html" data-back>← CONTINUER MES ACHATS</a></div>
     </form>
     <aside class="bag">
-      <h2>Panier (3)</h2>
-      <div class="item"><div class="th"><img src="img/collection/rd-tshirt.jpg" alt="T-SHIRT « R&amp;D »"></div><div><div class="nm">T-SHIRT « R&amp;D »</div><dl><dt>Taille :</dt><dd>M</dd><dt>Couleur :</dt><dd>Noir</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">19,90 €</div></div>
-      <div class="item"><div class="th"><img src="img/produits/rd-carte.jpg" alt="SAC À DOS « INVENTAIRE »"></div><div><div class="nm">SAC À DOS « INVENTAIRE »</div><dl><dt>Taille :</dt><dd>Unique</dd><dt>Couleur :</dt><dd>Noir · vert néon</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">59,90 €</div></div>
-      <div class="item"><div class="th"><img src="img/collection/rd-jean.jpg" alt="JEAN BAGGY « RUINES »"></div><div><div class="nm">JEAN BAGGY « RUINES »</div><dl><dt>Taille :</dt><dd>32</dd><dt>Couleur :</dt><dd>Noir délavé</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">49,90 €</div></div>
-      <div class="promo"><label class="field"><input type="text" placeholder="Code promo" aria-label="Code promo"></label><button type="button">APPLIQUER</button></div>
-      <div class="sum"><div><span>Sous-total</span><span>129,70 €</span></div><div><span>Livraison</span><span>Gratuite</span></div><div><span>Remise</span><span>0,00 €</span></div></div>
-      <div class="total"><b>Total</b><b>129,70 €</b></div>
+      <h2>Panier (<span id="bag-n">0</span>)</h2>
+      <div id="bag-items"></div>
+      <div class="bag-empty" id="bag-empty"><p>Ton panier est vide.</p><a href="collection-rd.html">DÉCOUVRIR LES COLLECTIONS &nbsp;→</a></div>
+      <div id="bag-sum">
+      <div class="promo"><label class="field"><input type="text" placeholder="Code promo" aria-label="Code promo"></label><button type="button" id="promo-btn">APPLIQUER</button></div>
+      <div class="sum"><div><span>Sous-total</span><span id="s-sub">0,00 €</span></div><div><span>Livraison</span><span id="s-liv">Gratuite</span></div><div><span>Remise</span><span id="s-rem">0,00 €</span></div></div>
+      <div class="total"><b>Total</b><b id="s-tot">0,00 €</b></div>
       <div class="tva">TVA incluse</div>
+      </div>
     </aside>
   </div>
 </div>

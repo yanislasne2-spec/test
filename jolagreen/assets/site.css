@@ -253,6 +253,29 @@ img,video{display:block}
 .total b+b{color:var(--acc)}
 .tva{font-size:calc(10*var(--u));color:var(--mid);margin-top:calc(7*var(--u))}
 
+.bag-empty{display:none;padding:calc(40*var(--u)) 0 calc(10*var(--u));border-bottom:1px solid var(--dim)}
+.bag-empty p{font-size:calc(13*var(--u));color:var(--soft);margin-bottom:calc(16*var(--u))}
+.bag-empty a{font-size:calc(11*var(--u));font-weight:700;color:var(--acc)}
+.is-empty .bag-empty{display:block}
+.is-empty #bag-sum{opacity:.35;pointer-events:none}
+.qty{display:inline-flex;align-items:center;gap:calc(10*var(--u))}
+.qty button{width:calc(18*var(--u));height:calc(18*var(--u));border:1px solid var(--dim);color:var(--soft);font-size:calc(11*var(--u));line-height:1;display:grid;place-items:center}
+.qty button:hover{border-color:var(--acc);color:var(--acc)}
+.item .rm{margin-top:calc(32*var(--u))}
+.pay-btn:disabled{opacity:.4;cursor:not-allowed}
+/* notification « ajouté au panier » */
+.toast{position:fixed;right:calc(24*var(--u));top:calc(76*var(--u));z-index:120;display:flex;align-items:center;gap:calc(16*var(--u));width:calc(380*var(--u));padding:calc(14*var(--u));background:#050806;border:1px solid #1c3325;border-radius:calc(14*var(--u));color:#e6fff0;
+  box-shadow:0 calc(20*var(--u)) calc(50*var(--u)) rgba(0,0,0,.5),0 0 calc(24*var(--u)) rgba(93,255,143,.12);transform:translateY(calc(-12*var(--u)));opacity:0;pointer-events:none;transition:opacity .3s,transform .4s cubic-bezier(.2,.8,.2,1)}
+.toast.show{opacity:1;transform:none;pointer-events:auto}
+.toast img{width:calc(56*var(--u));height:calc(72*var(--u));object-fit:cover;flex:none;border-radius:calc(4*var(--u))}
+.toast .tx{flex:1;min-width:0;font-size:calc(10*var(--u));line-height:calc(16*var(--u))}
+.toast .tx b{display:block;font-size:calc(11*var(--u));color:#8ee6a8;margin-bottom:calc(2*var(--u))}
+.toast .tx span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast .tx small{color:#4f8a63;font-size:calc(10*var(--u))}
+.toast a{flex:none;font-size:calc(10*var(--u));font-weight:700;padding:calc(10*var(--u)) calc(12*var(--u));border-radius:calc(8*var(--u));background:#8ee6a8;color:#07110b}
+.panier i.bump{animation:bump .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{40%{transform:scale(1.45)}}
+
 /* ---------------- LE PROJET ---------------- */
 .prj .lab{font-size:calc(11*var(--u));line-height:calc(16*var(--u));font-weight:700;color:var(--mid)}
 .prj .hero{position:relative;height:calc(884*var(--u));border-bottom:1px solid var(--line)}
@@ -436,6 +459,12 @@ img,video{display:block}
   .manif{padding:calc(60*var(--m)) calc(20*var(--m)) calc(80*var(--m))}
   .manif h2{font-size:calc(52*var(--m));line-height:calc(50*var(--m))}
   .manif a{width:calc(300*var(--m));height:calc(50*var(--m));line-height:calc(50*var(--m));border-radius:calc(25*var(--m));font-size:calc(11*var(--m));margin-top:calc(30*var(--m))}
+
+  .toast{left:calc(12*var(--m));right:calc(12*var(--m));top:calc(62*var(--m));bottom:auto;width:auto;gap:calc(12*var(--m));padding:calc(12*var(--m));border-radius:calc(14*var(--m))}
+  .toast img{width:calc(48*var(--m));height:calc(62*var(--m))}
+  .toast .tx,.toast a{font-size:calc(10*var(--m))}
+  .toast .tx b{font-size:calc(11*var(--m))}
+  .qty button{width:calc(20*var(--m));height:calc(20*var(--m))}
 
   /* footer mobile */
   .ftr{height:calc(640*var(--m))}
