@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panier — UNIQLO × JOLAGREEN</title>
+<meta name="description" content="Valide ta commande Uniqlo × Jolagreen23.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;400;700;800;900&family=Archivo+Narrow:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="page pan">
+
+<header class="hdr">
+  <a class="back" href="index.html">← ACCUEIL</a>
+  <nav class="tabs off"><a href="collection-rd.html">01 R&amp;D</a><a href="collection-99xp.html">02 99XP</a><a href="collection-goty.html">03 GOTY</a></nav>
+  <a class="panier" href="panier.html">PANIER <i>3</i></a>
+</header>
+  <section class="head">
+    <div class="lab">UNIQLO × JOLAGREEN — COMMANDE</div>
+    <h1>PANIER</h1>
+    <p>Étape finale · vérifie ta commande et valide ton paiement</p>
+  </section>
+  <div class="cols">
+    <form class="checkout" onsubmit="event.preventDefault();this.querySelector('.pay-btn').textContent='COMMANDE VALIDÉE ✓ — MERCI !'">
+      <div class="h2row"><h2>Informations</h2><a href="#">Déjà un compte ? &nbsp;SE CONNECTER</a></div>
+      <h3>INFORMATIONS PERSONNELLES</h3>
+      <div class="fields"><label class="field"><input type="text" placeholder="Prénom" autocomplete="given-name" aria-label="Prénom"></label><label class="field"><input type="text" placeholder="Nom" autocomplete="family-name" aria-label="Nom"></label><label class="field"><input type="tel" placeholder="Téléphone" autocomplete="tel" aria-label="Téléphone"></label><label class="field"><input type="email" placeholder="E-mail" autocomplete="email" aria-label="E-mail"></label></div>
+      <h3 style="margin-top:calc(44*var(--u))">ADRESSE DE LIVRAISON</h3>
+      <div class="fields"><label class="field"><input type="text" placeholder="Pays / Région" autocomplete="country-name" aria-label="Pays / Région"></label><label class="field"><input type="text" placeholder="Ville" autocomplete="address-level2" aria-label="Ville"></label><label class="field"><input type="text" placeholder="Adresse" autocomplete="street-address" aria-label="Adresse"></label><label class="field"><input type="text" placeholder="Code postal" autocomplete="postal-code" aria-label="Code postal"></label></div>
+      <label class="check"><input type="checkbox" checked> J’accepte le traitement de mes données personnelles</label>
+      <h2 style="margin-top:calc(60*var(--u))">Livraison</h2>
+      <div style="margin-top:calc(6*var(--u))">
+        <label class="opt"><input type="radio" name="liv" checked><span class="n">Livraison standard<small>Livraison en 3 à 5 jours ouvrés</small></span><span class="r free">Gratuite</span></label>
+        <label class="opt"><input type="radio" name="liv"><span class="n">Livraison express<small>Livraison en 1 à 2 jours ouvrés</small></span><span class="r">9,90 €</span></label>
+      </div>
+      <h2 style="margin-top:calc(63*var(--u))">Paiement</h2>
+      <div style="margin-top:calc(6*var(--u))" class="card-fields">
+        <label class="opt"><input type="radio" name="pay" checked><span class="n">Carte bancaire</span><span class="brand">VISA <span style="display:inline-block;vertical-align:middle;width:calc(30*var(--u));height:calc(16*var(--u));background:radial-gradient(circle at 25% 50%,rgba(185,214,194,.8) 49%,transparent 51%),radial-gradient(circle at 70% 50%,rgba(142,230,168,.8) 49%,transparent 51%)"></span></span></label>
+        <div class="fields"><label class="field"><input type="text" placeholder="Numéro de carte" autocomplete="cc-number" aria-label="Numéro de carte"></label><label class="field"><input type="text" placeholder="Titulaire de la carte" autocomplete="cc-name" aria-label="Titulaire de la carte"></label><label class="field"><input type="text" placeholder="Date d'expiration (MM/AA)" autocomplete="cc-exp" aria-label="Date d'expiration (MM/AA)"></label><label class="field"><input type="text" placeholder="CVV" autocomplete="cc-csc" aria-label="CVV"></label></div>
+      </div>
+      <label class="opt s"><input type="radio" name="pay"><span class="n">PayPal</span><span class="brand">PayPal</span></label>
+      <label class="opt s"><input type="radio" name="pay"><span class="n">Apple Pay</span><span class="brand">Apple Pay</span></label>
+      <label class="check" style="margin-top:calc(25*var(--u))"><input type="checkbox" checked> J’accepte les conditions générales de vente</label>
+      <button class="pay-btn" type="submit">PAYER ET VALIDER LA COMMANDE &nbsp; →</button>
+      <div class="foot"><span>Paiement sécurisé · Retours gratuits sous 30 jours</span><a href="collection-rd.html" data-back>← CONTINUER MES ACHATS</a></div>
+    </form>
+    <aside class="bag">
+      <h2>Panier (3)</h2>
+      <div class="item"><div class="th"><img src="img/collection/rd-tshirt.jpg" alt="T-SHIRT « R&amp;D »"></div><div><div class="nm">T-SHIRT « R&amp;D »</div><dl><dt>Taille :</dt><dd>M</dd><dt>Couleur :</dt><dd>Noir</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">19,90 €</div></div>
+      <div class="item"><div class="th"><img src="img/produits/rd-carte.jpg" alt="SAC À DOS « INVENTAIRE »"></div><div><div class="nm">SAC À DOS « INVENTAIRE »</div><dl><dt>Taille :</dt><dd>Unique</dd><dt>Couleur :</dt><dd>Noir · vert néon</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">59,90 €</div></div>
+      <div class="item"><div class="th"><img src="img/collection/rd-jean.jpg" alt="JEAN BAGGY « RUINES »"></div><div><div class="nm">JEAN BAGGY « RUINES »</div><dl><dt>Taille :</dt><dd>32</dd><dt>Couleur :</dt><dd>Noir délavé</dd><dt>Quantité :</dt><dd>1</dd></dl><a class="rm" href="#" onclick="event.preventDefault();this.closest('.item').style.opacity=.35">Retirer</a></div><div class="pr">49,90 €</div></div>
+      <div class="promo"><label class="field"><input type="text" placeholder="Code promo" aria-label="Code promo"></label><button type="button">APPLIQUER</button></div>
+      <div class="sum"><div><span>Sous-total</span><span>129,70 €</span></div><div><span>Livraison</span><span>Gratuite</span></div><div><span>Remise</span><span>0,00 €</span></div></div>
+      <div class="total"><b>Total</b><b>129,70 €</b></div>
+      <div class="tva">TVA incluse</div>
+    </aside>
+  </div>
+</div>
+
+<div class="player ">
+  <div class="island playing" role="button" tabindex="0" aria-label="Lecteur Jolagreen23 — ouvrir">
+    <div class="closed"><span class="cover"></span><span class="t1">800€</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+    <div class="opened">
+      <div class="row"><span class="cover"></span><div class="info"><b class="t2">800€</b><span class="art">Jolagreen23 · +99XP</span></div><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><button class="close" aria-label="Fermer le lecteur"><svg viewBox="0 0 18 18"><path d="M5 11l4-4 4 4" stroke="#8ee6a8" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      <div class="prog"><div class="bar"><span class="fill"></span><span class="knob"></span></div><div class="meta"><span class="num">PISTE 01/06</span><b>JOLAGREEN23</b></div></div>
+      <div class="ctrl"><button class="prev" aria-label="Piste précédente"><svg viewBox="0 0 24 24"><path d="M6 5.5h2v13H6zM19 5.5v13l-9.5-6.5z" fill="#e6fff0"/></svg></button><button class="pp" aria-label="Lecture / pause"><svg class="i-pause" viewBox="0 0 20 20"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="#07110b"/></svg><svg class="i-play" viewBox="0 0 20 20"><path d="M7 4l8 6-8 6z" fill="#07110b"/></svg></button><button class="next" aria-label="Piste suivante"><svg viewBox="0 0 24 24"><path d="M16 5.5h2v13h-2zM5 5.5v13l9.5-6.5z" fill="#e6fff0"/></svg></button></div>
+    </div>
+  </div>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>
