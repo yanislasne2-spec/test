@@ -195,9 +195,13 @@ main{position:relative;z-index:2}
   transition:color .45s, -webkit-text-stroke-color .45s;position:relative;z-index:4
 }
 .col .theme{margin-top:14px;font-size:10px;letter-spacing:.45em;color:var(--dim);transition:color .4s;position:relative;z-index:4}
-.col.active .title{color:var(--green);-webkit-text-stroke-color:var(--green);text-shadow:0 0 50px rgba(93,255,143,.3);transform:scale(1.02)}
-.col.active .sub{color:#c9f5d6;-webkit-text-stroke-color:#c9f5d6}
-.col.active .num,.col.active .theme{color:var(--green)}
+/* couleur de chaque capsule au survol : R&D vert, 99XP bleu, GOTY rouge */
+.col{--c:var(--green);--c2:#c9f5d6;--glow:rgba(93,255,143,.3)}
+#c-99{--c:#8ec5ff;--c2:#d6e8ff;--glow:rgba(93,169,255,.32)}
+#c-goty{--c:#ff7a72;--c2:#ffd6d2;--glow:rgba(255,65,61,.32)}
+.col.active .title{color:var(--c);-webkit-text-stroke-color:var(--c);text-shadow:0 0 50px var(--glow);transform:scale(1.02)}
+.col.active .sub{color:var(--c2);-webkit-text-stroke-color:var(--c2)}
+.col.active .num,.col.active .theme{color:var(--c)}
 .col.locked .title{-webkit-text-stroke-dasharray:4}
 .lockbar{margin-top:18px;width:min(420px,80vw);position:relative;z-index:4}
 .lockbar .track{height:6px;border:1px solid var(--dim);padding:1px}
@@ -293,7 +297,9 @@ main{position:relative;z-index:2}
 .overlay a{font-family:var(--wide);font-weight:900;font-stretch:125%;font-size:clamp(30px,7vw,84px);line-height:1.1;
   color:transparent;-webkit-text-stroke:1px var(--mid);transition:color .3s;display:flex;align-items:baseline;gap:16px}
 .overlay a small{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.3em;-webkit-text-stroke:0;color:var(--mid)}
-.overlay a:hover{color:var(--green);-webkit-text-stroke-color:var(--green)}
+.overlay a{--c:var(--green)}
+.overlay a:hover{color:var(--c);-webkit-text-stroke-color:var(--c)}
+.overlay a:hover small{color:var(--c)}
 .overlay .foot{position:absolute;top:90px;font-size:10px;letter-spacing:.4em;color:var(--dim)}
 
 .ftr{z-index:2;cursor:auto}
@@ -516,8 +522,8 @@ main{position:relative;z-index:2}
 <div class="overlay" id="overlay">
   <div class="foot">MENU PRINCIPAL</div>
   <a href="collection-rd.html" data-close data-hover>R&amp;D <small>01 · GUERRE</small></a>
-  <a href="collection-99xp.html" data-close data-hover>99XP <small>02 · JEUX VIDÉO</small></a>
-  <a href="collection-goty.html" data-close data-hover>GOTY <small>03 · ANIMÉ</small></a>
+  <a href="collection-99xp.html" data-close data-hover style="--c:#8ec5ff">99XP <small>02 · JEUX VIDÉO</small></a>
+  <a href="collection-goty.html" data-close data-hover style="--c:#ff7a72">GOTY <small>03 · ANIMÉ</small></a>
   <a href="projet.html" data-close data-hover>LE PROJET <small>04 · LA COLLAB</small></a>
   <a href="panier.html" data-close data-hover>PANIER <small>05 · COMMANDE</small></a>
 </div>
